@@ -15,8 +15,8 @@ HTTPS clone URL: https://git.jetbrains.space/elrincon/BlueCity.git
 * March 18th:
     - Tiburcio explained the code of the login and main pages of the project.
     - We decided to use Leaflet for the Maps and Geolocation (https://leafletjs.com/). Gonzalo y Ettiene will work on it.
-    - We studied the diagram made by IES STEVE TERRADAS (https://elrincon.jetbrains.space/p/bc/code/BlueCity?path=%2Fdocs%2Fordinogram.pdf)
-    - We discussed about the tasks each one wants to work with. Check the link for a graphical view of the tasks (https://elrincon.jetbrains.space/p/bc/code/BlueCity?path=%2Fdocs%2Fdocs%2Fwho-does-what.png)
+    - We studied the diagram made by IES STEVE TERRADAS (https://github.com/tcrurav/bluecity/blob/master/docs/ordinogram.pdf)
+    - We discussed about the tasks each one wants to work with. Check the link for a graphical view of the tasks (https://github.com/tcrurav/bluecity/blob/master/docs/who-does-what.png)
     - Juan Thielmann will create a Github mirror of (https://git.jetbrains.space/elrincon/BlueCity.git)
     - Tiburcio will upload the login and main pages to the repo.
     - Tiburcio will create a video/tutorial explaining the Authentication with Google. 
