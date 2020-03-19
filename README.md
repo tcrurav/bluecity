@@ -1,6 +1,6 @@
 # BlueCity
 
-Repositorio Principal del Proyecto Blue City
+Blue City main repository
 
 ## Getting Started
 
@@ -10,9 +10,25 @@ SSH clone URL: ssh://git@git.jetbrains.space/elrincon/BlueCity.git
 
 HTTPS clone URL: https://git.jetbrains.space/elrincon/BlueCity.git
 
+## Repo news
 
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+* March 18th:
+    - Tiburcio explained the code of the login and main pages of the project.
+    - We decided to use Leaflet for the Maps and Geolocation (https://leafletjs.com/). Gonzalo y Ettiene will work on it.
+    - We studied the diagram made by IES STEVE TERRADAS (https://elrincon.jetbrains.space/p/bc/code/BlueCity?path=%2Fdocs%2Fordinogram.pdf)
+    - We discussed about the tasks each one wants to work with. Check the link for a graphical view of the tasks (https://elrincon.jetbrains.space/p/bc/code/BlueCity?path=%2Fdocs%2Fdocs%2Fwho-does-what.png)
+    - Juan Thielmann will create a Github mirror of (https://git.jetbrains.space/elrincon/BlueCity.git)
+    - Tiburcio will upload the login and main pages to the repo.
+    - Tiburcio will create a video/tutorial explaining the Authentication with Google. 
+    - Carlos and Juan Thielmann will investigate the possibility of creating Mockups with Adobe XD.
+    - Aaron, Texe and Carlos will work on the rent part of the ordinogram.
+    - Isaiah and Néstor Cabanillas will work on the reservation of the parking.
+    - Juan Thielmann will work on the rent at the bottom right part of the ordinogram.
+    - Néstor Batista will work on the parking at the bottom left part of the ordinogram.
+* March 13th, No meeting because of Corona Virus.
+* March 6th, We worked further on React introducing the main concepts.
+* February 28th, We worked on React introducing the main concepts.
+* February 21th, introduction to the server technology with Node.js, Express and the use of Postman to test it.
 
 ## Prerequisites
 

@@ -1,0 +1,22 @@
+.my-fb-social-icon {
+  width: 2.5em;
+  padding-bottom: 3px;
+  /* padding-right: 5px; */
+}
+
+.my-fb-outline {
+  width: 100%;
+  /* text-transform: none; */
+  background-color: #3B579D !important;
+}
+
+.my-fb-outline:hover {
+  width: 100%;
+  /* text-transform: none; */
+  background-color: darkslategray !important;
+}
+
+.my-white {
+  color: white;
+  font-weight: bold;
+}
