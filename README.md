@@ -12,6 +12,9 @@ HTTPS clone URL: https://git.jetbrains.space/elrincon/BlueCity.git
 
 ## Repo news
 
+* March 25th:
+    - Today we have worked the basic concepts of passing data through props.
+    - Besides we have worked on leaflet. Here is the link to the github project we worked during the 2 hours of today: https://github.com/tcrurav/react-leaflet
 * March 18th:
     - Tiburcio explained the code of the login and main pages of the project.
     - We decided to use Leaflet for the Maps and Geolocation (https://leafletjs.com/). Gonzalo y Ettiene will work on it.
