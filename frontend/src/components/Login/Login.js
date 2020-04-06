@@ -1,5 +1,5 @@
 import React from 'react';
-import { MyAuthButtons } from '../MyAuthButtons/MyAuthButtons';
+import { MyAuthButtons } from '../my-auth-buttons/my-auth-buttons';
 
 export class Login extends React.Component {
   render() {
@@ -10,7 +10,9 @@ export class Login extends React.Component {
         </div>
         <div className="row text-center justify-content-center">
           <div className="col-10 mx-20">
-            <MyAuthButtons />
+            <MyAuthButtons 
+            // onSignIn={this.props.onSignIn}
+            />
           </div>
         </div>
       </div>

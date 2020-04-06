@@ -1,11 +1,12 @@
 import React from 'react';
-import { MyNavbar } from '../MyNavbar/MyNavbar';
+import { MyNavbar } from '../my-navbar/my-navbar';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 export class Main extends React.Component {
+  
   render() {
     return (
       <>
@@ -20,10 +21,10 @@ export class Main extends React.Component {
             </Col>
             <Col>
               <Row>
-                <Button variant="outline-primary" className="mt-2" href="/parking-search">Parking search</Button>
+                <Button variant="outline-primary" className="mt-2" href="/parking-search">Own scooter parking</Button>
               </Row>
               <Row>
-                <Button variant="outline-primary" className="mt-2" href="/rent">Rent a scooter</Button>
+                <Button variant="outline-primary" className="mt-2" href="/rent">Scooter renting</Button>
               </Row>
             </Col>
           </Row>
