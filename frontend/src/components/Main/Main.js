@@ -6,11 +6,18 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 export class Main extends React.Component {
+
+  constructor(props){
+    super(props);
+
+    console.log("Main")
+    console.log(this.props.history);
+  }
   
   render() {
     return (
       <>
-        <MyNavbar />
+        <MyNavbar history={this.props.history} />
         <Container className="p-3">
           <Row>
             <img className="img-fluid" src="img/bluecity.jpg" alt="logo" />

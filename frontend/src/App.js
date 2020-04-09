@@ -1,6 +1,8 @@
 import React from 'react';
 // import { library } from '@fortawesome/fontawesome-svg-core';
 // import { fab } from '@fortawesome/free-brands-svg-icons';
+import RoutePrivate from './utils/private-route';
+import RoutePublic from './utils/public-route';
 import { Login } from './components/login/login';
 import { Main } from './components/main/main';
 import { Contact } from './components/contact/contact';
@@ -24,26 +26,8 @@ class App extends React.Component {
     return (
       <Router>
         <Switch>
-          <Route
-            path='/main'
-            render={(props) =>
-              <Main
-              // {...props} onSignOut={() => {
-              //   console.log("llegó fuera main");
-              //   if (this.state.signedIn) this.setState({ signedIn: false });
-              // }}
-              />}
-          />
-          <Route
-            path='/login'
-            render={(props) =>
-              <Login
-              // {...props} onSignIn={() => {
-              //   console.log("llegó fuera login");
-              //   if (!this.state.signedIn) this.setState({ signedIn: true });
-              // }}
-              />}
-          />
+          <RoutePrivate path='/main' component={Main} />
+          <RoutePublic path='/login' component={Login} />
           <Route path='/contact' component={Contact} />
           <Route component={MyError} />
         </Switch>
