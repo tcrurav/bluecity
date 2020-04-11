@@ -1,5 +1,5 @@
 const db = require("../models");
-const Box = db.boxes;
+const Box = db.box;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Box
