@@ -1,6 +1,7 @@
 const db = require("../models");
-const User = db.users;
+const User = db.user;
 const Op = db.Sequelize.Op;
+const utils = require("../utils");
 
 // Create and Save a new User
 exports.create = (req, res) => {
@@ -20,20 +21,43 @@ exports.create = (req, res) => {
     isAdmin: req.body.isAdmin ? req.body.isAdmin : false
   };
 
-  // Save User in the database
-  User.create(user)
+  console.log(user);
+
+  User.findOne({ where: { username: user.username, password: user.password } })
     .then(data => {
-      res.send(data);
+      if (data) {
+        const token = utils.generateToken(data);
+          // get basic user details
+          const userObj = utils.getCleanUser(data);
+          // return the token along with user details
+          return res.json({ user: userObj, token });
+      }
+
+      // User not found. Save new User in the database
+      User.create(user)
+        .then(data => {
+          const token = utils.generateToken(data);
+          // get basic user details
+          const userObj = utils.getCleanUser(data);
+          // return the token along with user details
+          return res.json({ user: userObj, token });
+        })
+        .catch(err => {
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred while creating the User."
+          });
+        });
+
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the User."
+          err.message || "Some error occurred while retrieving tutorials."
       });
     });
+
 };
-
-
 
 // Retrieve all Users from the database.
 exports.findAll = (req, res) => {
