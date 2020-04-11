@@ -1,5 +1,5 @@
 const db = require("../models");
-const Parking = db.parkings;
+const Parking = db.parking;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Parking

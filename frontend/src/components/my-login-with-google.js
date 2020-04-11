@@ -2,6 +2,7 @@
 import React from 'react';
 import { MyGoogleLoginButton } from './my-google-login-button';
 import { setUserSession } from '../utils/common';
+import UserDataService from '../services/user.service';
 
 // I have implemented the solution of this url:
 // https://w3path.com/react-google-login-with-example/
@@ -19,7 +20,7 @@ export class MyLoginWithGoogle extends React.Component {
     window['googleSDKLoaded'] = () => {
       window['gapi'].load('auth2', () => {
         this.auth2 = window['gapi'].auth2.init({
-          client_id: '847633477961-hcf33ro35b7kce8856c1ae4lp9bd5aoq.apps.googleusercontent.com',
+          client_id: '------------------------YOUR OWN GOOGLE KEY--------------------------.apps.googleusercontent.com',
           cookiepolicy: 'single_host_origin',
           scope: 'profile email'
         });
@@ -29,9 +30,9 @@ export class MyLoginWithGoogle extends React.Component {
 
     (function (d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) { 
+      if (d.getElementById(id)) {
         window['googleSDKLoaded']();
-        return; 
+        return;
       }
       js = d.createElement(s); js.id = id;
       js.src = "https://apis.google.com/js/platform.js?onload=googleSDKLoaded";
@@ -45,6 +46,25 @@ export class MyLoginWithGoogle extends React.Component {
     this.googleSDK();
   }
 
+  saveUser(token, profile) {
+    var data = {
+      username: profile.getEmail(),
+      name: profile.getName(),
+      password: profile.getId(),
+    };
+
+    UserDataService.create(data)
+      .then(response => {
+        console.log("response from UserDataService")
+        console.log(response);
+        setUserSession(token, profile, response.data.token, response.data.user);
+        this.props.history.push("/main");
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
   prepareLoginButton = () => {
     console.log("prepareLoginButton")
     this.auth2.attachClickHandler(document.querySelector('#login-button'), {},
@@ -56,11 +76,11 @@ export class MyLoginWithGoogle extends React.Component {
         // console.log('Name: ' + profile.getName());
         // console.log('Image URL: ' + profile.getImageUrl());
         // console.log('Email: ' + profile.getEmail());
-        
+
         //YOUR CODE HERE
-        setUserSession(googleUser.getAuthResponse().id_token, profile);
-        this.props.history.push("/main");
-        
+
+        this.saveUser(googleUser.getAuthResponse().id_token, profile);
+
       }, (error) => {
         console.log(JSON.stringify(error, undefined, 2));
       });
