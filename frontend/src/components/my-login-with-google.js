@@ -5,6 +5,7 @@ import { setUserSession } from '../utils/common';
 
 // I have implemented the solution of this url:
 // https://w3path.com/react-google-login-with-example/
+
 export class MyLoginWithGoogle extends React.Component {
   constructor(props) {
     super(props);

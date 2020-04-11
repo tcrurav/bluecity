@@ -1,6 +1,18 @@
 import React from 'react';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
-import "./contact.css";
+import { MyNavbar } from '../my-navbar';
+import { Footer } from '../footer';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { MyContainer } from '../my-container';
+import styled from 'styled-components';
+
+const MyMap = styled(Map)`
+  &.leaflet-container {
+    width: 100%;
+    height: 100vh;
+  }
+`;
 
 export class Contact extends React.Component {
   constructor(props) {
@@ -15,20 +27,30 @@ export class Contact extends React.Component {
   render() {
     const position = [this.state.lat, this.state.lng]
     return (
-      <Map center={position} zoom={this.state.zoom}>
-        <TileLayer
-          attribution=''
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Marker position={position}>
-          <Popup>
-            IES El Rincón<br />
-            Guanarteme Building<br />
-            My school.<br />
-            I miss it so much.
-          </Popup>
-        </Marker>
-      </Map>
+      <>
+        <MyNavbar history={this.props.history} />
+        <MyContainer>
+          <Row>
+            <Col>
+              <MyMap center={position} zoom={this.state.zoom}>
+                <TileLayer
+                  attribution=''
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={position}>
+                  <Popup>
+                    IES El Rincón<br />
+                    Guanarteme Building<br />
+                    My school.<br />
+                    I miss it so much.
+                  </Popup>
+                </Marker>
+              </MyMap>
+            </Col>
+          </Row>
+        </MyContainer>
+        <Footer />
+      </>
     )
   }
 }

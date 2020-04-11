@@ -5,6 +5,8 @@ import RoutePrivate from './utils/private-route';
 import RoutePublic from './utils/public-route';
 import { Login } from './components/login';
 import { Main } from './components/main';
+import { Parking } from './components/parking';
+import { Renting } from './components/renting';
 import { Contact } from './components/contact/contact';
 import { MyError } from './components/my-error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -27,6 +29,8 @@ class App extends React.Component {
       <Router>
         <Switch>
           <RoutePrivate path='/main' component={Main} />
+          <RoutePrivate path='/parking' component={Parking} />
+          <RoutePrivate path='/renting' component={Renting} />
           <RoutePublic path='/login' component={Login} />
           <Route path='/contact' component={Contact} />
           <Route component={MyError} />

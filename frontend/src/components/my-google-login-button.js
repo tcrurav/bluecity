@@ -9,7 +9,11 @@ const MyImg = styled.img`
 
 const MyA = styled.a`
   width: 100%;
-  text-transform: none;
+  background-color: #fff !important;
+  
+  &:hover {
+    box-shadow: 0 0 16px #4285f4;
+  }
 `;
 
 const MySpan = styled.span`
