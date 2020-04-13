@@ -6,17 +6,25 @@ Blue City main repository
 
 Download links:
 
-SSH clone URL: ssh://git@git.jetbrains.space/elrincon/BlueCity.git
+From Github: https://github.com/tcrurav/bluecity.git
 
-HTTPS clone URL: https://git.jetbrains.space/elrincon/BlueCity.git
+Hope it will keep updated soon too:
+* SSH clone URL: ssh://git@git.jetbrains.space/elrincon/BlueCity.git
+* HTTPS clone URL: https://git.jetbrains.space/elrincon/BlueCity.git
 
 ## Repo news
 
+* April 1st:
+    - In this online meeting, we worked on the mockups. Carlos from his computer made some mockups using Adobe XD.
+    - We also discuss about some other points of the project making clear how to work together.
+* March 25th:
+    - In this online meeting, we have worked the basic concepts of passing data through props.
+    - Besides we have worked on leaflet. Here is the link to the github project we worked during the 2 hours of today: https://github.com/tcrurav/react-leaflet
 * March 18th:
-    - Tiburcio explained the code of the login and main pages of the project.
+    - In this online meeting, Tiburcio explained the code of the login and main pages of the project.
     - We decided to use Leaflet for the Maps and Geolocation (https://leafletjs.com/). Gonzalo y Ettiene will work on it.
-    - We studied the diagram made by IES STEVE TERRADAS (https://elrincon.jetbrains.space/p/bc/code/BlueCity?path=%2Fdocs%2Fordinogram.pdf)
-    - We discussed about the tasks each one wants to work with. Check the link for a graphical view of the tasks (https://elrincon.jetbrains.space/p/bc/code/BlueCity?path=%2Fdocs%2Fdocs%2Fwho-does-what.png)
+    - We studied the diagram made by IES STEVE TERRADAS (https://github.com/tcrurav/bluecity/blob/master/docs/ordinogram.pdf)
+    - We discussed about the tasks each one wants to work with. Check the link for a graphical view of the tasks (https://github.com/tcrurav/bluecity/blob/master/docs/who-does-what.png)
     - Juan Thielmann will create a Github mirror of (https://git.jetbrains.space/elrincon/BlueCity.git)
     - Tiburcio will upload the login and main pages to the repo.
     - Tiburcio will create a video/tutorial explaining the Authentication with Google. 
@@ -32,16 +40,77 @@ HTTPS clone URL: https://git.jetbrains.space/elrincon/BlueCity.git
 
 ## Prerequisites
 
-What things you need to install the software and how to install them.
+The best option to start with this project is cloning it in your PC:
 
 ```
-Examples
+git clone https://github.com/tcrurav/bluecity.git
 ```
 
-## Deployment
+This project contains 2 different parts:
+* Frontend
+* Backend
 
-Add additional notes about how to deploy this on a production system.
+You need a node.js working environment. The LTS is recommended: https://nodejs.org/es/
 
-## Resources
+Once you have cloned your project install all dependencies.
 
-Add links to external resources for this project, such as CI server, bug tracker, etc.
+```
+cd bluecity/frontend
+npm install
+
+cd bluecity/backend
+npm install
+```
+
+* For your frontend part, if you want to use the Google Login feature, you have to create a clientID by creating a new project on Google developers website.: https://developers.google.com/identity/sign-in/web/sign-in
+
+Your Google ClientID should be inserted in the file: bluecity/frontend/src/components/my-login-with-google.js
+
+```
+client_id: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com',
+```
+
+* For your backend part, you need a mysql server working. You have to edit the file bluecity/backend/config/config.json, depending on your environment.
+
+```
+    "username": "root",
+    "password": "your password",
+    "database": "bluecity_development",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": 0
+```
+
+To start enjoying this project.
+
+```
+cd bluecity/frontend
+npm start
+
+cd bluecity/backend
+npm start
+```
+
+Enjoy!!!
+
+## Built With
+
+* [Visual Studio Code](https://code.visualstudio.com/) - The Editor used in this project
+* [React](https://reactjs.org/) - React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes.
+* [Node.js](https://nodejs.org/) - Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.
+* [Leaflet](https://leafletjs.com/) - an open-source JavaScript library
+for mobile-friendly interactive maps.
+* [react-fontawesome](https://github.com/FortAwesome/react-fontawesome) - React package integrating all icons in fontawesome.
+* [react-bootstrap](https://react-bootstrap.github.io/) - React-Bootstrap replaces the Bootstrap JavaScript. Each component has been built from scratch as a true React component, without unneeded dependencies like jQuery.
+* [react-leaflet](https://react-leaflet.js.org/) - React-Leaflet uses ⚛️ React's lifecycle methods to call the relevant Leaflet handlers, which has a few consequences.
+* [sequelize](https://sequelize.org/) - Sequelize is a promise-based Node.js ORM for Postgres, MySQL, MariaDB, SQLite and Microsoft SQL Server. It features solid transaction support, relations, eager and lazy loading, read replication and more.
+* [express](https://expressjs.com/) - Fast, unopinionated, minimalist web framework for Node.js.
+* [MySQL Workbench](https://www.mysql.com/products/workbench/) - MySQL Workbench is a unified visual tool for database architects, developers, and DBAs.
+* [dotenv](https://www.npmjs.com/package/dotenv) - Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env. Storing configuration in the environment separate from code is based on The Twelve-Factor App methodology.
+
+## Acknowledgments
+
+* https://www.cluemediator.com/reactjs-tutorial. Excellent tutorial as a basis for learning the basics needed for this project.
+* https://bezkoder.com/react-crud-web-api/. Another excellent tutorial to learn about the basics of this project.
+* https://gist.github.com/PurpleBooth/109311bb0361f32d87a2. A very complete template for README.md files.
+* https://w3path.com/react-google-login-with-example/. Excellent tutorial to understand Google login feature.
