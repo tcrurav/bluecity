@@ -14,8 +14,10 @@ Hope it will keep updated soon too:
 
 ## Repo news
 
+* April 15th:
+    - We have been learning how to deploy the whole start project Tiburcio had been working on this last Eastern, starting cloning the project from github, and then installing all the stuff for both the frontend and backend, following the instructions in this github project. At least Carlos Sánchez could install it all successfully. Some other students wear also successfull too or where near to achieve it.
 * April 1st:
-    - In this online meeting, we worked on the mockups. Carlos from his computer made some mockups using Adobe XD.
+    - In this online meeting, we worked on the mockups. Carlos Sánchez from his computer made some mockups using Adobe XD.
     - We also discuss about some other points of the project making clear how to work together.
 * March 25th:
     - In this online meeting, we have worked the basic concepts of passing data through props.
@@ -70,7 +72,16 @@ Your Google ClientID should be inserted in the file: bluecity/frontend/src/compo
 client_id: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com',
 ```
 
-* For your backend part, you need a mysql server working. You have to edit the file bluecity/backend/config/config.json, depending on your environment.
+* For your backend part:
+1. You need a .env file with a key for the JWT:
+
+```
+    JWT_SECRET=V3RY#1MP0RT@NT$3CR3T#
+```
+
+2. You need a mysql server working.
+
+3. You have to edit the file bluecity/backend/config/config.json, depending on your environment.
 
 ```
     "username": "root",
@@ -81,7 +92,21 @@ client_id: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com',
     "operatorsAliases": 0
 ```
 
-To start enjoying this project.
+4. Create the mysql database, that in our case is "bluecity_development".
+
+5. Do the migration creating the tables with the contents of /bluecity/migrations 
+
+```
+npx sequelize-cli db:migrate
+```
+
+6. And populating the tables with data with the contents of /bluecity/seeders
+
+```
+npx sequelize-cli db:seed:all
+```
+
+Finally to start enjoying this project.
 
 ```
 cd bluecity/frontend
