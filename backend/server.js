@@ -34,6 +34,7 @@ app.use(function (req, res, next) {
   if (!token) return next(); //if no token, continue
 
   token = token.replace('Bearer ', '');
+  // .env should contain a line like JWT_SECRET=V3RY#1MP0RT@NT$3CR3T#
   jwt.verify(token, process.env.JWT_SECRET, function (err, user) {
     if (err) {
       return res.status(401).json({

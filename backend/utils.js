@@ -15,6 +15,7 @@ function generateToken(user) {
     password: user.password
   };
  
+  // .env should contain a line like JWT_SECRET=V3RY#1MP0RT@NT$3CR3T#
   return jwt.sign(u, process.env.JWT_SECRET, {
     expiresIn: 60 * 60 * 24 // expires in 24 hours
   });
