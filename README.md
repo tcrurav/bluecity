@@ -15,10 +15,10 @@ Hope it will keep updated soon too:
 ## Repo news
 
 * April 15th:
-    - We have been learning how to deploy the whole start project Tiburcio had been working on this last Eastern, starting cloning the project from github, and then installing all the stuff for both the frontend and backend, following the instructions in this github project. At least Carlos Sánchez could install it all successfully. Some other students wear also successfull too or where near to achieve it.
+    - We have been learning how to deploy the whole start project Tiburcio had been working on this last Eastern, starting cloning the project from github, and then installing all the stuff for both the frontend and backend, following the instructions in this github project. At least Carlos Sánchez could install it all successfully. Some other students were also successfull too or were near to achieve it.
 * April 1st:
     - In this online meeting, we worked on the mockups. Carlos Sánchez from his computer made some mockups using Adobe XD.
-    - We also discuss about some other points of the project making clear how to work together.
+    - We also discussed about some other points of the project making clear how to work together.
 * March 25th:
     - In this online meeting, we have worked the basic concepts of passing data through props.
     - Besides we have worked on leaflet. Here is the link to the github project we worked during the 2 hours of today: https://github.com/tcrurav/react-leaflet
