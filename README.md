@@ -14,9 +14,10 @@ Hope it will keep updated soon too:
 
 ## Repo news
 
-* April 23th:
+* April 22nd:
     - We have been learning how to deal with git branches in this project.
     - We have then created a branch called feature/mytest to add a new component called MyTest. We had a problem at the end. The solution was just to modify the line 11 in backend/routes/user.routes.js, so that it stays: router.get("/", users.findAll);
+    - In this meeting Carlos Sánchez, Néstor Cabanillas and Néstor Batista have already installed successfully Tiburcio's reference project, and were actively adding the new MyTest component. Aaron and Texe were still with the boilerplate actions such as installing MySQL. They plan to have during this week a meeting to finally install it all.
 * April 15th:
     - We have been learning how to deploy the whole start project Tiburcio had been working on this last Eastern, starting cloning the project from github, and then installing all the stuff for both the frontend and backend, following the instructions in this github project. At least Carlos Sánchez could install it all successfully. Some other students were also successfull too or were near to achieve it.
 * April 1st:
