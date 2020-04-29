@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "root",
+    "username": "",
     "password": "",
-    "database": "bluecity_dev",
+    "database": "",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": 0
   },
   "test": {
-    "username": "carlos",
-    "password": "Casanroxd061001*",
+    "username": "",
+    "password": "",
     "database": "bluecity_test",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": 0
   },
   "production": {
-    "username": "carlos",
-    "password": "Casanroxd061001*",
+    "username": "",
+    "password": "",
     "database": "bluecity_production",
     "host": "127.0.0.1",
     "dialect": "mysql",
