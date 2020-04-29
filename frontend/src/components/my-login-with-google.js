@@ -20,7 +20,7 @@ export class MyLoginWithGoogle extends React.Component {
     window['googleSDKLoaded'] = () => {
       window['gapi'].load('auth2', () => {
         this.auth2 = window['gapi'].auth2.init({
-          client_id: '215570009146-1a4einf4514o62jmusn6c8ehu5qqbr9g.apps.googleusercontent.com',
+          client_id: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com',
           cookiepolicy: 'single_host_origin',
           scope: 'profile email'
         });

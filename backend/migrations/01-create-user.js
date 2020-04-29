@@ -1,6 +1,5 @@
-//npx sequelize-cli db:migrate:undo:all --> Borra todas las migraciones
-//npx sequelize-cli db:migrate --> Hace las migraciones
-//user-migration.js
+//npx sequelize-cli db:migrate:undo:all --> To delete all migrations
+//npx sequelize-cli db:migrate --> To do the migrations
 module.exports = {
   up: (queryInterface, Sequelize) =>
     queryInterface.createTable("Users", {

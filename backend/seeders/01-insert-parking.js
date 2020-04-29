@@ -1,4 +1,4 @@
-//npx sequelize-cli db:seed:all
+//npx sequelize-cli db:seed:all to insert this data in the tables of the database
 module.exports = {
     up: (queryInterface, Sequelize) => {
       return queryInterface.bulkInsert('Parkings', [{
