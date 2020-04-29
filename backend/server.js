@@ -51,6 +51,8 @@ app.use(function (req, res, next) {
 
 require("./routes/user.routes")(app);
 require("./routes/parking.routes")(app);
+require("./routes/box.routes")(app);
+require("./routes/scooter.routes")(app);
 
 app.listen(port, () => {
   console.log('Server started on: ' + port);
