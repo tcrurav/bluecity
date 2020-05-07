@@ -8,43 +8,17 @@ Download links:
 
 From Github: https://github.com/tcrurav/bluecity.git
 
-Hope it will keep updated soon too:
-* SSH clone URL: ssh://git@git.jetbrains.space/elrincon/BlueCity.git
-* HTTPS clone URL: https://git.jetbrains.space/elrincon/BlueCity.git
-
-## Repo news
-
-* April 22nd:
-    - We have been learning how to deal with git branches in this project.
-    - We have then created a branch called feature/mytest to add a new component called MyTest. We had a problem at the end. The solution was just to modify the line 11 in backend/routes/user.routes.js, so that it stays: router.get("/", users.findAll);
-    - In this meeting Carlos Sánchez, Néstor Cabanillas and Néstor Batista have already installed successfully Tiburcio's reference project, and were actively adding the new MyTest component. Aaron and Texe were still with the boilerplate actions such as installing MySQL. They plan to have during this week a meeting to finally install it all.
-* April 15th:
-    - We have been learning how to deploy the whole start project Tiburcio had been working on this last Eastern, starting cloning the project from github, and then installing all the stuff for both the frontend and backend, following the instructions in this github project. At least Carlos Sánchez could install it all successfully. Some other students were also successfull too or were near to achieve it.
-* April 1st:
-    - In this online meeting, we worked on the mockups. Carlos Sánchez from his computer made some mockups using Adobe XD.
-    - We also discussed about some other points of the project making clear how to work together.
-* March 25th:
-    - In this online meeting, we have worked the basic concepts of passing data through props.
-    - Besides we have worked on leaflet. Here is the link to the github project we worked during the 2 hours of today: https://github.com/tcrurav/react-leaflet
-* March 18th:
-    - In this online meeting, Tiburcio explained the code of the login and main pages of the project.
-    - We decided to use Leaflet for the Maps and Geolocation (https://leafletjs.com/). Gonzalo y Ettiene will work on it.
-    - We studied the diagram made by IES STEVE TERRADAS (https://github.com/tcrurav/bluecity/blob/master/docs/ordinogram.pdf)
-    - We discussed about the tasks each one wants to work with. Check the link for a graphical view of the tasks (https://github.com/tcrurav/bluecity/blob/master/docs/who-does-what.png)
-    - Juan Thielmann will create a Github mirror of (https://git.jetbrains.space/elrincon/BlueCity.git)
-    - Tiburcio will upload the login and main pages to the repo.
-    - Tiburcio will create a video/tutorial explaining the Authentication with Google. 
-    - Carlos and Juan Thielmann will investigate the possibility of creating Mockups with Adobe XD.
-    - Aaron, Texe and Carlos will work on the rent part of the ordinogram.
-    - Isaiah and Néstor Cabanillas will work on the reservation of the parking.
-    - Juan Thielmann will work on the rent at the bottom right part of the ordinogram.
-    - Néstor Batista will work on the parking at the bottom left part of the ordinogram.
-* March 13th, No meeting because of Corona Virus.
-* March 6th, We worked further on React introducing the main concepts.
-* February 28th, We worked on React introducing the main concepts.
-* February 21th, introduction to the server technology with Node.js, Express and the use of Postman to test it.
+Also available in elrincon.jetbrains.space of the project:
+* HTTPS clone URL: https://git.jetbrains.space/elrincon/bc/learning.git
 
 ## Prerequisites
+
+You need a working environment with:
+* [Git](https://git-scm.com) - You can install it from https://git-scm.com/downloads.
+* [MySQL](https://www.mysql.com) - You can install it from https://www.mysql.com/downloads/.
+* [Node.js](https://nodejs.org) - Install node.js from https://nodejs.org/es/download/. It's advisable to install the LTS version.
+
+## Installation instructions
 
 The best option to start with this project is cloning it in your PC:
 
@@ -121,6 +95,45 @@ npm start
 ```
 
 Enjoy!!!
+
+## Repo news
+
+* May 6th:
+    - Juan Thielmann has mirrored https://github.com/tcrurav/bluecity.git in https://git.jetbrains.space/elrincon/bc/learning.git
+    - Texe has shared his desktop and now he has the project locally working in his computer.
+    - Texe had been working on logos for the project and now he has added it to the project in the development branch locally. He hasn't uploaded it to the remote development branch yet.
+* April 29th:
+    - Carlos Sánchez has shared his desktop and worked on a new component to show how add a new table in the database, and how to show that data in a new component in the frontend.
+    - At the end Carlos Sánchez has merged his feature branch in the development branch, and uploaded to the remote development branch.
+* April 22nd:
+    - We have been learning how to deal with git branches in this project.
+    - We have then created a branch called feature/mytest to add a new component called MyTest. We had a problem at the end. The solution was just to modify the line 11 in backend/routes/user.routes.js, so that it stays: router.get("/", users.findAll);
+    - In this meeting Carlos Sánchez, Néstor Cabanillas and Néstor Batista have already installed successfully Tiburcio's reference project, and were actively adding the new MyTest component. Aaron and Texe were still with the boilerplate actions such as installing MySQL. They plan to have during this week a meeting to finally install it all.
+* April 15th:
+    - We have been learning how to deploy the whole start project Tiburcio had been working on this last Eastern, starting cloning the project from github, and then installing all the stuff for both the frontend and backend, following the instructions in this github project. At least Carlos Sánchez could install it all successfully. Some other students were also successfull too or were near to achieve it.
+* April 1st:
+    - In this online meeting, we worked on the mockups. Carlos Sánchez from his computer made some mockups using Adobe XD.
+    - We also discussed about some other points of the project making clear how to work together.
+* March 25th:
+    - In this online meeting, we have worked the basic concepts of passing data through props.
+    - Besides we have worked on leaflet. Here is the link to the github project we worked during the 2 hours of today: https://github.com/tcrurav/react-leaflet
+* March 18th:
+    - In this online meeting, Tiburcio explained the code of the login and main pages of the project.
+    - We decided to use Leaflet for the Maps and Geolocation (https://leafletjs.com/). Gonzalo y Ettiene will work on it.
+    - We studied the diagram made by IES STEVE TERRADAS (https://github.com/tcrurav/bluecity/blob/master/docs/ordinogram.pdf)
+    - We discussed about the tasks each one wants to work with. Check the link for a graphical view of the tasks (https://github.com/tcrurav/bluecity/blob/master/docs/who-does-what.png)
+    - Juan Thielmann will create a Github mirror of (https://git.jetbrains.space/elrincon/BlueCity.git)
+    - Tiburcio will upload the login and main pages to the repo.
+    - Tiburcio will create a video/tutorial explaining the Authentication with Google. 
+    - Carlos and Juan Thielmann will investigate the possibility of creating Mockups with Adobe XD.
+    - Aaron, Texe and Carlos will work on the rent part of the ordinogram.
+    - Isaiah and Néstor Cabanillas will work on the reservation of the parking.
+    - Juan Thielmann will work on the rent at the bottom right part of the ordinogram.
+    - Néstor Batista will work on the parking at the bottom left part of the ordinogram.
+* March 13th, No meeting because of Corona Virus.
+* March 6th, We worked further on React introducing the main concepts.
+* February 28th, We worked on React introducing the main concepts.
+* February 21th, introduction to the server technology with Node.js, Express and the use of Postman to test it.
 
 ## Built With
 
