@@ -53,7 +53,7 @@ client_id: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com',
 ```
 
 * For your backend part:
-1. You need a .env file with a key for the JWT:
+1. You need a bluecity/backend/.env file with a key for the JWT:
 
 ```
     JWT_SECRET=V3RY#1MP0RT@NT$3CR3T#
