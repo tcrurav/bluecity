@@ -11,96 +11,151 @@ From Github: https://github.com/tcrurav/bluecity.git
 Also available in elrincon.jetbrains.space of the project:
 * HTTPS clone URL: https://git.jetbrains.space/elrincon/bc/learning.git
 
-## Prerequisites
+## Project Install instructions for Ubuntu 20.04 in a local clean machine
 
-You need a working environment with:
-* [Git](https://git-scm.com) - You can install it from https://git-scm.com/downloads.
-* [MySQL](https://www.mysql.com) - You can install it from https://www.mysql.com/downloads/.
-* [Node.js](https://nodejs.org) - Install node.js from https://nodejs.org/es/download/. It's advisable to install the LTS version.
-
-## General Installation instructions
-
-There is a deep alternative version of this instructions for Ubuntu 20.04. [Project Install instructions for Ubuntu 20.04 in a local clean machine](/README.For.Linux.md).
-
-The best option to start with this project is cloning it in your PC:
+Ensure you have an updated environment with update/upgrade:
 
 ```
-git clone https://github.com/tcrurav/bluecity.git
+$ sudo apt update
+$ sudo apt upgrade
 ```
 
-This project contains 2 different parts:
+You need a node.js working environment. Install Node.js and npm (node package manager):
+
+```
+$ sudo apt install nodejs
+$ sudo apt install npm
+```
+
+You need git to clone the project:
+
+```
+$ sudo apt install git
+```
+
+Create a directory for bluecity and clone the project using git:
+
+```
+$ mkdir ~/bluecity
+$ cd ~/bluecity
+$ git clone https://github.com/tcrurav/bluecity.git
+```
+
+You will notice this project contains 2 different parts (in 2 directories):
 * Frontend
 * Backend
 
-You need a node.js working environment. The LTS is recommended: https://nodejs.org/es/
-
-Once you have cloned your project install all dependencies.
+Once you have a node.js working environment and you have cloned your project install all dependencies.
 
 ```
-cd bluecity/frontend
-npm install
+$ cd ~/bluecity/bluecity/frontend
+$ npm install
 
-cd bluecity/backend
-npm install
+$ cd ~/bluecity/bluecity/backend
+$ npm install
 ```
 
 * For your frontend part, if you want to use the Google Login feature, you have to create a clientID by creating a new project on Google developers website.: https://developers.google.com/identity/sign-in/web/sign-in
 
-Your Google ClientID should be inserted in the file: bluecity/frontend/src/components/my-login-with-google.js
+In that page click on the blue button "Configure a project" to start the process of obtaining your clientID.
+
+After clicking on the blue button you'll have to sign in Google, and then you will be able to create a new project:
+
+![Create Project](/docs/screenshot-17-bis.png)
+
+![Create Project](/docs/screenshot-18-bis.png)
+
+![Create Project](/docs/screenshot-19-bis.png)
+
+![Create Project](/docs/screenshot-20-bis.png)
+
+In our local environment we can use the default http://localhost:3000 as the origin. For an explotation deployment you'll have to change/add your deployment URL.
+
+![Create Project](/docs/screenshot-21-bis.png)
+
+And finally you get your ClientID:
+
+![Create Project](/docs/screenshot-22-bis.png)
+
+Your Google ClientID should be inserted in the file: ~/bluecity/bluecity/frontend/src/components/my-login-with-google.js. Edit the following line:
 
 ```
 client_id: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com',
 ```
 
 * For your backend part:
-1. You need a .env file with a key for the JWT:
+1. Create a ~/bluecity/bluecity/backend/.env file with a key for the JWT:
 
 ```
     JWT_SECRET=V3RY#1MP0RT@NT$3CR3T#
 ```
 
-2. You need a mysql server working.
+2. You need a mysql server working. For detailed instructions click on https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04
 
-3. You have to edit the file bluecity/backend/config/config.json, depending on your environment.
+```
+$ sudo apt install mysql-server
+$ sudo mysql_secure_installation
+```
+
+For the last command introduce the following recommended options:
+
+![mysql](/docs/screenshot-31-bis.png)
+
+And for the rest of the options just click on ENTER.
+
+Now you can enter in the mysql CLI:
+
+```
+$ sudo mysql
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'password';
+mysql> FLUSH PRIVILEGES;
+mysql> exit
+```
+
+Now you can enter in the mysql CLI again with your new password to create the database for this project:
+
+```
+$ sudo mysql -u root -p
+mysql> create database bluecity_development;
+mysql> exit
+```
+
+3. You have to edit the file ~/bluecity/bluecity/backend/config/config.json, to indicate the user, password and database to use in the project.
 
 ```
     "username": "root",
-    "password": "your password",
+    "password": "password",
     "database": "bluecity_development",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": 0
 ```
 
-4. Create the mysql database, that in our case is "bluecity_development".
-
-5. Do the migration creating the tables with the contents of /bluecity/migrations 
+4. Do the migration creating the tables with the contents of ~/bluecity/bluecity/backend/migrations 
 
 ```
-npx sequelize-cli db:migrate
+$ cd ~/bluecity/bluecity/backend/migrations
+$ npx sequelize-cli db:migrate
 ```
 
-6. And populating the tables with data with the contents of /bluecity/seeders
+6. And populating the tables with data with the contents of ~/bluecity/bluecity/backend/migrations 
 
 ```
-npx sequelize-cli db:seed:all
+$ cd ~/bluecity/bluecity/backend/migrations
+$ npx sequelize-cli db:seed:all
 ```
 
 Finally to start enjoying this project.
 
 ```
-cd bluecity/frontend
-npm start
+$ cd ~/bluecity/bluecity/frontend
+$ npm start
 
-cd bluecity/backend
-npm start
+$ cd ~/bluecity/bluecity/backend
+$ npm start
 ```
 
 Enjoy!!!
-
-## Project Install instructions for Ubuntu 20.04 in a local clean machine
-
-[Project Install instructions for Ubuntu 20.04 in a local clean machine](/README.For.Linux.md)
 
 ## Repo news
 
@@ -162,3 +217,4 @@ for mobile-friendly interactive maps.
 * https://bezkoder.com/react-crud-web-api/. Another excellent tutorial to learn about the basics of this project.
 * https://gist.github.com/PurpleBooth/109311bb0361f32d87a2. A very complete template for README.md files.
 * https://w3path.com/react-google-login-with-example/. Excellent tutorial to understand Google login feature.
+* https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04. Excellent tutorial to install mysql-server in Ubuntu 20.04.
