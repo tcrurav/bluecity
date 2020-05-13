@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "",
+    "username": "root",
     "password": "",
-    "database": "",
+    "database": "bluecity_dev",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": 0

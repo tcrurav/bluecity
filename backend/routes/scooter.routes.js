@@ -8,6 +8,9 @@ module.exports = app => {
   
     // Retrieve all Scooter
     router.get("/", scooters.findAll);
+
+    // Find all free scooter
+    router.get("/freeScooters", scooters.findFreeScooters);
   
     // Retrieve a single Scooter with id
     router.get("/:id", scooters.findOne);
@@ -20,9 +23,6 @@ module.exports = app => {
   
     // Create a new Scooter
     router.delete("/", scooters.deleteAll);
-
-    // Find all free scooter
-    router.get("/freeScooters", scooters.findFreeScooters);
   
     app.use('/api/scooters', router);
   };

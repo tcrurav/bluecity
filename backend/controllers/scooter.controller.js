@@ -72,13 +72,13 @@ exports.findFreeScooters = (req, res) => {
         res.send(data);
       })
       .catch(err => {
+        console.log("hubo un error");
         res.status(500).send({
           message:
               err.message || "Some error occurred while retrieving scooters."
         });
       });
 };
-
 
 // Update a Scooter by the id in the request
 exports.update = (req, res) => {
