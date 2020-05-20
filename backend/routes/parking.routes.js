@@ -8,7 +8,10 @@ module.exports = app => {
   
     // Retrieve all Parking
     router.get("/", parkings.findAll);
-  
+
+    // Retrieve all Parking with a free scooter
+    router.get("/freeParkings", parkings.findAllWithAFreeScooter);
+
     // Retrieve a single Parking with id
     router.get("/:id", parkings.findOne);
   

@@ -72,10 +72,7 @@ exports.findFreeScooters = (req, res) => {
         res.send(data);
       })
       .catch(err => {
-<<<<<<< HEAD
         console.log("hubo un error");
-=======
->>>>>>> 19417255b0485db8067925a313f3338b29c14650
         res.status(500).send({
           message:
               err.message || "Some error occurred while retrieving scooters."
@@ -83,10 +80,6 @@ exports.findFreeScooters = (req, res) => {
       });
 };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 19417255b0485db8067925a313f3338b29c14650
 // Update a Scooter by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
