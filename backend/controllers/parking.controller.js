@@ -49,35 +49,35 @@ exports.findAll = (req, res) => {
         });
 };
 
+// as its name explains, it executes the query asynchronously to get properly the desired data.
+function executeQueryAsynchronously(data) {
+    return new Promise(function (resolve, reject) {
+        let output = data.map(b => {
+            return Parking.findByPk(b.dataValues.parkingId).then(parkingData => {
+                return parkingData.dataValues;
+            })
+        })
+        // waits to return from the output when all the individual promises are solved.
+        Promise.all(output).then(function(results) {
+            resolve(results);
+        })
+    })
+}
+
 // Retrieve all Parkings from the database with a free scooter.
 exports.findAllWithAFreeScooter = (req, res) => {
     Box.findAll({
         where: {userId: null, occupied: 1}
     })
         .then(data => {
-            console.log(data);
-            data.map(b => {
-                Parking.findByPk(b.parkingId).then(parkingData => {
-                    return parkingData;
-                })
+            executeQueryAsynchronously(data).then(resultParking => {
+                res.send(resultParking);
             })
-            res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
                     err.message || "Some error occurred while retrieving boxes."
-            });
-        });
-
-    Parking.findAll()
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving parkings."
             });
         });
 };
