@@ -44,10 +44,10 @@ npm install
 
 * For your frontend part, if you want to use the Google Login feature, you have to create a clientID by creating a new project on Google developers website.: https://developers.google.com/identity/sign-in/web/sign-in
 
-Your Google ClientID should be inserted in the file: bluecity/frontend/src/components/my-login-with-google.js
+Your Google ClientID is used in the file bluecity/frontend/src/components/my-login-with-google.js and should be inserted in the file bluecity/frontend/.env in the following manner: 
 
 ```
-client_id: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com',
+REACT_APP_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com,
 ```
 
 * For your backend part:
@@ -98,6 +98,11 @@ Enjoy!!!
 
 ## Repo news
 
+* May 27th:
+    - Carlos Sánchez has kept on sharing his desktop through Google Meet and we all have worked in the branch feature/mapping in order to create a working leaflet map to show all free scooter parkings available. 
+    - Today Carlos has also created the .env file of the frontend to avoid the burden of copying the Google ClientID for the Authentication any time there was a push/pull to/from the Github remote repo.
+* May 13th and 20th:
+    - Carlos Sánchez has shared his desktop through Google Meet and we all have worked in the branch feature/mapping in order to create a working leaflet map to show all free scooter parkings available. To achieve this goal we have worked on both the backend and frontend sides.
 * May 6th:
     - Juan Thielmann has mirrored https://github.com/tcrurav/bluecity.git in https://git.jetbrains.space/elrincon/bc/learning.git
     - Texe has shared his desktop and now he has the project locally working in his computer.
