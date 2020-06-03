@@ -96,6 +96,11 @@ npm start
 
 Enjoy!!!
 
+## Dev Docs
+
+* [Ordinogram](https://github.com/tcrurav/bluecity/blob/master/docs/ordinogram.pdf) - The ordinogram designed by IES STEVE TERRADAS.
+* [ER Diagram](https://github.com/tcrurav/bluecity/blob/master/docs/bluecity_dev_ER_diagram.png) - The Entity-Relationship backend's diagram.
+
 ## Repo news
 
 * May 6th:
@@ -119,7 +124,7 @@ Enjoy!!!
     - Besides we have worked on leaflet. Here is the link to the github project we worked during the 2 hours of today: https://github.com/tcrurav/react-leaflet
 * March 18th:
     - In this online meeting, Tiburcio explained the code of the login and main pages of the project.
-    - We decided to use Leaflet for the Maps and Geolocation (https://leafletjs.com/). Gonzalo y Ettiene will work on it.
+    - We decided to use Leaflet for the Maps and Geolocation (https://leafletjs.com/). Gonzalo y Etienne will work on it.
     - We studied the diagram made by IES STEVE TERRADAS (https://github.com/tcrurav/bluecity/blob/master/docs/ordinogram.pdf)
     - We discussed about the tasks each one wants to work with. Check the link for a graphical view of the tasks (https://github.com/tcrurav/bluecity/blob/master/docs/who-does-what.png)
     - Juan Thielmann will create a Github mirror of (https://git.jetbrains.space/elrincon/BlueCity.git)

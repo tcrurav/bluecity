@@ -11,7 +11,10 @@ module.exports = app => {
 
     // Find all free scooter
     router.get("/freeScooters", scooters.findFreeScooters);
-  
+
+    // Retrieve a single Scooter with userId
+    router.get("/user/:userId", scooters.findOneWithUserId);
+
     // Retrieve a single Scooter with id
     router.get("/:id", scooters.findOne);
   

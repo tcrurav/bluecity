@@ -61,6 +61,23 @@ exports.findOne = (req, res) => {
     });
 };
 
+// Find a single Scooter with an userId
+exports.findOneWithUserId = (req, res) => {
+  const userId = req.params.userId;
+
+  Scooter.findOne({
+    where: { userId: userId}
+  })
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error retrieving Scooter with userId=" + userId
+        });
+      });
+};
+
 // Find all free Scooters (where userId is null)
 exports.findFreeScooters = (req, res) => {
   Scooter.findAll({
