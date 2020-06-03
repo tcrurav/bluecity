@@ -77,10 +77,10 @@ And finally you get your ClientID:
 
 ![Create Project](/docs/screenshot-22-bis.png)
 
-Your Google ClientID should be inserted in the file: ~/bluecity/bluecity/frontend/src/components/my-login-with-google.js. Edit the following line:
+Your Google ClientID is used in the file bluecity/frontend/src/components/my-login-with-google.js and should be inserted in the file bluecity/frontend/.env in the following manner: 
 
 ```
-client_id: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com',
+REACT_APP_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com,
 ```
 
 * For your backend part:
@@ -157,8 +157,23 @@ $ npm start
 
 Enjoy!!!
 
+## Dev Docs
+
+* [Ordinogram](https://github.com/tcrurav/bluecity/blob/master/docs/ordinogram.pdf) - The ordinogram designed by IES STEVE TERRADAS.
+* [ER Diagram](https://github.com/tcrurav/bluecity/blob/master/docs/bluecity_dev_ER_diagram.png) - The Entity-Relationship backend's diagram.
+
 ## Repo news
 
+* June 3rd:
+    - Carlos Carlos Sánchez has kept on sharing his desktop through Google Meet and Aarón and Tiburcio have worked in the branch feature/mapping in order to create a working leaflet map to show all free scooter parkings available. We got it! Today it shows the leaflet map finally getting data from the Backend.
+    - We have added the ER diagram from WebStorm IDE Grip into the README.md.
+    - We also modified the component Renting to decide wether the logged in user has an already rented scooter or not.
+    - The feature is not fully finished but we have decided to merge it to develop branch and then to master branch.
+* May 27th:
+    - Carlos Sánchez has kept on sharing his desktop through Google Meet and we all have worked in the branch feature/mapping in order to create a working leaflet map to show all free scooter parkings available. 
+    - Today Carlos has also created the .env file of the frontend to avoid the burden of copying the Google ClientID for the Authentication any time there was a push/pull to/from the Github remote repo.
+* May 13th and 20th:
+    - Carlos Sánchez has shared his desktop through Google Meet and we all have worked in the branch feature/mapping in order to create a working leaflet map to show all free scooter parkings available. To achieve this goal we have worked on both the backend and frontend sides.
 * May 6th:
     - Juan Thielmann has mirrored https://github.com/tcrurav/bluecity.git in https://git.jetbrains.space/elrincon/bc/learning.git
     - Texe has shared his desktop and now he has the project locally working in his computer.
