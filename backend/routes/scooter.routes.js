@@ -8,13 +8,13 @@ module.exports = app => {
   
     // Retrieve all Scooter
     router.get("/", scooters.findAll);
-<<<<<<< HEAD
 
     // Find all free scooter
     router.get("/freeScooters", scooters.findFreeScooters);
-=======
->>>>>>> 19417255b0485db8067925a313f3338b29c14650
-  
+
+    // Retrieve a single Scooter with userId
+    router.get("/user/:userId", scooters.findOneWithUserId);
+
     // Retrieve a single Scooter with id
     router.get("/:id", scooters.findOne);
   
@@ -26,12 +26,6 @@ module.exports = app => {
   
     // Create a new Scooter
     router.delete("/", scooters.deleteAll);
-<<<<<<< HEAD
-=======
-
-    // Find all free scooter
-    router.get("/freeScooters", scooters.findFreeScooters);
->>>>>>> 19417255b0485db8067925a313f3338b29c14650
   
     app.use('/api/scooters', router);
   };

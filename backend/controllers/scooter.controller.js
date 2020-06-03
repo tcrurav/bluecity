@@ -61,6 +61,23 @@ exports.findOne = (req, res) => {
     });
 };
 
+// Find a single Scooter with an userId
+exports.findOneWithUserId = (req, res) => {
+  const userId = req.params.userId;
+
+  Scooter.findOne({
+    where: { userId: userId}
+  })
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error retrieving Scooter with userId=" + userId
+        });
+      });
+};
+
 // Find all free Scooters (where userId is null)
 exports.findFreeScooters = (req, res) => {
   Scooter.findAll({
@@ -72,10 +89,7 @@ exports.findFreeScooters = (req, res) => {
         res.send(data);
       })
       .catch(err => {
-<<<<<<< HEAD
         console.log("hubo un error");
-=======
->>>>>>> 19417255b0485db8067925a313f3338b29c14650
         res.status(500).send({
           message:
               err.message || "Some error occurred while retrieving scooters."
@@ -83,10 +97,6 @@ exports.findFreeScooters = (req, res) => {
       });
 };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 19417255b0485db8067925a313f3338b29c14650
 // Update a Scooter by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;

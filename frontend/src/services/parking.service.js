@@ -5,6 +5,10 @@ class ParkingDataService {
     return http.get("/parkings");
   }
 
+  findAllWithAFreeScooter() {
+    return http.get("/parkings/freeParkings");
+  }
+
   get(id) {
     return http.get(`/parkings/${id}`);
   }

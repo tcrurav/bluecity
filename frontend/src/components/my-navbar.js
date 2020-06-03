@@ -40,6 +40,7 @@ export class MyNavbar extends React.Component {
             <Nav.Link href="/parking"><FontAwesomeIcon icon={faParking} /> Parking</Nav.Link>
             <Nav.Link href="/renting"><FontAwesomeIcon icon={faCreditCard} /> Renting</Nav.Link>
             <Nav.Link href="/contact"><FontAwesomeIcon icon={faMapMarkerAlt} /> Contact</Nav.Link>
+            <Nav.Link href="/mapping"><FontAwesomeIcon icon={faMapMarkerAlt} /> freeParkings</Nav.Link>
           </Nav>
           <Nav className="ml-auto">
             <Nav.Link onClick={this.handleLogout}><FontAwesomeIcon icon={faSignOutAlt} /> Sign out</Nav.Link>
