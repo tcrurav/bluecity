@@ -5,6 +5,10 @@ class ScooterDataService {
     return http.get("/scooters");
   }
 
+  getScooterWithUserId(userId) {
+    return http.get(`/scooters/user/${userId}`);
+  }
+
   get(id) {
     return http.get(`/scooters/${id}`);
   }
