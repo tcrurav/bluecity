@@ -10,8 +10,10 @@ import { Renting } from './components/renting';
 import { Contact } from './components/contact/contact';
 import { MyError } from './components/my-error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import {Scooter} from "./components/scooter";
+import {Mapping} from './components/mapping';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 // import 'jquery/dist/jquery.min.js';
 // import 'bootstrap/dist/js/bootstrap.min.js';
 
@@ -31,8 +33,9 @@ class App extends React.Component {
         <Switch>
           <RoutePrivate path='/main' component={Main} />
           <RoutePrivate path='/parking' component={Parking} />
-          <RoutePrivate path='/renting' component={Renting} />
+          <RoutePrivate path='/renting' component={() => <Renting userId="1"/>}/>
           <RoutePrivate path='/scooter-renting' component={Scooter} />
+          <RoutePrivate path='/mapping' component={Mapping} />
           <RoutePublic path='/login' component={Login} />
           <Route path='/contact' component={Contact} />
           <Route component={MyError} />

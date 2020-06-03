@@ -98,12 +98,18 @@ npm start
 
 Enjoy!!!
 
-## Project Install instructions for Ubuntu 20.04 in a local clean machine
+## Dev Docs
 
-[Project Install instructions for Ubuntu 20.04 in a local clean machine](/README.For.Linux.md)
+* [Ordinogram](https://github.com/tcrurav/bluecity/blob/master/docs/ordinogram.pdf) - The ordinogram designed by IES STEVE TERRADAS.
+* [ER Diagram](https://github.com/tcrurav/bluecity/blob/master/docs/bluecity_dev_ER_diagram.png) - The Entity-Relationship backend's diagram.
 
 ## Repo news
 
+* June 3rd:
+    - Carlos Carlos Sánchez has kept on sharing his desktop through Google Meet and Aarón and Tiburcio have worked in the branch feature/mapping in order to create a working leaflet map to show all free scooter parkings available. We got it! Today it shows the leaflet map finally getting data from the Backend.
+    - We have added the ER diagram from WebStorm IDE Grip into the README.md.
+    - We also modified the component Renting to decide wether the logged in user has an already rented scooter or not.
+    - The feature is not fully finished but we have decided to merge it to develop branch and then to master branch.
 * May 27th:
     - Carlos Sánchez has kept on sharing his desktop through Google Meet and we all have worked in the branch feature/mapping in order to create a working leaflet map to show all free scooter parkings available. 
     - Today Carlos has also created the .env file of the frontend to avoid the burden of copying the Google ClientID for the Authentication any time there was a push/pull to/from the Github remote repo.
@@ -130,7 +136,7 @@ Enjoy!!!
     - Besides we have worked on leaflet. Here is the link to the github project we worked during the 2 hours of today: https://github.com/tcrurav/react-leaflet
 * March 18th:
     - In this online meeting, Tiburcio explained the code of the login and main pages of the project.
-    - We decided to use Leaflet for the Maps and Geolocation (https://leafletjs.com/). Gonzalo y Ettiene will work on it.
+    - We decided to use Leaflet for the Maps and Geolocation (https://leafletjs.com/). Gonzalo y Etienne will work on it.
     - We studied the diagram made by IES STEVE TERRADAS (https://github.com/tcrurav/bluecity/blob/master/docs/ordinogram.pdf)
     - We discussed about the tasks each one wants to work with. Check the link for a graphical view of the tasks (https://github.com/tcrurav/bluecity/blob/master/docs/who-does-what.png)
     - Juan Thielmann will create a Github mirror of (https://git.jetbrains.space/elrincon/BlueCity.git)

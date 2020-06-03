@@ -1,27 +1,40 @@
 import React from 'react';
-import { MyNavbar } from './my-navbar';
-import { Footer } from './footer';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { MyContainer } from './my-container';
-import Button from "react-bootstrap/Button";
+import {MyNavbar} from './my-navbar';
+import {Footer} from './footer';
+import ScooterDataService from "../services/scooter.service";
+import {Mapping} from "./mapping";
 
 export class Renting extends React.Component {
 
-  render() {
-    return (
-      <>
-        <MyNavbar history={this.props.history} />
-        <MyContainer>
-          <Row className="h-75">
-            <Col className="text-center my-auto">
-                <Button variant="outline-primary" className="mt-2" href="/scooter-renting">Rent a Scooter</Button>
-            </Col>
-          </Row>
-        </MyContainer>
-        <Footer />
-      </>
-    );
-  }
+    constructor(props) {
+        super(props);
+        this.findScooterWithuserId = this.findScooterWithuserId.bind(this);
+        this.state = {
+            user: null
+        }
+    }
+
+    componentDidMount() {
+        this.findScooterWithuserId();
+    }
+
+    findScooterWithuserId() {
+        ScooterDataService.getScooterWithUserId(this.props.userId).then(res => {
+            console.log(res);
+            this.setState({
+                user: res.data
+            })
+        })
+    }
+
+    render() {
+        return (
+            <>
+                <MyNavbar history={this.props.history}/>
+                    {this.state.user? <Mapping /> : <Mapping />}
+                <Footer/>
+            </>
+        );
+    }
 }
 
