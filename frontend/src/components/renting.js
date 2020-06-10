@@ -2,7 +2,8 @@ import React from 'react';
 import {MyNavbar} from './my-navbar';
 import {Footer} from './footer';
 import ScooterDataService from "../services/scooter.service";
-import {Mapping} from "./mapping";
+import {ParkingsWithFreeScooters} from "./parkingsWithFreeScooters";
+import {ParkingsWithFreeBoxes} from "./parkingsWithFreeBoxes";
 
 export class Renting extends React.Component {
 
@@ -31,7 +32,7 @@ export class Renting extends React.Component {
         return (
             <>
                 <MyNavbar history={this.props.history}/>
-                    {this.state.user? <Mapping /> : <Mapping />}
+                    {this.state.user ? <ParkingsWithFreeBoxes /> : <ParkingsWithFreeScooters />}
                 <Footer/>
             </>
         );

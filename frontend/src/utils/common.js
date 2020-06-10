@@ -5,6 +5,13 @@ export const getUser = () => {
   else return null;
 }
 
+// return the current user id from the session storage
+export const getCurrentUserId = () => {
+  const userStr = sessionStorage.getItem('apiUser');
+  if (userStr) return JSON.parse(userStr).id;
+  else return null;
+}
+
 // return the token from the session storage
 export const getToken = () => {
   return sessionStorage.getItem('token') || null;
