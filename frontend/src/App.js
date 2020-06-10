@@ -28,13 +28,16 @@ class App extends React.Component {
      }
   }*/
 
+  // READ following web to uderstand the use of history in react-router-dom
+  // https://github.com/ReactTraining/react-router/blob/master/FAQ.md#how-do-i-pass-props-to-the-component-rendered-by-a-route
+
   render() {
     return (
       <Router>
         <Switch>
           <RoutePrivate path='/main' component={Main} />
           <RoutePrivate path='/parking' component={Parking} />
-          <RoutePrivate path='/renting' component={() => <Renting userId={getCurrentUserId()}/>}/>
+          <RoutePrivate path='/renting' component={(props) => <Renting userId={getCurrentUserId()} history={props.history} />}/>
           <RoutePrivate path='/scooter-renting' component={Scooter} />
           <RoutePublic path='/login' component={Login} />
           <Route path='/contact' component={Contact} />

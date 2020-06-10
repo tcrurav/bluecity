@@ -1,7 +1,5 @@
 import React from 'react';
 import {Map, TileLayer, Marker, Popup} from 'react-leaflet';
-import {MyNavbar} from './my-navbar';
-import {Footer} from './footer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import {MyContainer} from './my-container';
