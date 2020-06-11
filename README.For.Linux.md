@@ -164,8 +164,12 @@ Enjoy!!!
 
 ## Repo news
 
+* June 10th:
+    - Carlos Sánchez has kept on sharing his desktop through Google Meet and Aarón and Tiburcio have worked in a new branch feature/remapping. 
+    - Now the ParkingsWithFreeScooters (former name was Mapping) component gets the userId from the logged on user.
+    - After the online session Tiburcio has solved the crash when user signs out from Renting page. It was because the props.history was not passed on to the component.
 * June 3rd:
-    - Carlos Carlos Sánchez has kept on sharing his desktop through Google Meet and Aarón and Tiburcio have worked in the branch feature/mapping in order to create a working leaflet map to show all free scooter parkings available. We got it! Today it shows the leaflet map finally getting data from the Backend.
+    - Carlos Sánchez has kept on sharing his desktop through Google Meet and Aarón and Tiburcio have worked in the branch feature/mapping in order to create a working leaflet map to show all free scooter parkings available. We got it! Today it shows the leaflet map finally getting data from the Backend.
     - We have added the ER diagram from WebStorm IDE Grip into the README.md.
     - We also modified the component Renting to decide wether the logged in user has an already rented scooter or not.
     - The feature is not fully finished but we have decided to merge it to develop branch and then to master branch.

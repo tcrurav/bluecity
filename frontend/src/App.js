@@ -10,22 +10,26 @@ import { Renting } from './components/renting';
 import { Contact } from './components/contact/contact';
 import { MyError } from './components/my-error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {getCurrentUserId} from "./utils/common";
 import {Scooter} from "./components/scooter";
-import {Mapping} from './components/mapping';
+import {ParkingsWithFreeScooters} from './components/parkingsWithFreeScooters';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // import 'jquery/dist/jquery.min.js';
 // import 'bootstrap/dist/js/bootstrap.min.js';
 
 class App extends React.Component {
-  // constructor(props) {
-  //   super(props);
+  /*constructor(props) {
+     super(props);
 
-  //   // library.add(fab);
-  //   this.state = {
-  //     signedIn: false
-  //   }
-  // }
+     // library.add(fab);
+     this.state = {
+       userId: 1
+     }
+  }*/
+
+  // READ following web to uderstand the use of history in react-router-dom
+  // https://github.com/ReactTraining/react-router/blob/master/FAQ.md#how-do-i-pass-props-to-the-component-rendered-by-a-route
 
   render() {
     return (
@@ -33,9 +37,8 @@ class App extends React.Component {
         <Switch>
           <RoutePrivate path='/main' component={Main} />
           <RoutePrivate path='/parking' component={Parking} />
-          <RoutePrivate path='/renting' component={() => <Renting userId="1"/>}/>
+          <RoutePrivate path='/renting' component={(props) => <Renting userId={getCurrentUserId()} history={props.history} />}/>
           <RoutePrivate path='/scooter-renting' component={Scooter} />
-          <RoutePrivate path='/mapping' component={Mapping} />
           <RoutePublic path='/login' component={Login} />
           <Route path='/contact' component={Contact} />
           <Route component={MyError} />

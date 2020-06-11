@@ -3,7 +3,7 @@ module.exports = {
     up: (queryInterface, Sequelize) => {
       return queryInterface.bulkInsert('Boxes', [{
         id: 1,
-        occupied: false,
+        occupied: true,
         userId: null,
         parkingId: 1,
         createdAt: new Date(),
@@ -45,7 +45,7 @@ module.exports = {
         updatedAt: new Date()
       },{
         id: 7,
-        occupied: false,
+        occupied: true,
         userId: null,
         parkingId: 2,
         createdAt: new Date(),

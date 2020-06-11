@@ -1,7 +1,5 @@
 import React from 'react';
 import {Map, TileLayer, Marker, Popup} from 'react-leaflet';
-import {MyNavbar} from './my-navbar';
-import {Footer} from './footer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import {MyContainer} from './my-container';
@@ -15,7 +13,7 @@ const MyMap = styled(Map)`
   }
 `;
 
-export class Mapping extends React.Component {
+export class ParkingsWithFreeScooters extends React.Component {
     /*constructor(props) {
       super(props);
       this.state = {
@@ -61,7 +59,7 @@ export class Mapping extends React.Component {
                             />
                             {this.state.parkings.map(p => {
                                 let pos = [p.lat, p.long];
-                                return <Marker position={pos}>
+                                return <Marker key={p.id} position={pos}>
                                     <Popup>
                                         Parking {p.id}<br/>
                                         {p.name}<br/>
