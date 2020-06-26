@@ -80,7 +80,7 @@ And finally you get your ClientID:
 Your Google ClientID is used in the file bluecity/frontend/src/components/my-login-with-google.js and should be inserted in the file bluecity/frontend/.env in the following manner: 
 
 ```
-REACT_APP_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com,
+REACT_APP_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com
 ```
 
 * For your backend part:
@@ -116,7 +116,7 @@ Now you can enter in the mysql CLI again with your new password to create the da
 
 ```
 $ sudo mysql -u root -p
-mysql> create database bluecity_development;
+mysql> create database bluecity_dev;
 mysql> exit
 ```
 
@@ -125,7 +125,7 @@ mysql> exit
 ```
     "username": "root",
     "password": "password",
-    "database": "bluecity_development",
+    "database": "bluecity_dev",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": 0
@@ -134,14 +134,14 @@ mysql> exit
 4. Do the migration creating the tables with the contents of ~/bluecity/bluecity/backend/migrations 
 
 ```
-$ cd ~/bluecity/bluecity/backend/migrations
+$ cd ~/bluecity/bluecity/backend
 $ npx sequelize-cli db:migrate
 ```
 
-6. And populating the tables with data with the contents of ~/bluecity/bluecity/backend/migrations 
+6. And populating the tables with data with the contents of ~/bluecity/bluecity/backend/seeders 
 
 ```
-$ cd ~/bluecity/bluecity/backend/migrations
+$ cd ~/bluecity/bluecity/backend
 $ npx sequelize-cli db:seed:all
 ```
 

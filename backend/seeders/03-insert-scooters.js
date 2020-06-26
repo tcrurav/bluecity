@@ -1,7 +1,7 @@
 //npx sequelize-cli db:seed:all
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        return queryInterface.bulkInsert('Scooters', [
+        return queryInterface.bulkInsert('scooters', [
             {
                 id: 1,
                 userId: null,
@@ -19,6 +19,6 @@ module.exports = {
         ]);
     },
     down: (queryInterface, Sequelize) => {
-        return queryInterface.bulkDelete('Scooters', null, {});
+        return queryInterface.bulkDelete('scooters', null, {});
     }
 };

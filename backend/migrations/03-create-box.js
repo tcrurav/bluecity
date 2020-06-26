@@ -2,7 +2,7 @@
 //create-post.js
 module.exports = {
     up: (queryInterface, Sequelize) =>
-      queryInterface.createTable("Boxes", {
+      queryInterface.createTable("boxes", {
         id: {
           allowNull: false,
           autoIncrement: true,
@@ -17,7 +17,7 @@ module.exports = {
           type: Sequelize.INTEGER,
           onDelete: "CASCADE",
           references: {
-            model: "Users",
+            model: "users",
             key: "id",
             as: "userId",
           },
@@ -26,7 +26,7 @@ module.exports = {
             type: Sequelize.INTEGER,
             onDelete: "CASCADE",
             references: {
-              model: "Parkings",
+              model: "parkings",
               key: "id",
               as: "parkingId",
             },
@@ -40,5 +40,5 @@ module.exports = {
           type: Sequelize.DATE,
         },
       }),
-    down: (queryInterface /* , Sequelize */) => queryInterface.dropTable("Boxes"),
+    down: (queryInterface /* , Sequelize */) => queryInterface.dropTable("boxes"),
   }

@@ -1,7 +1,7 @@
 //create-post.js
 module.exports = {
     up: (queryInterface, Sequelize) =>
-      queryInterface.createTable("Parkings", {
+      queryInterface.createTable("parkings", {
         id: {
           allowNull: false,
           autoIncrement: true,
@@ -33,5 +33,5 @@ module.exports = {
           type: Sequelize.DATE,
         },
       }),
-    down: (queryInterface /* , Sequelize */) => queryInterface.dropTable("Parkings"),
+    down: (queryInterface /* , Sequelize */) => queryInterface.dropTable("parkings"),
   }
