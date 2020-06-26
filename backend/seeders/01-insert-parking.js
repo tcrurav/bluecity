@@ -1,7 +1,7 @@
 //npx sequelize-cli db:seed:all to insert this data in the tables of the database
 module.exports = {
     up: (queryInterface, Sequelize) => {
-      return queryInterface.bulkInsert('Parkings', [{
+      return queryInterface.bulkInsert('parkings', [{
         id: 1,
         lat: '28.127729',
         long: '-15.4464768',
@@ -20,6 +20,6 @@ module.exports = {
       }]);
     },
     down: (queryInterface, Sequelize) => {
-      return queryInterface.bulkDelete('Parkings', null, {});
+      return queryInterface.bulkDelete('parkings', null, {});
     }
   };

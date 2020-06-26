@@ -49,7 +49,7 @@ npm install
 Your Google ClientID is used in the file bluecity/frontend/src/components/my-login-with-google.js and should be inserted in the file bluecity/frontend/.env in the following manner: 
 
 ```
-REACT_APP_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com,
+REACT_APP_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com
 ```
 
 * For your backend part:
@@ -66,23 +66,25 @@ REACT_APP_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.co
 ```
     "username": "root",
     "password": "your password",
-    "database": "bluecity_development",
+    "database": "bluecity_dev",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": 0
 ```
 
-4. Create the mysql database, that in our case is "bluecity_development".
+4. Create the mysql database, that in our case is "bluecity_dev".
 
-5. Do the migration creating the tables with the contents of /bluecity/migrations 
+5. Do the migration creating the tables with the contents of /bluecity/backend/migrations 
 
 ```
+cd /bluecity/backend
 npx sequelize-cli db:migrate
 ```
 
-6. And populating the tables with data with the contents of /bluecity/seeders
+6. And populating the tables with data with the contents of /bluecity/backend/seeders
 
 ```
+cd /bluecity/backend
 npx sequelize-cli db:seed:all
 ```
 
