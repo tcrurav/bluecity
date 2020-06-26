@@ -116,7 +116,7 @@ Now you can enter in the mysql CLI again with your new password to create the da
 
 ```
 $ sudo mysql -u root -p
-mysql> create database bluecity_development;
+mysql> create database bluecity_dev;
 mysql> exit
 ```
 
@@ -125,7 +125,7 @@ mysql> exit
 ```
     "username": "root",
     "password": "password",
-    "database": "bluecity_development",
+    "database": "bluecity_dev",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": 0
