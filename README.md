@@ -105,6 +105,13 @@ Enjoy!!!
 
 ## Repo news
 
+* July 9th:
+    - Carlos Sánchez, Aarón Medina and Tiburcio have worked in a new function to display available parkings and its map.
+    - Now the user can click on a parking to view its detailed information including a picture of the place.
+* June 10th:
+    - Carlos Sánchez has kept on sharing his desktop through Google Meet and Aarón and Tiburcio have worked in a new branch feature/remapping.
+    - Now the ParkingsWithFreeScooters (former name was Mapping) component gets the userId from the logged on user.
+    - After the online session Tiburcio has solved the crash when user signs out from Renting page. It was because the props.history was not passed on to the component.
 * June 3rd:
     - Carlos Carlos Sánchez has kept on sharing his desktop through Google Meet and Aarón and Tiburcio have worked in the branch feature/mapping in order to create a working leaflet map to show all free scooter parkings available. We got it! Today it shows the leaflet map finally getting data from the Backend.
     - We have added the ER diagram from WebStorm IDE Grip into the README.md.
@@ -172,3 +179,4 @@ Enjoy!!!
 * https://bezkoder.com/react-crud-web-api/. Another excellent tutorial to learn about the basics of this project.
 * https://gist.github.com/PurpleBooth/109311bb0361f32d87a2. A very complete template for README.md files.
 * https://w3path.com/react-google-login-with-example/. Excellent tutorial to understand Google login feature.
+* https://www.theserverside.com/video/Follow-these-git-commit-message-guidelines. Guidelines to write properly git commit messages.

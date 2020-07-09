@@ -14,6 +14,8 @@ app.use(cors());
 app.use(bodyParser.json());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
+// pathing to parkings images
+app.use(express.static('data/img'));
  
 // database conection
 const db = require("./models");

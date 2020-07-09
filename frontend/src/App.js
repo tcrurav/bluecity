@@ -14,6 +14,7 @@ import {getCurrentUserId} from "./utils/common";
 import {Scooter} from "./components/scooter";
 import {ParkingsWithFreeScooters} from './components/parkingsWithFreeScooters';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {Availability} from "./components/availability";
 
 // import 'jquery/dist/jquery.min.js';
 // import 'bootstrap/dist/js/bootstrap.min.js';
@@ -34,6 +35,7 @@ class App extends React.Component {
         <Switch>
           <RoutePrivate path='/main' component={Main} />
           <RoutePrivate path='/parking' component={Parking} />
+          <RoutePrivate path='/availability' component={Availability} />
           <RoutePrivate path='/renting' component={() => <Renting userId={getCurrentUserId()}/>}/>
           <RoutePrivate path='/scooter-renting' component={Scooter} />
           <RoutePublic path='/login' component={Login} />

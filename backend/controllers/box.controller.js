@@ -47,7 +47,7 @@ exports.findAll = (req, res) => {
         });
 };
 
-// Retrieve all Boxes from the database with a free Scooter.
+/*// Retrieve all Boxes from the database with a free Scooter.
 exports.findAll = (req, res) => {
     Box.findAll({
             where: {userId: null, occupied: 1}
@@ -61,7 +61,7 @@ exports.findAll = (req, res) => {
                     err.message || "Some error occurred while retrieving boxes."
             });
         });
-};
+};*/
 
 // Find a single Box with an id
 exports.findOne = (req, res) => {

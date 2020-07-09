@@ -4,6 +4,7 @@ import {MyNavbar} from './my-navbar';
 import {Footer} from './footer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import {MyContainer} from './my-container';
 import styled from 'styled-components';
 import ParkingDataService from "../services/parking.service";
@@ -27,23 +28,29 @@ export class ParkingsWithFreeBoxes extends React.Component {
 
     constructor(props) {
         super(props);
-        this.findAllWithAFreeScooter = this.findAllWithAFreeScooter.bind(this);
+        this.findAllWithAFreeBox = this.findAllWithAFreeBox.bind(this);
         this.state = {
             parkings: []
         }
     }
 
     componentDidMount() {
-        this.findAllWithAFreeScooter();
+        this.findAllWithAFreeBox();
     }
 
-    findAllWithAFreeScooter() {
-        ParkingDataService.findAllWithAFreeScooter().then(res => {
-            console.log("buenas tardes");
+    findAllWithAFreeBox() {
+        ParkingDataService.findAllWithAFreeBox().then(res => {
             console.log(res);
             this.setState({
                 parkings: res.data
             })
+        })
+    }
+
+    redirectToDetailedParking(id) {
+        this.props.history.push({
+            pathname: '/availability',
+            state: { parkingId: id }
         })
     }
 
@@ -65,7 +72,8 @@ export class ParkingsWithFreeBoxes extends React.Component {
                                     <Popup>
                                         Parking {p.id}<br/>
                                         {p.name}<br/>
-                                        {p.address}
+                                        {p.address} <br />
+                                        <Button onClick={() => this.redirectToDetailedParking(p.id)}>Check availability</Button>
                                     </Popup>
                                 </Marker>;
                             })}

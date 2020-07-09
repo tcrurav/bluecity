@@ -12,6 +12,9 @@ module.exports = app => {
     // Retrieve all Parking with a free scooter
     router.get("/freeParkings", parkings.findAllWithAFreeScooter);
 
+    // Retrieve all Parking with a free scooter
+    router.get("/freeBoxes", parkings.findAllWithAFreeBox);
+
     // Retrieve a single Parking with id
     router.get("/:id", parkings.findOne);
   
@@ -21,7 +24,7 @@ module.exports = app => {
     // Delete a Parking with id
     router.delete("/:id", parkings.delete);
   
-    // Create a new Parking
+    // Deletes all Parking
     router.delete("/", parkings.deleteAll);
   
     app.use('/api/parkings', router);

@@ -82,6 +82,24 @@ exports.findAllWithAFreeScooter = (req, res) => {
         });
 };
 
+// Retrieve all Parkings from the database with a free box.
+exports.findAllWithAFreeBox = (req, res) => {
+    Box.findAll({
+        where: {occupied: 0}
+    })
+        .then(data => {
+            executeQueryAsynchronously(data).then(resultParking => {
+                res.send(resultParking);
+            })
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving boxes."
+            });
+        });
+};
+
 // Find a single Parking with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
