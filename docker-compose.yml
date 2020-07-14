@@ -1,0 +1,59 @@
+version: '3.3'
+services:
+  db:
+    image: mysql
+    # restart: always
+    env_file:
+      - ./backend/.env
+    # environment:
+    #   - MYSQL_DATABASE=${MYSQL_DATABASE}
+    #   # So you don't have to use root, but you can if you like
+    #   - MYSQL_USER=${MYSQL_USER}
+    #   # You can use whatever password you like
+    #   - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    #   # Password for root access
+    #   - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - 3306:3306
+    # expose:
+    #   # Opens port 3306 on the container
+    #   - 3306
+    # Where our data will be persisted
+    volumes:
+      - my-db:/var/lib/mysql
+    networks:
+      - app-network
+    # command: echo -e "MYSQL_DATABASE=$MYSQL_DATABASE MYSQL_DATABASE=${MYSQL_DATABASE}"
+  api:
+    build: ./backend
+    env_file:
+      - ./backend/.env
+    ports: 
+      - '4000:4000'
+    expose:
+      - '4000'
+    networks:
+      - app-network
+    depends_on:
+      - db
+  app:
+    build: ./frontend
+    env_file:
+      - ./frontend/.env
+    ports: 
+      - '3000:3000'
+    expose:
+      - '3000'
+    networks:
+      - app-network
+    depends_on:
+      - api
+# Names our volume
+volumes:
+  my-db:
+    driver: local
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
