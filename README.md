@@ -1,6 +1,14 @@
 # BlueCity
 
-Bluecity main repository
+Bluecity App and Server Software repository.
+
+This is a MEC funded project which aims the construction of a prototype for a network of scooter parkings in a city, including the construction of the parkings (IES Steve Terradas), the app and server software (IES El Rincón), the economic study of the project (IES Bernat el Ferrer), and the overall councelling by a company (Furious Koalas).
+
+These are the collaborating institutions:
+* [IES El Rincón](http://www.ieselrincon.es)
+* [IES Esteve Terradas](http://www.iesesteveterradas.cat)
+* [IES Bernat el Ferrer](https://www.bernatelferrer.cat)
+* [Furious Koalas Interactive](https://www.furiouskoalas.com/)
 
 ## Getting Started
 
@@ -164,7 +172,7 @@ $ cd ~/bluecity/bluecity/backend
 $ npm install
 ```
 
-* For your frontend part, if you want to use the Google Login feature, you have to create a Google clientID as explained previously in the General Instructions above.
+* For your frontend part, if you want to use the Google Login feature, you have to create a clientID by creating a new project on Google developers website.: https://developers.google.com/identity/sign-in/web/sign-in, as explained previously in the General Installation Instructions above.
 
 Your Google ClientID is used in the file bluecity/frontend/src/components/my-login-with-google.js and should be inserted in the file bluecity/frontend/.env in the following manner: 
 
@@ -259,7 +267,9 @@ This project contains 2 different parts:
 * Frontend
 * Backend
 
-* For your frontend part, if you want to use the Google Login feature, you have to create a clientID by creating a new project on Google developers website.: https://developers.google.com/identity/sign-in/web/sign-in
+Let's see how to proceed with each one:
+
+* For your frontend part, if you want to use the Google Login feature, you have to create a clientID by creating a new project on Google developers website.: https://developers.google.com/identity/sign-in/web/sign-in, as explained previously in the General Installation Instructions above.
 
 Your Google ClientID is used in the file bluecity/frontend/src/components/my-login-with-google.js and should be inserted in the file bluecity/frontend/.env in the following manner: 
 
@@ -270,8 +280,7 @@ REACT_APP_BASEURL=http://localhost:4000/api
 
 Take into account the second line to introduce in the file bluecity/frontend/.env necessary to indicate the base URL of your API.
 
-* For your backend part:
-1. You need a bluecity/backend/.env file with a key for the JWT and the data for the connection to your MySQL Server:
+* For your backend part, you need a bluecity/backend/.env file with a key for the JWT and the data for the connection to your MySQL Server:
 
 ```
 JWT_SECRET=V3RY#1MP0RT@NT$3CR3T#
