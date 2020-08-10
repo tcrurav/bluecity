@@ -39,9 +39,9 @@ export const removeUserSession = () => {
 
 // set the token and user from the session storage
 export const setUserSession = (token, user, apiToken, apiUser) => {
-  console.log("tiburcio - setUserSession")
-  console.log(apiToken)
-  console.log(apiUser)
+  //console.log("tiburcio - setUserSession")
+  //console.log(apiToken)
+  //console.log(apiUser)
   sessionStorage.setItem('token', token);
   sessionStorage.setItem('user', JSON.stringify(user));
   sessionStorage.setItem('apiToken', apiToken);

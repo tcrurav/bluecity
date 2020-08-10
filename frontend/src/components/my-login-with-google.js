@@ -16,7 +16,7 @@ export class MyLoginWithGoogle extends React.Component {
   }
 
   googleSDK() {
-    console.log("googleSDK");
+    //console.log("googleSDK");
     window['googleSDKLoaded'] = () => {
       window['gapi'].load('auth2', () => {
         this.auth2 = window['gapi'].auth2.init({
@@ -42,7 +42,7 @@ export class MyLoginWithGoogle extends React.Component {
   }
 
   componentDidMount() {
-    console.log("componentDidMount")
+    //console.log("componentDidMount")
     this.googleSDK();
   }
 
@@ -55,8 +55,8 @@ export class MyLoginWithGoogle extends React.Component {
 
     UserDataService.create(data)
       .then(response => {
-        console.log("response from UserDataService")
-        console.log(response);
+        //console.log("response from UserDataService")
+        //console.log(response);
         setUserSession(token, profile, response.data.token, response.data.user);
         this.props.history.push("/main");
       })
@@ -87,7 +87,7 @@ export class MyLoginWithGoogle extends React.Component {
   }
 
   render() {
-    console.log("render")
+    //console.log("render")
     return (
       <MyGoogleLoginButton />
     );

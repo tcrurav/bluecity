@@ -2,7 +2,7 @@ import React from "react";
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
 
-import App from "./App";
+import { Login } from "./login";
 
 let container = null;
 let myScript = null;
@@ -26,9 +26,9 @@ afterEach(() => {
   myScript = null;
 });
 
-it("By default the App shows 'Login with Google' and 'Login with Facebook'", () => {
+it("render login page containing 'Login with Google' and 'Login with Facebook'", () => {
   act(() => {
-    render(<App />, container);
+    render(<Login />, container);
   });
   expect(container.textContent).toMatch(/Login with GoogleLogin with Facebook/);
 });

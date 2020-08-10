@@ -24,10 +24,10 @@ EXPOSE 4000
 # RUN [ "npx", "sequelize-cli", "db:migrate" ]
 # RUN [ "npx", "sequelize-cli", "db:seed:all" ]
 
-# ENTRYPOINT [ "npm", "start" ]
+ENTRYPOINT [ "npm", "start" ]
 
-COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+# COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 
-RUN chmod +x /docker-entrypoint.sh
+# RUN chmod +x /docker-entrypoint.sh
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+# ENTRYPOINT ["/docker-entrypoint.sh"]

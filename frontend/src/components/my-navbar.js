@@ -22,8 +22,8 @@ export class MyNavbar extends React.Component {
 
     this.handleLogout = this.handleLogout.bind(this);
 
-    console.log("historial");
-    console.log(this.props.history);
+    //console.log("historial");
+    //console.log(this.props.history);
   }
 
   // handle click event of logout button
