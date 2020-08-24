@@ -53,12 +53,21 @@ export class MyLoginWithGoogle extends React.Component {
       password: profile.getId(),
     };
 
+    this.props.changeLoadingState(true);
+
     UserDataService.create(data)
       .then(response => {
         //console.log("response from UserDataService")
         //console.log(response);
         setUserSession(token, profile, response.data.token, response.data.user);
-        this.props.history.push("/main");
+
+        // setTimeout(() => { //Just to simulate the timeout
+          this.props.changeLoadingState(false);
+
+          this.props.history.push("/main");
+        // }, 2000);
+
+
       })
       .catch(e => {
         console.log(e);
@@ -66,7 +75,7 @@ export class MyLoginWithGoogle extends React.Component {
   }
 
   prepareLoginButton = () => {
-    console.log("prepareLoginButton")
+    //console.log("prepareLoginButton")
     this.auth2.attachClickHandler(document.querySelector('#login-button'), {},
       (googleUser) => {
 
@@ -89,7 +98,7 @@ export class MyLoginWithGoogle extends React.Component {
   render() {
     //console.log("render")
     return (
-      <MyGoogleLoginButton />
+        <MyGoogleLoginButton />
     );
   }
 }

@@ -45,6 +45,7 @@ services:
       - '3000:3000'
     expose:
       - '3000'
+    stdin_open: true
     networks:
       - app-network
     depends_on:
