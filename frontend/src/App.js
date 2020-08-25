@@ -12,6 +12,7 @@ import { MyError } from './components/my-error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import {getCurrentUserId} from "./utils/common";
 import {Scooter} from "./components/scooter";
+import MyAccount from "./components/my-account";
 import {ParkingsWithFreeScooters} from './components/parkingsWithFreeScooters';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -36,6 +37,7 @@ class App extends React.Component {
       <Router>
         <Switch>
           <RoutePrivate path='/main' component={Main} />
+          <RoutePrivate path='/my-account' component={(props) => <MyAccount userId={getCurrentUserId()} history={props.history} />}/>
           <RoutePrivate path='/parking' component={Parking} />
           <RoutePrivate path='/renting' component={(props) => <Renting userId={getCurrentUserId()} history={props.history} />}/>
           <RoutePrivate path='/scooter-renting' component={Scooter} />

@@ -21,7 +21,6 @@ export class Scooter extends React.Component {
 
     findAllFreeScooters() {
         ScooterDataService.findAllFree().then(res => {
-            console.log(res);
             this.setState({
                 scooters: res.data
             })

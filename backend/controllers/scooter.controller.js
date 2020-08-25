@@ -84,12 +84,9 @@ exports.findFreeScooters = (req, res) => {
     where: { userId: null }
   })
       .then(data => {
-        console.log("llegó");
-        console.log(data);
         res.send(data);
       })
       .catch(err => {
-        console.log("hubo un error");
         res.status(500).send({
           message:
               err.message || "Some error occurred while retrieving scooters."

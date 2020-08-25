@@ -1,31 +1,32 @@
 module.exports = app => {
     const scooters = require("../controllers/scooter.controller.js");
+    const auth = require("../controllers/auth.js");
   
     var router = require("express").Router();
   
     // Create a new Scooter
-    router.post("/", scooters.create);
+    router.post("/", auth.isAuthenticated, scooters.create);
   
     // Retrieve all Scooter
-    router.get("/", scooters.findAll);
+    router.get("/", auth.isAuthenticated, scooters.findAll);
 
     // Find all free scooter
-    router.get("/freeScooters", scooters.findFreeScooters);
+    router.get("/freeScooters", auth.isAuthenticated, scooters.findFreeScooters);
 
     // Retrieve a single Scooter with userId
-    router.get("/user/:userId", scooters.findOneWithUserId);
+    router.get("/user/:userId", auth.isAuthenticated, scooters.findOneWithUserId);
 
     // Retrieve a single Scooter with id
-    router.get("/:id", scooters.findOne);
+    router.get("/:id", auth.isAuthenticated, scooters.findOne);
   
     // Update a Scooter with id
-    router.put("/:id", scooters.update);
+    router.put("/:id", auth.isAuthenticated, scooters.update);
   
     // Delete a Scooter with id
-    router.delete("/:id", scooters.delete);
+    router.delete("/:id", auth.isAuthenticated, scooters.delete);
   
     // Create a new Scooter
-    router.delete("/", scooters.deleteAll);
+    router.delete("/", auth.isAuthenticated, scooters.deleteAll);
   
     app.use('/api/scooters', router);
   };

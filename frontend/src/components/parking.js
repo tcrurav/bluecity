@@ -23,10 +23,8 @@ export class Parking extends React.Component {
   }
 
   getParkings() {
-    //IMPORTANT: This should be fixed: token should be sent (fixed necessary in backend too)
     ParkingDataService.getAll()
       .then(response => {
-        console.log(response)
         this.setState({
           parkings: response.data
         })

@@ -20,7 +20,6 @@ exports.signin = (req, res) => {
   User.findOne({ where: { username: user, password: pwd } })
     .then(data => {
       // generate token
-      console.log(data);
       const token = utils.generateToken(data);
       // get basic user details
       const userObj = utils.getCleanUser(data);

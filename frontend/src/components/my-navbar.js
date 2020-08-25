@@ -5,7 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import { removeUserSession } from '../utils/common';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faParking, faCreditCard, faHome, faSignOutAlt, faMapMarkerAlt} from '@fortawesome/free-solid-svg-icons'
+import { faParking, faCreditCard, faHome, faSignOutAlt, faMapMarkerAlt, faUser} from '@fortawesome/free-solid-svg-icons'
 
 const MyIcon = styled.img`
   width: 1em;
@@ -21,9 +21,6 @@ export class MyNavbar extends React.Component {
     super(props);
 
     this.handleLogout = this.handleLogout.bind(this);
-
-    //console.log("historial");
-    //console.log(this.props.history);
   }
 
   // handle click event of logout button
@@ -40,6 +37,7 @@ export class MyNavbar extends React.Component {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <Nav.Link href="/main"><FontAwesomeIcon icon={faHome} /> Main</Nav.Link>
+            <Nav.Link href="/my-account"><FontAwesomeIcon icon={faUser} /> My account</Nav.Link>
             <Nav.Link href="/parking"><FontAwesomeIcon icon={faParking} /> Parking</Nav.Link>
             <Nav.Link href="/renting"><FontAwesomeIcon icon={faCreditCard} /> Renting</Nav.Link>
             <Nav.Link href="/contact"><FontAwesomeIcon icon={faMapMarkerAlt} /> Contact</Nav.Link>

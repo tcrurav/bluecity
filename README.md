@@ -182,7 +182,7 @@ REACT_APP_BASEURL=http://localhost:4000/api
 CI=true
 ```
 
-Take into account the second line to introduce in the file bluecity/frontend/.env necessary to indicate the base URL of your API.
+Take into account the second line to introduce in the file bluecity/frontend/.env is necessary to indicate the base URL of your API. The third line "CI=true" is to avoid a bug in react-scripts that maybe will be solved soon.
 
 * For your backend part:
 1. Create a ~/bluecity/bluecity/backend/.env file with a key for the JWT:
@@ -314,6 +314,11 @@ Enjoy!!!
 
 ## Repo news
 
+* August 25th:
+    - Tiburcio starts to create tests with jest + enzyme for the project.
+    - Tiburcio fixes some problems with Authentication and adds MyAccount component to test it. 
+    - Tiburcio fixes manifest.json to use a new favicon for the project.
+    - Tiburcio adds a loader (using react-pure-loaders) for the login process. In the future should be added to any API call.
 * July 14th:
     - Tiburcio dockerizes the project with a basic configuration of 3 containers.
     - There is a bug to be fixed: The project only works if the "docker-compose up" is executed twice.
@@ -387,7 +392,7 @@ Enjoy!!!
 
 ## Acknowledgments
 
-* https://www.cluemediator.com/reactjs-tutorial. Excellent tutorial as a basis for learning the basics needed for this project.
+* https://www.cluemediator.com/category/reactjs. Excellent tutorial as a basis for learning the basics needed for this project.
 * https://bezkoder.com/react-crud-web-api/. Another excellent tutorial to learn about the basics of this project.
 * https://gist.github.com/PurpleBooth/109311bb0361f32d87a2. A very complete template for README.md files.
 * https://w3path.com/react-google-login-with-example/. Excellent tutorial to understand Google login feature.

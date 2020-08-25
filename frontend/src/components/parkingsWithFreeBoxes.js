@@ -37,8 +37,6 @@ export class ParkingsWithFreeBoxes extends React.Component {
 
     findAllWithAFreeScooter() {
         ParkingDataService.findAllWithAFreeScooter().then(res => {
-            console.log("buenas tardes");
-            console.log(res);
             this.setState({
                 parkings: res.data
             })

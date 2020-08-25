@@ -57,8 +57,6 @@ export class MyLoginWithGoogle extends React.Component {
 
     UserDataService.create(data)
       .then(response => {
-        //console.log("response from UserDataService")
-        //console.log(response);
         setUserSession(token, profile, response.data.token, response.data.user);
 
         // setTimeout(() => { //Just to simulate the timeout
@@ -96,7 +94,6 @@ export class MyLoginWithGoogle extends React.Component {
   }
 
   render() {
-    //console.log("render")
     return (
         <MyGoogleLoginButton />
     );

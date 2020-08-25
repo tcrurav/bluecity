@@ -21,7 +21,6 @@ export class Renting extends React.Component {
 
     findScooterWithuserId() {
         ScooterDataService.getScooterWithUserId(this.props.userId).then(res => {
-            console.log(res);
             this.setState({
                 user: res.data
             })
