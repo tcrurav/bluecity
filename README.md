@@ -258,7 +258,7 @@ Enjoy!!!
 
 ## Installation instructions if you want to deploy the project with Docker
 
-Clone this project it in your PC:
+Clone this project in your PC:
 
 ```
 git clone https://github.com/tcrurav/bluecity.git
@@ -299,13 +299,56 @@ NODE_ENV=development
 * Finally go to the base directory of the project and run the docker-compose file:
 
 ```
-cd bluecity
-docker-compose up
+$ cd bluecity
+$ docker-compose up
 ```
 
 Enjoy!!!
 
-**IMPORTANT: You may need to execute twice the command "docker-compose up" to succeed.**
+## Installation instructions if you want to deploy the project with Openshift
+
+Basically you have to first follow the instructions of the section "Installation instructions if you want to deploy the project with Docker" of this document.
+
+Next you can create a free openshift online account: https://www.openshift.com/products/online/clicking on Sign up for free arriving to the link: https://manage.openshift.com/sign_in
+
+Once you have created your openshift free online account create a new project on openshift web console.
+
+After that notice that you have 2 different profiles to work with. Choose the "Developer" profile.
+
+Click on "+Add" to create a new Database in your project. You need the data of the .env you have previosly entered to use the MySql template in openshift.
+
+Click on "+Add" to create 2 new containers to your project for bluecity_api and bluecity_app. There are many possibilities. You can choose "Container image" to make use of the docker images you have already created using the docker-compose.yml file in the section "Installation instructions if you want to deploy the project with Docker" of this document.
+
+You could choose the possibility to specify an image name of an external registry. To upload an image to docker hub (a possible external registry), you have to create an account in docker hub, and then just do the following to upload the images to docker hub:
+
+```
+$ docker tag bluecity_api <user>/bluecity_api
+$ docker push <user>/bluecity_api
+$ docker tag bluecity_api <user>/bluecity_api
+$ docker push <user>/bluecity_api
+```
+
+Notice that user is your docker hub user account.
+
+Once you have your 2 images uploaded to docker-hub you can proceed with the image deploy in openshift. Here you have an screenshot of my own image tcrurav/bluecity_api. (Remember to change tcrurav for your user docker hub account):
+
+![Dockerhub](/docs/Openshift-Dockerhub.png)
+
+After you have deployed your 3 images now your Openshift Topology should look like this:
+
+![topology](/docs/Openshift-Topology.png)
+
+At this point you need to run the entry-point.sh script in the bluecity_api container. For that access the openshift terminal and run the following command:
+
+```
+$ ./docker-entrypoint.sh
+```
+
+![Terminal](/docs/Openshift-Terminal.png)
+
+And that's all.
+
+Alternatively There are many other possibilities with Openshift including the use of Kompose to translate automatically the docker-compose.yml into Openshift objects, using the following instructions link: https://kubernetes.io/docs/tasks/configure-pod-container/translate-compose-kubernetes/
 
 ## Dev Docs
 
@@ -314,6 +357,9 @@ Enjoy!!!
 
 ## Repo news
 
+* August 31st:
+    - Tiburcio edit README.md to add the section "Installation instructions if you want to deploy the project with Openshift"
+    - Tiburcio uses wait-for-it.sh script to improve docker-compose.yml file.
 * August 25th:
     - Tiburcio starts to create tests with jest + enzyme for the project.
     - Tiburcio fixes some problems with Authentication and adds MyAccount component to test it. 
@@ -398,3 +444,4 @@ Enjoy!!!
 * https://w3path.com/react-google-login-with-example/. Excellent tutorial to understand Google login feature.
 * https://www.theserverside.com/video/Follow-these-git-commit-message-guidelines. Guidelines to write properly git commit messages.
 * https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04. Excellent tutorial to install mysql-server in Ubuntu 20.04.
+* https://github.com/vishnubob/wait-for-it. wait-for-it.sh is a pure bash script that will wait on the availability of a host and TCP port. In our bluecity project makes it possible that the api waits for mysql when the docker-compose.yml file gets launched.

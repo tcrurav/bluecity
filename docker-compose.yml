@@ -14,18 +14,13 @@ services:
     #   # Password for root access
     #   - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     ports:
-      # <Port exposed> : < MySQL Port running inside container>
       - 3306:3306
-    # expose:
-    #   # Opens port 3306 on the container
-    #   - 3306
-    # Where our data will be persisted
     volumes:
       - my-db:/var/lib/mysql
     networks:
       - app-network
-    # command: echo -e "MYSQL_DATABASE=$MYSQL_DATABASE MYSQL_DATABASE=${MYSQL_DATABASE}"
   api:
+    image: bluecity_api
     build: ./backend
     env_file:
       - ./backend/.env
@@ -33,11 +28,14 @@ services:
       - '4000:4000'
     expose:
       - '4000'
+    # stdin_open: true
     networks:
       - app-network
     depends_on:
       - db
+    command: ["./wait-for-it.sh", "db:3306", "--timeout=0", "--", "./docker-entrypoint.sh"]
   app:
+    image: bluecity_app
     build: ./frontend
     env_file:
       - ./frontend/.env
@@ -45,16 +43,14 @@ services:
       - '3000:3000'
     expose:
       - '3000'
-    stdin_open: true
+    # stdin_open: true
     networks:
       - app-network
     depends_on:
       - api
-# Names our volume
 volumes:
   my-db:
     driver: local
-#Docker Networks
 networks:
   app-network:
     driver: bridge

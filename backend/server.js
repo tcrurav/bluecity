@@ -10,6 +10,22 @@ const port = process.env.PORT || 4000;
  
 // enable CORS
 app.use(cors());
+// app.options('*', cors()) // include before other routes
+
+// var whitelist = ['http://localhost:3000', "http://bluecityapp-bluecity.apps.us-west-1.starter.openshift-online.com", /** other domains if any */ ]
+// var corsOptions = {
+//   credentials: true,
+//   origin: function(origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   }
+// }
+
+// app.use(cors(corsOptions));
+
 // parse application/json
 app.use(bodyParser.json());
 // parse application/x-www-form-urlencoded
@@ -48,6 +64,12 @@ app.use(function (req, res, next) {
     }
   });
 });
+
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "http://bluecityapp-bluecity.apps.us-west-1.starter.openshift-online.com"); // update to match the domain you will make the request from
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 
 require("./routes/user.routes")(app);
 require("./routes/parking.routes")(app);
