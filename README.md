@@ -372,7 +372,7 @@ Alternatively There are many other possibilities with Openshift including the us
     - Carlos Sánchez, Aarón Medina and Tiburcio have worked in a new function to display available parkings and its map.
     - Now the user can click on a parking to view its detailed information including a picture of the place.
 * June 10th:
-    - Carlos Sánchez has kept on sharing his desktop through Google Meet and Aarón and Tiburcio have worked in a new branch feature/remapping. 
+    - Carlos Sánchez has kept on sharing his desktop through Google Meet and Aarón and Tiburcio have worked in a new branch feature/remapping.
     - Now the ParkingsWithFreeScooters (former name was Mapping) component gets the userId from the logged on user.
     - After the online session Tiburcio has solved the crash when user signs out from Renting page. It was because the props.history was not passed on to the component.
 * June 3rd:
