@@ -1,6 +1,11 @@
 import http from "../utils/http-common";
 
 class BoxDataService {
+
+  getAllBoxesInAParking(id){
+    return http.get(`/boxes/parking/${id}`);
+  }
+
   getAll() {
     return http.get("/boxes");
   }

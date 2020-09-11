@@ -49,16 +49,27 @@ exports.findAll = (req, res) => {
         });
 };
 
+function getUniqueParkingIdValues(array) {
+    var flags = [], output = [], l = array.length, i;
+    for (i = 0; i < l; i++) {
+        if (flags[array[i].dataValues.parkingId]) continue;
+        flags[array[i].dataValues.parkingId] = true;
+        output.push(array[i].dataValues.parkingId);
+    }
+    return output;
+}
+
 // as its name explains, it executes the query asynchronously to get properly the desired data.
 function executeQueryAsynchronously(data) {
     return new Promise(function (resolve, reject) {
-        let output = data.map(b => {
-            return Parking.findByPk(b.dataValues.parkingId).then(parkingData => {
+        let uniqueParkingIdValues = getUniqueParkingIdValues(data)
+        let output = uniqueParkingIdValues.map(b => {
+            return Parking.findByPk(b).then(parkingData => {
                 return parkingData.dataValues;
             })
         })
         // waits to return from the output when all the individual promises are solved.
-        Promise.all(output).then(function(results) {
+        Promise.all(output).then(function (results) {
             resolve(results);
         })
     })
@@ -67,7 +78,7 @@ function executeQueryAsynchronously(data) {
 // Retrieve all Parkings from the database with a free scooter.
 exports.findAllWithAFreeScooter = (req, res) => {
     Box.findAll({
-        where: {userId: null, occupied: 1}
+        where: { userId: null, occupied: 1 }
     })
         .then(data => {
             executeQueryAsynchronously(data).then(resultParking => {
@@ -82,10 +93,12 @@ exports.findAllWithAFreeScooter = (req, res) => {
         });
 };
 
+const FIVE_MINUTES = 5 * 60 * 1000;
+
 // Retrieve all Parkings from the database with a free box.
 exports.findAllWithAFreeBox = (req, res) => {
     Box.findAll({
-        where: {occupied: 0}
+        where: { occupied: 0, lastReservationDate: { [Op.lt]: new Date(new Date() - FIVE_MINUTES) } }
     })
         .then(data => {
             executeQueryAsynchronously(data).then(resultParking => {
@@ -120,7 +133,7 @@ exports.update = (req, res) => {
     const id = req.params.id;
 
     Parking.update(req.body, {
-        where: {id: id}
+        where: { id: id }
     })
         .then(num => {
             if (num == 1) {
@@ -145,7 +158,7 @@ exports.delete = (req, res) => {
     const id = req.params.id;
 
     Parking.destroy({
-        where: {id: id}
+        where: { id: id }
     })
         .then(num => {
             if (num == 1) {
@@ -172,7 +185,7 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({message: `${nums} Parkings were deleted successfully!`});
+            res.send({ message: `${nums} Parkings were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({

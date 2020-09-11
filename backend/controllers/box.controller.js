@@ -16,6 +16,7 @@ exports.create = (req, res) => {
     const box = {
         id: req.body.id,
         occupied: req.body.occupied,
+        lastReservationDate: req.body.lastReservationDate,
         userId: req.body.userId,
         ParkingId: req.body.ParkingId
     };
@@ -34,6 +35,23 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all Boxes from the database.
+exports.findAllBoxesInAParking = (req, res) => {
+    const id = req.params.id;
+    Box.findAll({
+        where: { parkingId: id }
+    })
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving boxes."
+            });
+        });
+};
+
+// Retrieve all Boxes from the database.
 exports.findAll = (req, res) => {
     Box.findAll()
         .then(data => {
@@ -46,22 +64,6 @@ exports.findAll = (req, res) => {
             });
         });
 };
-
-/*// Retrieve all Boxes from the database with a free Scooter.
-exports.findAll = (req, res) => {
-    Box.findAll({
-            where: {userId: null, occupied: 1}
-        })
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving boxes."
-            });
-        });
-};*/
 
 // Find a single Box with an id
 exports.findOne = (req, res) => {
@@ -83,7 +85,7 @@ exports.update = (req, res) => {
     const id = req.params.id;
 
     Box.update(req.body, {
-        where: {id: id}
+        where: { id: id }
     })
         .then(num => {
             if (num == 1) {
@@ -108,7 +110,7 @@ exports.delete = (req, res) => {
     const id = req.params.id;
 
     Box.destroy({
-        where: {id: id}
+        where: { id: id }
     })
         .then(num => {
             if (num == 1) {
@@ -135,7 +137,7 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({message: `${nums} Boxes were deleted successfully!`});
+            res.send({ message: `${nums} Boxes were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({

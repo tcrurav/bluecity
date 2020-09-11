@@ -13,6 +13,10 @@ module.exports = {
           type: Sequelize.BOOLEAN,
           allowNull: false,
         },
+        lastReservationDate: {
+          type: Sequelize.DATE,
+          allowNull: false
+        },
         userId: {
           type: Sequelize.INTEGER,
           onDelete: "CASCADE",
