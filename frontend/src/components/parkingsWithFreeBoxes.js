@@ -38,7 +38,6 @@ export class ParkingsWithFreeBoxes extends React.Component {
 
   findAllWithAFreeBox() {
     ParkingDataService.findAllWithAFreeBox().then(res => {
-      // console.log(res);
       this.setState({
         parkings: res.data
       })
@@ -68,7 +67,6 @@ export class ParkingsWithFreeBoxes extends React.Component {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
               {this.state.parkings.map(p => {
-                console.log(p.id)
                 let pos = [p.lat, p.long];
                 return <Marker key={p.id} position={pos}>
                   <Popup>

@@ -7,10 +7,9 @@ const utils = require("../utils");
 exports.create = (req, res) => {
   //Validate request
   if (!req.body.password || !req.body.username) {
-    res.status(400).send({
+    return res.status(400).send({
       message: "Content can not be empty!"
     });
-    return;
   }
 
   // Create a User
@@ -25,10 +24,10 @@ exports.create = (req, res) => {
     .then(data => {
       if (data) {
         const token = utils.generateToken(data);
-          // get basic user details
-          const userObj = utils.getCleanUser(data);
-          // return the token along with user details
-          return res.json({ user: userObj, token });
+        // get basic user details
+        const userObj = utils.getCleanUser(data);
+        // return the token along with user details
+        return res.json({ user: userObj, token });
       }
 
       // User not found. Save new User in the database
@@ -41,7 +40,7 @@ exports.create = (req, res) => {
           return res.json({ user: userObj, token });
         })
         .catch(err => {
-          res.status(500).send({
+          return res.status(500).send({
             message:
               err.message || "Some error occurred while creating the User."
           });
@@ -49,7 +48,7 @@ exports.create = (req, res) => {
 
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving tutorials."
       });
@@ -62,10 +61,10 @@ exports.findAll = (req, res) => {
 
   User.findAll()
     .then(data => {
-      res.send(data);
+      return res.send(data);
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving tutorials."
       });
@@ -78,10 +77,10 @@ exports.findOne = (req, res) => {
 
   User.findByPk(id)
     .then(data => {
-      res.send(data);
+      return res.send(data);
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message: "Error retrieving User with id=" + id
       });
     });
@@ -96,17 +95,17 @@ exports.update = (req, res) => {
   })
     .then(num => {
       if (num == 1) {
-        res.send({
+        return res.send({
           message: "User was updated successfully."
         });
       } else {
-        res.send({
+        return res.send({
           message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`
         });
       }
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message: "Error updating User with id=" + id
       });
     });
@@ -175,10 +174,10 @@ exports.findUserByUsernameAndPassword = (req, res) => {
 
   User.findOne({ where: { username: user, password: pwd } })
     .then(data => {
-      res.send(data);
+      return res.send(data);
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving tutorials."
       });

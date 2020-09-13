@@ -3,7 +3,7 @@ import { getApiToken } from "./common";
 
 const apiToken = getApiToken();
 const objToExport = apiToken ? axios.create({
-  baseURL: process.env.REACT_APP_BASEURL,
+  baseURL: process.env.REACT_APP_BASEURL + "/api",
   headers: {
     "Content-type": "application/json",
     "Authorization": `Bearer ${apiToken}`
@@ -11,7 +11,7 @@ const objToExport = apiToken ? axios.create({
 })
   :
   axios.create({
-    baseURL: process.env.REACT_APP_BASEURL,
+    baseURL: process.env.REACT_APP_BASEURL + "/api",
     headers: {
       "Content-type": "application/json"
     }

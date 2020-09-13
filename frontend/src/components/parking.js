@@ -1,9 +1,6 @@
 import React from 'react';
 import { MyNavbar } from './my-navbar';
 import { Footer } from './footer';
-import { MyContainer } from './my-container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import ParkingDataService from '../services/parking.service';
 import {ParkingsWithFreeBoxes} from "./parkingsWithFreeBoxes";
 

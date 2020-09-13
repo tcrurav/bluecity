@@ -77,7 +77,7 @@ Your Google ClientID is used in the file bluecity/frontend/src/components/my-log
 
 ```
 REACT_APP_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com
-REACT_APP_BASEURL=http://localhost:4000/api
+REACT_APP_BASEURL=http://localhost:4000
 ```
 
 Take into account the second line to introduce in the file bluecity/frontend/.env necessary to indicate the base URL of your API.
@@ -178,7 +178,7 @@ Your Google ClientID is used in the file bluecity/frontend/src/components/my-log
 
 ```
 REACT_APP_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com
-REACT_APP_BASEURL=http://localhost:4000/api
+REACT_APP_BASEURL=http://localhost:4000
 CI=true
 ```
 
@@ -276,7 +276,7 @@ Your Google ClientID is used in the file bluecity/frontend/src/components/my-log
 
 ```
 REACT_APP_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com
-REACT_APP_BASEURL=http://localhost:4000/api
+REACT_APP_BASEURL=http://localhost:4000
 ```
 
 Take into account the second line to introduce in the file bluecity/frontend/.env necessary to indicate the base URL of your API.

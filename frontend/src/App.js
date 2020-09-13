@@ -13,7 +13,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import {getCurrentUserId} from "./utils/common";
 import {Scooter} from "./components/scooter";
 import MyAccount from "./components/my-account";
-import {ParkingsWithFreeScooters} from './components/parkingsWithFreeScooters';
+// import {ParkingsWithFreeScooters} from './components/parkingsWithFreeScooters';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Availability} from "./components/availability";
 

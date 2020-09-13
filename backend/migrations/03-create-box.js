@@ -1,5 +1,8 @@
 //node_modules/.bin/sequelize db:migrate
 //create-post.js
+
+const Constants = require('../constants');
+
 module.exports = {
     up: (queryInterface, Sequelize) =>
       queryInterface.createTable("boxes", {
@@ -8,6 +11,11 @@ module.exports = {
           autoIncrement: true,
           primaryKey: true,
           type: Sequelize.INTEGER,
+        },
+        state: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          defaultValue: Constants.BOX_EMPTY_DOOR_CLOSED
         },
         occupied: {
           type: Sequelize.BOOLEAN,

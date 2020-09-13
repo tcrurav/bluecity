@@ -1,10 +1,17 @@
+const Constants = require('../constants');
+
 module.exports = (sequelize, Sequelize) => {
   const Box = sequelize.define("box", {
+    state: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: Constants.BOX_EMPTY_DOOR_CLOSED
+    },
     occupied: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false
-    }, 
+    },
     lastReservationDate: {
       type: Sequelize.DATE,
       allowNull: false,
@@ -12,7 +19,7 @@ module.exports = (sequelize, Sequelize) => {
     }
   });
 
-  Box.associate = function(models) {
+  Box.associate = function (models) {
     Box.belongsTo(models.parking, {
       onDelete: "CASCADE",
       foreignKey: "parkingId",
