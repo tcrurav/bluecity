@@ -77,7 +77,7 @@ function executeQueryAsynchronously(data) {
 // Retrieve all Parkings from the database with a free scooter.
 exports.findAllWithAFreeScooter = (req, res) => {
   Box.findAll({
-    where: { userId: null, occupied: 1 }
+    where: { userId: null, occupied: true }
   })
     .then(data => {
       executeQueryAsynchronously(data).then(resultParking => {
@@ -97,7 +97,7 @@ const FIVE_MINUTES = 5 * 60 * 1000;
 // Retrieve all Parkings from the database with a free box.
 exports.findAllWithAFreeBox = (req, res) => {
   Box.findAll({
-    where: { occupied: 0, lastReservationDate: { [Op.lt]: new Date(new Date() - FIVE_MINUTES) } }
+    where: { occupied: false, lastReservationDate: { [Op.lt]: new Date(new Date() - FIVE_MINUTES) } }
   })
     .then(data => {
       executeQueryAsynchronously(data).then(resultParking => {
