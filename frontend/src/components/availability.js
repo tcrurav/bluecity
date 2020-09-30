@@ -94,6 +94,7 @@ export class Availability extends React.Component {
 
     this.reservationInterval = null;
     this.socket = null;
+    this.watchID = null;
   }
 
   componentDidMount() {
@@ -135,9 +136,7 @@ export class Availability extends React.Component {
   checkOpenBoxPossible() {
     //Check distance to first box in parking. Notice that all boxes in the same parking have the same location.
     ParkingDataService.get(this.state.boxes[0].parkingId).then((res) => {
-      // console.log("checkOpenBoxPossible")
-      // console.log(res);
-      // console.log(this.state)
+      console.log("checkOpenBoxPossible")
       const distanceToParking = getDistanceFromLatLonInKm(this.state.lat, this.state.long, parseFloat(res.data.lat), parseFloat(res.data.long));
       // console.log(distanceToParking)
       if (this.state.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION &&
@@ -175,7 +174,7 @@ export class Availability extends React.Component {
 
   watchPosition() {
     if (navigator.geolocation) {
-      navigator.geolocation.watchPosition((position) => {
+      this.watchID = navigator.geolocation.watchPosition((position) => {
         this.setState({
           lat: position.coords.latitude,
           long: position.coords.longitude
@@ -190,7 +189,8 @@ export class Availability extends React.Component {
   findAllBoxesInAParking(id) {
     return new Promise((resolve, reject) => {
       BoxDataService.getAllBoxesInAParking(id).then(res => {
-        // console.log(res);
+        console.log("findAllBoxesInAParking")
+        console.log(res);
         let occupied = 0, free = 0, reserved = 0,
           boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
         for (let i = 0; i < res.data.length; i++) {
@@ -279,7 +279,7 @@ export class Availability extends React.Component {
   }
 
   cancelCountdown() {
-    if (this.reservationInterval) clearInterval(this.reservationInterval);
+    if (this.reservationInterval != null) clearInterval(this.reservationInterval);
   }
 
   activateCountdown() {
@@ -329,7 +329,10 @@ export class Availability extends React.Component {
   componentWillUnmount() {
     this.cancelCountdown();
 
-    if (this.socket) this.socket.disconnect();
+    if (this.socket != null) this.socket.disconnect();
+
+    if (this.watchID != null) navigator.geolocation.clearWatch(this.watch);
+    
   }
 
   render() {
