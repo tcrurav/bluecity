@@ -3,11 +3,11 @@ require('dotenv').config();
 // PostGres
 module.exports = {
   development: {
-    username: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DB,
+    username: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
     host: process.env.DB_HOST,
-    dialect: 'postgres'
+    dialect: 'mysql'
   },
   test: {
     username: process.env.POSTGRES_USER,
