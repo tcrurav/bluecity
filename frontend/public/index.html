@@ -3,16 +3,16 @@
 
 <head>
   <meta charset="utf-8" />
-  <link rel="icon" href="%PUBLIC_URL%/img/bluecity.ico" />
+  <link rel="icon" href="img/bluecity.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#000000" />
   <meta name="description" content="Web site created using create-react-app" />
-  <link rel="apple-touch-icon" href="%PUBLIC_URL%/img/bluecity.jpg" />
+  <link rel="apple-touch-icon" href="/public/img/bluecity.jpg" />
   <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <link rel="manifest" href="manifest.json" />
   <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -26,7 +26,43 @@
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
     crossorigin="" />
   <script src="https://apis.google.com/js/api.js" async defer></script>
-  <title>React App</title>
+  <title>Bluecity</title>
+
+  <!-- Only to test that the ServiceWorker is working -->
+  <!-- <style type="text/css">
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+    .navbar {
+      background-color: #4169e1;
+    }
+    .navbar h3 {
+      display: inline-block;
+      text-align: left;
+      padding: 10px;
+      color: black;
+      text-decoration: none;
+    }
+    .navbar a {
+      display: inline-block;
+      padding: 10px;
+      color: #fff;
+      text-decoration: none;
+    }
+    .page-info {
+      padding: 10px;
+    }
+    .Current {
+      color: #2e8b57;
+    }
+    .Completed {
+      color: #ff6347;
+      text-decoration: line-through;
+    }
+  </style> -->
+
 </head>
 
 <body>
@@ -42,6 +78,33 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+    <!-- Only to test that the ServiceWorker is working -->
+    <!-- <div class="navbar">
+      <h3>Task Manager</h3>
+      <a href="/">Current Tasks</a>
+      <a href="/completed">Completed Tasks</a>
+    </div>
+    <p class="page-info">
+      Loading...
+    </p> -->
+
+    <!-- Only to test that the ServiceWorker is working -->
+    <!-- <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('worker.js').then(function(registration) {
+            console.log('Worker registration successful', registration.scope);
+          }, function(err) {
+            console.log('Worker registration failed', err);
+          }).catch(function(err) {
+            console.log(err);
+          });
+        });
+      } else {
+        console.log('Service Worker is not supported by browser.');
+      }
+    </script> -->
 </body>
 
 </html>

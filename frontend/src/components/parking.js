@@ -2,11 +2,11 @@ import React from 'react';
 import { MyNavbar } from './my-navbar';
 import { Footer } from './footer';
 import ParkingDataService from '../services/parking.service';
-import {ParkingsWithFreeBoxes} from "./parkingsWithFreeBoxes";
+import { ParkingsWithFreeBoxes } from "./parkingsWithFreeBoxes";
 
 export class Parking extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -16,7 +16,7 @@ export class Parking extends React.Component {
     this.getParkings = this.getParkings.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getParkings();
   }
 
@@ -36,7 +36,7 @@ export class Parking extends React.Component {
     return (
       <>
         <MyNavbar history={this.props.history} />
-            <ParkingsWithFreeBoxes history={this.props.history}/>
+        <ParkingsWithFreeBoxes history={this.props.history} />
         <Footer />
       </>
     );

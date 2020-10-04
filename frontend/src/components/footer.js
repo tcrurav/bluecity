@@ -57,7 +57,7 @@ export class Footer extends React.Component {
         </MyFirstRow>
         <Row>
           <MyCopyrightCol>
-            <p>Copyright information: Unless otherwise specified, all text and images on this website are licensed under the <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+            <p>Copyright information: Unless otherwise specified, all text and images on this website are licensed under the <a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
           </MyCopyrightCol>
         </Row>
       </MyContainer>

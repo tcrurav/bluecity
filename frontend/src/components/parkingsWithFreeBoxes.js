@@ -3,6 +3,7 @@ import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Image from 'react-bootstrap/Image';
 import { MyContainer } from './my-container';
 import styled from 'styled-components';
 import ParkingDataService from "../services/parking.service";
@@ -10,7 +11,7 @@ import ParkingDataService from "../services/parking.service";
 const MyMap = styled(Map)`
   &.leaflet-container {
     width: 100%;
-    height: 100vh;
+    height: 70vh;
   }
 `;
 
@@ -28,7 +29,8 @@ export class ParkingsWithFreeBoxes extends React.Component {
     super(props);
     this.findAllWithAFreeBox = this.findAllWithAFreeBox.bind(this);
     this.state = {
-      parkings: []
+      parkings: [],
+      position: [28.128081, -15.4467406]
     }
   }
 
@@ -54,9 +56,25 @@ export class ParkingsWithFreeBoxes extends React.Component {
     })
   }
 
+  getCurrentPosition() {
+    console.log("getCurrentPosition")
+    navigator.geolocation.getCurrentPosition((location) => {
+      // var latlng = new L.LatLng(location.coords.latitude, location.coords.longitude);
+      console.log("getCurrentPosition inside")
+      console.log(location);
+      this.setState({
+        position: [location.coords.latitude, location.coords.longitude]
+      });
+    });
+  }
+
   render() {
-    const position = [28.128081, -15.4467406]
-    const zoom = 13
+    // Las Palmas de GC
+    //const position = [28.128081, -15.4467406];
+    console.log("renderizando...")
+    const position = this.state.position;
+    console.log(position)
+    const zoom = 13;
     return (
       <MyContainer>
         <Row>
@@ -78,6 +96,14 @@ export class ParkingsWithFreeBoxes extends React.Component {
                 </Marker>;
               })}
             </MyMap>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button onClick={() => this.getCurrentPosition()} variant="info" className="float-right mt-3 mr-3">
+              <Image src={`${process.env.REACT_APP_BASEURL}/my-location.png`} width="25" />
+            </Button>
+            {/* <p className="mt-3 text-center">{this.state.parkings.length} parkings in Gran Canaria now.</p> */}
           </Col>
         </Row>
       </MyContainer>

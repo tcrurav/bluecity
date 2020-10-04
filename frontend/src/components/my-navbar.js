@@ -31,7 +31,7 @@ export class MyNavbar extends React.Component {
 
   render() {
     return (
-      <MyNavbarContainer bg="light" expand="md">
+      <MyNavbarContainer bg="light" expand="md" fixed="top">
         <Navbar.Brand href="/main"><MyIcon src="img/bluecity-icon.jpg" alt="icon"/> Bluecity</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

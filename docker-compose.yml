@@ -37,7 +37,7 @@ services:
     depends_on:
       - db
     # command: ["./wait-for-it.sh", "db:3306", "--timeout=0", "--", "./docker-entrypoint.sh"]
-    command: ["./wait-for-it.sh", "db:5432", "--timeout=0", "--", "./docker-entrypoint.sh"]
+    #command: ["./wait-for-it.sh", "db:5432", "--timeout=0", "--", "./docker-entrypoint.sh"]
   app:
     image: bluecity_app
     build: ./frontend

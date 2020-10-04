@@ -346,7 +346,7 @@ export class Availability extends React.Component {
                 <h4>{this.props.location.state.parking.name}</h4>
                 <p>{this.props.location.state.parking.address}</p>
               </Card.Header>
-              <Card.Img variant="top" src={`http://localhost:4000/parking${this.props.location.state.parking.id}.jpg`} />
+              <Card.Img variant="top" src={`${process.env.REACT_APP_BASEURL}/parking${this.props.location.state.parking.id}.jpg`} />
               <Card.Body>
                 <Card.Title>{this.state.boxes.length} boxes in total</Card.Title>
                 {/* <Card.Text> */}
