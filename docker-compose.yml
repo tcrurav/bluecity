@@ -36,6 +36,7 @@ services:
     command: ["./wait-for-it.sh", "db:3306", "--timeout=0", "--", "./docker-entrypoint.sh"]
   app:
     image: bluecity_app
+    tty: true
     build: ./frontend
     env_file:
       - ./frontend/.env
@@ -43,7 +44,7 @@ services:
       - '3000:3000'
     expose:
       - '3000'
-    # stdin_open: true
+    stdin_open: true
     networks:
       - app-network
     depends_on:

@@ -3,6 +3,9 @@ FROM node
 # Create app directory
 WORKDIR /usr/src/app
 
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+
 # ALTERNATIVE FOR BUILD
 #COPY build ./
 
@@ -18,11 +21,13 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 RUN npm install
+# RUN npm install react-scripts@3.4.1 -g --silent
+
 # If you are building your code for production
 # RUN npm ci --only=production
 
 # Bundle app source
-COPY . .
+COPY . ./
 
 EXPOSE 3000
 
