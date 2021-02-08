@@ -1,5 +1,11 @@
 require('dotenv').config();
 
+// dialectOptions: {
+//   ssl: {
+//     cert: cCert
+//   }
+// }
+
 // PostGres
 module.exports = {
   development: {
@@ -7,7 +13,7 @@ module.exports = {
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
     host: process.env.DB_HOST,
-    dialect: 'mysql'
+    dialect: 'postgres'
   },
   test: {
     username: process.env.POSTGRES_USER,
