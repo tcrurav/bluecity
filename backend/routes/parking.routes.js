@@ -13,6 +13,9 @@ module.exports = app => {
     // Retrieve all Parking with a free scooter
     router.get("/freeParkings", auth.isAuthenticated, parkings.findAllWithAFreeScooter);
 
+    // Retrieve all Parking with a free scooter
+    router.get("/freeBoxes", parkings.findAllWithAFreeBox);
+
     // Retrieve a single Parking with id
     router.get("/:id", auth.isAuthenticated, parkings.findOne);
   

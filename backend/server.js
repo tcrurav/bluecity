@@ -1,13 +1,15 @@
 require('dotenv').config();
- 
+
 const jwt = require('jsonwebtoken');
 const express = require('express');
+const http = require("http");
+const socketIo = require("socket.io");
 const cors = require('cors');
 const bodyParser = require('body-parser');
- 
+
 const app = express();
 const port = process.env.PORT || 4000;
- 
+
 // enable CORS
 app.use(cors());
 // app.options('*', cors()) // include before other routes
@@ -30,12 +32,14 @@ app.use(cors());
 app.use(bodyParser.json());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
- 
+// pathing to parkings images
+app.use(express.static('data/img'));
+
 // database conection
 const db = require("./models");
 
 // For explotation. Database is not dropped.
-db.sequelize.sync(); 
+db.sequelize.sync();
 
 // Development only. Drops and re-sync db everytime the server starts.
 // db.sequelize.sync({ force: true }).then(() => {
@@ -71,11 +75,35 @@ app.use(function (req, res, next) {
 //   next();
 // });
 
+app.get("/api/hello", (req, res) => {
+  res.send({ response: "I am alive" }).status(200);
+});
+
 require("./routes/user.routes")(app);
 require("./routes/parking.routes")(app);
 require("./routes/box.routes")(app);
 require("./routes/scooter.routes")(app);
 
-app.listen(port, () => {
+const server = http.createServer(app);
+const io = socketIo(server);
+
+io.on("connect", (socket) => {
+  console.log("New client connected");
+
+  socket.emit("hola", { connection_confirmed: true });
+
+  socket.on("chacho-tu", (data) => {
+    console.log("openToIntroduceScooter")
+    console.log(data);
+
+    // socket.emit("openToIntroduceScooter", {open_to_introduce_scooter: true});
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
+
+server.listen(port, () => {
   console.log('Server started on: ' + port);
 });

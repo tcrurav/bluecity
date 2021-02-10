@@ -1,7 +1,8 @@
 version: '3.3'
 services:
   db:
-    image: mysql
+    image: postgres
+    # image: mysql
     # restart: always
     env_file:
       - ./backend/.env
@@ -14,9 +15,11 @@ services:
     #   # Password for root access
     #   - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     ports:
-      - 3306:3306
+      # - 3306:3306
+      - 5432:5432
     volumes:
-      - my-db:/var/lib/mysql
+      # - my-db:/var/lib/mysql
+      - my-db:/var/lib/postgresql/data
     networks:
       - app-network
   api:
@@ -33,7 +36,8 @@ services:
       - app-network
     depends_on:
       - db
-    command: ["./wait-for-it.sh", "db:3306", "--timeout=0", "--", "./docker-entrypoint.sh"]
+    # command: ["./wait-for-it.sh", "db:3306", "--timeout=0", "--", "./docker-entrypoint.sh"]
+    #command: ["./wait-for-it.sh", "db:5432", "--timeout=0", "--", "./docker-entrypoint.sh"]
   app:
     image: bluecity_app
     tty: true
