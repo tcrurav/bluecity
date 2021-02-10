@@ -17,6 +17,14 @@ module.exports = {
         name: 'Auditorio Alfredo Kraus',
         createdAt: new Date(),
         updatedAt: new Date()
+      },{
+        id: 3,
+        lat: '28.003293',
+        long: '-15.4160894',
+        address: 'Plaza de San Juan',
+        name: 'Basílica de San Juan Bautista',
+        createdAt: new Date(),
+        updatedAt: new Date()
       }]);
     },
     down: (queryInterface, Sequelize) => {

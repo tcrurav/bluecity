@@ -9,6 +9,10 @@ class ParkingDataService {
     return http.get("/parkings/freeParkings");
   }
 
+  findAllWithAFreeBox() {
+    return http.get("/parkings/freeBoxes");
+  }
+
   get(id) {
     return http.get(`/parkings/${id}`);
   }

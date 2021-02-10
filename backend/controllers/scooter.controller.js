@@ -6,10 +6,9 @@ const Op = db.Sequelize.Op;
 exports.create = (req, res) => {
   // Validate request
   if (!req.body.id) {
-    res.status(400).send({
+    return res.status(400).send({
       message: "Content can not be empty!"
     });
-    return;
   }
 
   // Create a Scooter
@@ -22,10 +21,10 @@ exports.create = (req, res) => {
   // Save Scooter in the database
   Scooter.create(scooter)
     .then(data => {
-      res.send(data);
+      return res.send(data);
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message:
           err.message || "Some error occurred while creating the Scooter."
       });
@@ -36,10 +35,10 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
   Scooter.findAll()
     .then(data => {
-      res.send(data);
+      return res.send(data);
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving scooters."
       });
@@ -52,10 +51,10 @@ exports.findOne = (req, res) => {
 
   Scooter.findByPk(id)
     .then(data => {
-      res.send(data);
+      return res.send(data);
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message: "Error retrieving Scooter with id=" + id
       });
     });
@@ -69,10 +68,10 @@ exports.findOneWithUserId = (req, res) => {
     where: { userId: userId}
   })
       .then(data => {
-        res.send(data);
+        return res.send(data);
       })
       .catch(err => {
-        res.status(500).send({
+        return res.status(500).send({
           message: "Error retrieving Scooter with userId=" + userId
         });
       });
@@ -84,10 +83,10 @@ exports.findFreeScooters = (req, res) => {
     where: { userId: null }
   })
       .then(data => {
-        res.send(data);
+        return res.send(data);
       })
       .catch(err => {
-        res.status(500).send({
+        return res.status(500).send({
           message:
               err.message || "Some error occurred while retrieving scooters."
         });
@@ -103,17 +102,17 @@ exports.update = (req, res) => {
   })
     .then(num => {
       if (num == 1) {
-        res.send({
+        return res.send({
           message: "Scooter was updated successfully."
         });
       } else {
-        res.send({
+        return res.send({
           message: `Cannot update Scooter with id=${id}. Maybe Scooter was not found or req.body is empty!`
         });
       }
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message: "Error updating Scooter with id=" + id
       });
     });
@@ -128,17 +127,17 @@ exports.delete = (req, res) => {
   })
     .then(num => {
       if (num == 1) {
-        res.send({
+        return res.send({
           message: "Scooter was deleted successfully!"
         });
       } else {
-        res.send({
+        return res.send({
           message: `Cannot delete Scooter with id=${id}. Maybe Scooter was not found!`
         });
       }
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message: "Could not delete Scooter with id=" + id
       });
     });
@@ -151,10 +150,10 @@ exports.deleteAll = (req, res) => {
     truncate: false
   })
     .then(nums => {
-      res.send({ message: `${nums} Scooters were deleted successfully!` });
+      return res.send({ message: `${nums} Scooters were deleted successfully!` });
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message:
           err.message || "Some error occurred while removing all tutorials."
       });

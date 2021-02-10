@@ -6,8 +6,11 @@ module.exports = app => {
   
     // Create a new Box
     router.post("/", auth.isAuthenticated, boxes.create);
+
+    // Retrieve all Boxes in a parking
+    router.get("/parking/:id", auth.isAuthenticated, boxes.findAllBoxesInAParking);
   
-    // Retrieve all Box
+    // Retrieve all Boxes
     router.get("/", auth.isAuthenticated, boxes.findAll);
   
     // Retrieve a single Box with id

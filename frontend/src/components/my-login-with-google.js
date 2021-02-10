@@ -51,6 +51,7 @@ export class MyLoginWithGoogle extends React.Component {
       username: profile.getEmail(),
       name: profile.getName(),
       password: profile.getId(),
+      isAdmin: false
     };
 
     this.props.changeLoadingState(true);

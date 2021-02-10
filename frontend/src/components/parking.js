@@ -1,14 +1,12 @@
 import React from 'react';
 import { MyNavbar } from './my-navbar';
 import { Footer } from './footer';
-import { MyContainer } from './my-container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import ParkingDataService from '../services/parking.service';
+import { ParkingsWithFreeBoxes } from "./parkingsWithFreeBoxes";
 
 export class Parking extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -18,7 +16,7 @@ export class Parking extends React.Component {
     this.getParkings = this.getParkings.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getParkings();
   }
 
@@ -38,14 +36,7 @@ export class Parking extends React.Component {
     return (
       <>
         <MyNavbar history={this.props.history} />
-        <MyContainer>
-          <Row className="h-75">
-            <Col className="text-center my-auto">
-              <h1>Parking</h1>
-              {this.state.parkings.map(p => <p key={p.id}>{p.name}</p>)}
-            </Col>
-          </Row>
-        </MyContainer>
+        <ParkingsWithFreeBoxes history={this.props.history} />
         <Footer />
       </>
     );
