@@ -38,7 +38,10 @@ exports.create = (req, res) => {
 exports.findAllBoxesInAParking = (req, res) => {
   const id = req.params.id;
   Box.findAll({
-    where: { parkingId: id }
+    where: { parkingId: id },
+    order: [
+      ['id']
+    ]
   })
     .then(data => {
       return res.send(data);
