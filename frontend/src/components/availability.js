@@ -10,7 +10,7 @@ import BoxDataService from '../services/box.service';
 import ParkingDataService from '../services/parking.service';
 import { getApiUser, getDistanceFromLatLonInKm } from '../utils/common';
 
-import socketIOClient from "socket.io-client";
+import socketIOClient from "socket.io-client"; //Websockets
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
@@ -74,6 +74,8 @@ export class Availability extends React.Component {
       free: 0,
       reservation_time_left: 0,
       boxReservedByThisUser: THIS_USER_HAS_NO_RESERVATION,
+      lat_parking: 0,
+      long_parking: 0,
       openBoxPossible: false,
       geolocationAvailable: false,
       lat: 0,
@@ -88,12 +90,14 @@ export class Availability extends React.Component {
     this.checkGeolocationAvailability = this.checkGeolocationAvailability.bind(this);
     this.openBox = this.openBox.bind(this);
     this.watchPosition = this.watchPosition.bind(this);
-    this.createSocketIOConnection = this.createSocketIOConnection.bind(this);
+    this.createSocketIOConnection = this.createSocketIOConnection.bind(this); //Websockets
+    this.checkDistanceToParking = this.checkDistanceToParking.bind(this);
     this.cancelCountdown = this.cancelCountdown.bind(this);
     this.cancelReservation = this.cancelReservation.bind(this);
+    this.refresh = this.refresh.bind(this);
 
     this.reservationInterval = null;
-    this.socket = null;
+    this.socket = null; //Websockets
     this.watchID = null;
   }
 
@@ -112,14 +116,26 @@ export class Availability extends React.Component {
       });
     });
 
-    this.createSocketIOConnection();
+    this.createSocketIOConnection(); //Websockets
   }
 
-  createSocketIOConnection() {
+  refresh() {
+    console.log("refresh");
+    this.findAllBoxesInAParking(this.props.location.state.parking.id).then((newState) => {
+      this.setState(newState);
+      if (this.state.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
+        this.activateCountdown();
+      }
+    });
+  }
+
+  createSocketIOConnection() { //Websockets
     console.log("createSocketIOConnection");
     if (!this.socket) {
       console.log("victoria");
-      this.socket = socketIOClient(process.env.REACT_APP_BASEURL);
+      this.socket = socketIOClient(process.env.REACT_APP_BASEURL, {
+        withCredentials: true
+      });
       console.log("otro1")
       this.socket.on('connect', () => {
         console.log('connected to backend');
@@ -128,25 +144,42 @@ export class Availability extends React.Component {
       this.socket.on("hola", data => {
         console.log("connection confirmed");
       });
-      
+
+      this.socket.on("refresh", data => {
+        if (data.who_changed_it !== apiUser.id && data.parking_changed === this.props.location.state.parking.id) this.refresh();
+        console.log("connection refreshed");
+      });
+
       console.log("otro2")
     }
   }
 
   checkOpenBoxPossible() {
+    //Condition to check if lat, long of parking has been already queried. Black hole somewhere in athlantic sea lat=0, long=0
+    // if (this.state.lat !== 0 || this.state.long !== 0) {
     //Check distance to first box in parking. Notice that all boxes in the same parking have the same location.
     ParkingDataService.get(this.state.boxes[0].parkingId).then((res) => {
-      console.log("checkOpenBoxPossible")
-      const distanceToParking = getDistanceFromLatLonInKm(this.state.lat, this.state.long, parseFloat(res.data.lat), parseFloat(res.data.long));
-      // console.log(distanceToParking)
-      if (this.state.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION &&
-        this.state.geolocationAvailable &&
-        distanceToParking < CLOSE_DISTANCE_TO_PARKING) {
-        this.setState({ openBoxPossible: true, distanceToParking: distanceToParking });
-        return;
-      }
-      this.setState({ openBoxPossible: false, distanceToParking: distanceToParking });
+      this.checkDistanceToParking(res.data.lat, res.data.long);
     });
+    // } else {
+    //   this.checkDistanceToParking(this.state.lat_parking, this.state.long_parking);
+    // }
+  }
+
+  checkDistanceToParking(lat, long) {
+    console.log("checkOpenBoxPossible")
+    const distanceToParking = getDistanceFromLatLonInKm(
+      this.state.lat, this.state.long, parseFloat(lat), parseFloat(long));
+    // console.log(distanceToParking)
+    if (this.state.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION &&
+      this.state.geolocationAvailable &&
+      distanceToParking < CLOSE_DISTANCE_TO_PARKING) {
+      this.setState({
+        openBoxPossible: true, distanceToParking: distanceToParking, lat_parking: lat, long_parking: long
+      });
+      return;
+    }
+    this.setState({ openBoxPossible: false, distanceToParking: distanceToParking, lat_parking: lat, long_parking: long });
   }
 
   checkGeolocationAvailability() {
@@ -175,13 +208,15 @@ export class Availability extends React.Component {
   watchPosition() {
     if (navigator.geolocation) {
       this.watchID = navigator.geolocation.watchPosition((position) => {
-        this.setState({
-          lat: position.coords.latitude,
-          long: position.coords.longitude
-        });
-        this.checkOpenBoxPossible();
-        // console.log("Latitude is :", position.coords.latitude);
-        // console.log("Longitude is :", position.coords.longitude);
+        if (this.state.lat !== position.coords.latitude || this.state.long !== position.coords.longitude) {
+          this.setState({
+            lat: position.coords.latitude,
+            long: position.coords.longitude
+          });
+          this.checkOpenBoxPossible();
+          // console.log("Latitude is :", position.coords.latitude);
+          // console.log("Longitude is :", position.coords.longitude);
+        }
       });
     }
   }
@@ -252,6 +287,7 @@ export class Availability extends React.Component {
         this.setState(newState);
         this.activateCountdown();
         this.checkOpenBoxPossible();
+        this.socket.emit("something-changed", { who_changed_it: apiUser.id, parking_changed: this.props.location.state.parking.id });
       });
     }).catch((e) => console.error(e));
   }
@@ -274,6 +310,7 @@ export class Availability extends React.Component {
         newState.openBoxPossible = false;
         this.setState(newState);
         // this.checkOpenBoxPossible();
+        this.socket.emit("something-changed", { who_changed_it: apiUser.id, parking_changed: this.props.location.state.parking.id });
       });
     }).catch((e) => console.error(e));
   }
@@ -284,6 +321,11 @@ export class Availability extends React.Component {
 
   activateCountdown() {
     this.reservationInterval = setInterval(() => {
+      if (this.state.boxReservedByThisUser === THIS_USER_HAS_NO_RESERVATION) {
+        //Probably a second went over before the reservation was cancelled.
+        this.cancelCountdown();
+        return;
+      }
       const reservation_time_left = FIVE_MINUTES - (new Date().getTime() - new Date(this.state.boxes[this.state.boxReservedByThisUser].lastReservationDate).getTime());
       if (reservation_time_left < 1000) {
         //five minutes are over
@@ -301,133 +343,133 @@ export class Availability extends React.Component {
         reservation_time_left: reservation_time_left
       });
     }, 1000);
+}
+
+formatTimeLeft() {
+  let totalSeconds = Math.floor(this.state.reservation_time_left / 1000);
+  let min = Math.floor(totalSeconds / 60);
+  let sec = totalSeconds % 60;
+  if (sec < 10) {
+    sec = "0" + sec;
+  }
+  return (min === 0 && sec === 0 ? "" : `${min}:${sec}`);
+}
+
+openBox() {
+  console.log("openBox");
+  try { //Websockets
+    this.socket.emit("chacho-tu", { hola: "hola" });
+    console.log("terminó bien");
+  } catch (e) {
+    console.log("error");
+  } finally {
+    console.log("terminó bien o mal");
   }
 
-  formatTimeLeft() {
-    let totalSeconds = Math.floor(this.state.reservation_time_left / 1000);
-    let min = Math.floor(totalSeconds / 60);
-    let sec = totalSeconds % 60;
-    if (sec < 10) {
-      sec = "0" + sec;
-    }
-    return (min === 0 && sec === 0 ? "" : `${min}:${sec}`);
-  }
+}
 
-  openBox() {
-    console.log("openBox");
-    try{
-      this.socket.emit("chacho-tu", { hola: "hola" });
-      console.log("terminó bien");
-    } catch (e){
-      console.log("error");
-    } finally {
-      console.log("terminó bien o mal");
-    }
-    
-  }
+componentWillUnmount() {
+  this.cancelCountdown();
 
-  componentWillUnmount() {
-    this.cancelCountdown();
+  if (this.socket != null) this.socket.disconnect(); //Websockets
 
-    if (this.socket != null) this.socket.disconnect();
+  if (this.watchID != null) navigator.geolocation.clearWatch(this.watch);
 
-    if (this.watchID != null) navigator.geolocation.clearWatch(this.watch);
-    
-  }
+}
 
-  render() {
-    return (
-      <>
-        <MyNavbar history={this.props.history} />
-        <MyContainer>
-          <Row>
-            <Card className="m-2">
-              <Card.Header>
-                <h4>{this.props.location.state.parking.name}</h4>
-                <p>{this.props.location.state.parking.address}</p>
-              </Card.Header>
-              <Card.Img variant="top" src={`${process.env.REACT_APP_BASEURL}/parking${this.props.location.state.parking.id}.jpg`} />
-              <Card.Body>
-                <Card.Title>{this.state.boxes.length} boxes in total</Card.Title>
-                {/* <Card.Text> */}
-                <Row className="pt-2">
-                  <Col>
-                    <RedMarker><FontAwesomeIcon icon={faMapMarkerAlt} /></RedMarker> {this.state.occupied} occupied<br />
-                    <GreenMarker><FontAwesomeIcon icon={faMapMarkerAlt} /></GreenMarker> {this.state.free} available<br />
-                    <OrangeMarker><FontAwesomeIcon icon={faMapMarkerAlt} /></OrangeMarker> {this.state.reserved} reserved<br />
-                  </Col>
-                  <Col>
-                    <Row>
+render() {
+  return (
+    <>
+      <MyNavbar history={this.props.history} />
+      <MyContainer>
+        <Row>
+          <Card className="m-2">
+            <Card.Header>
+              <h4>{this.props.location.state.parking.name}</h4>
+              <p>{this.props.location.state.parking.address}</p>
+            </Card.Header>
+            <Card.Img variant="top" src={`${process.env.REACT_APP_BASEURL}/parking${this.props.location.state.parking.id}.jpg`} />
+            <Card.Body>
+              <Card.Title>{this.state.boxes.length} boxes in total</Card.Title>
+              {/* <Card.Text> */}
+              <Row className="pt-2">
+                <Col>
+                  <RedMarker><FontAwesomeIcon icon={faMapMarkerAlt} /></RedMarker> {this.state.occupied} occupied<br />
+                  <GreenMarker><FontAwesomeIcon icon={faMapMarkerAlt} /></GreenMarker> {this.state.free} available<br />
+                  <OrangeMarker><FontAwesomeIcon icon={faMapMarkerAlt} /></OrangeMarker> {this.state.reserved} reserved<br />
+                </Col>
+                <Col>
+                  <Row>
+                    {
+                      this.state.boxes.map((b, index) => {
+                        switch (this.findOutGreenRedOrOrange(b)) {
+                          case OCCUPIED: return <MyRedCol key={b.id}>{index + 1}</MyRedCol>;
+                          case FREE: return <MyGreenCol key={b.id} onClick={(b) => this.handleReservation(index)}>{index + 1}</MyGreenCol>;
+                          case RESERVED: return <MyOrangeCol key={b.id}>{index + 1}</MyOrangeCol>;
+                          default:
+                            console.log("This case should never take place");
+                            return <></>;
+                        }
+                      })
+                    }
+                  </Row>
+                </Col>
+              </Row>
+              <Row className="mt-3">
+                <Col></Col>
+                <Col>
+                  <Row>
+                    <Col>
                       {
-                        this.state.boxes.map((b, index) => {
-                          switch (this.findOutGreenRedOrOrange(b)) {
-                            case OCCUPIED: return <MyRedCol key={b.id}>{index + 1}</MyRedCol>;
-                            case FREE: return <MyGreenCol key={b.id} onClick={(b) => this.handleReservation(index)}>{index + 1}</MyGreenCol>;
-                            case RESERVED: return <MyOrangeCol key={b.id}>{index + 1}</MyOrangeCol>;
-                            default:
-                              console.log("This case should never take place");
-                              return <></>;
-                          }
-                        })
+                        this.state.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION ?
+                          <Button block variant="secondary" onClick={() =>
+                            this.cancelReservation(this.state.boxReservedByThisUser)}>Cancel Reservation
+                              </Button>
+                          : <></>
                       }
-                    </Row>
-                  </Col>
-                </Row>
-                <Row className="mt-3">
-                  <Col></Col>
-                  <Col>
-                    <Row>
-                      <Col>
-                        {
-                          this.state.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION ?
-                            <Button block variant="secondary" onClick={() =>
-                              this.cancelReservation(this.state.boxReservedByThisUser)}>Cancel Reservation
+                    </Col>
+                  </Row>
+                  <Row className="mt-1">
+                    <Col>
+                      {
+                        this.state.openBoxPossible ?
+                          <Button block variant="primary"
+                            onClick={this.openBox}>Open box nº{this.state.boxReservedByThisUser + 1} &gt;&gt;
                               </Button>
-                            : <></>
-                        }
-                      </Col>
-                    </Row>
-                    <Row className="mt-1">
-                      <Col>
-                        {
-                          this.state.openBoxPossible ?
-                            <Button block variant="primary"
-                              onClick={this.openBox}>Open box nº{this.state.boxReservedByThisUser + 1} &gt;&gt;
-                              </Button>
-                            : <></>
-                        }
-                      </Col>
-                    </Row>
+                          : <></>
+                      }
+                    </Col>
+                  </Row>
 
-                  </Col>
-                </Row>
-                {/* </Card.Text> */}
-              </Card.Body>
-            </Card>
-          </Row>
-          <Row className="pt-3">
-            <Col>
-              {
-                this.state.boxReservedByThisUser === THIS_USER_HAS_NO_RESERVATION ?
-                  <><BlueInfo><FontAwesomeIcon icon={faInfoCircle} /></BlueInfo> Click on the Box number to reserve a parking box.</>
-                  :
-                  <><BlueInfo><FontAwesomeIcon icon={faInfoCircle} /></BlueInfo> Your reservation for box nº{this.state.boxReservedByThisUser + 1} in parking {this.props.location.state.parking.name} will expire in {this.formatTimeLeft()}</>
-              }
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              {
-                this.state.geolocationAvailable ?
-                  <><BlueInfo><FontAwesomeIcon icon={faInfoCircle} /></BlueInfo> Geolocation activated. This parking is {this.state.distanceToParking ? this.state.distanceToParking.toFixed(2) : ""}Km from your current location.</>
-                  :
-                  <><RedMarker><FontAwesomeIcon icon={faMapMarkerAlt} /></RedMarker> Geolocation not available. Please activate it.</>
-              }
-            </Col>
-          </Row>
-        </MyContainer>
-        <Footer />
-      </>
-    );
-  }
+                </Col>
+              </Row>
+              {/* </Card.Text> */}
+            </Card.Body>
+          </Card>
+        </Row>
+        <Row className="pt-3">
+          <Col>
+            {
+              this.state.boxReservedByThisUser === THIS_USER_HAS_NO_RESERVATION ?
+                <><BlueInfo><FontAwesomeIcon icon={faInfoCircle} /></BlueInfo> Click on the Box number to reserve a parking box.</>
+                :
+                <><BlueInfo><FontAwesomeIcon icon={faInfoCircle} /></BlueInfo> Your reservation for box nº{this.state.boxReservedByThisUser + 1} in parking {this.props.location.state.parking.name} will expire in {this.formatTimeLeft()}</>
+            }
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {
+              this.state.geolocationAvailable ?
+                <><BlueInfo><FontAwesomeIcon icon={faInfoCircle} /></BlueInfo> Geolocation activated. This parking is {this.state.distanceToParking ? this.state.distanceToParking.toFixed(2) : ""}Km from your current location.</>
+                :
+                <><RedMarker><FontAwesomeIcon icon={faMapMarkerAlt} /></RedMarker> Geolocation not available. Please activate it.</>
+            }
+          </Col>
+        </Row>
+      </MyContainer>
+      <Footer />
+    </>
+  );
+}
 }
