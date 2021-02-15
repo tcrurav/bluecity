@@ -27,9 +27,9 @@ exports.signin = (req, res) => {
       return res.json({ user: userObj, token });
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Some error occurred while authenticating."
       });
     });
 };
@@ -65,7 +65,7 @@ exports.isAuthenticated = (req, res, next) => {
         next();
       })
       .catch(err => {
-        res.status(500).send({
+        return res.status(500).send({
           message: "Error retrieving User with id=" + id
         });
       });

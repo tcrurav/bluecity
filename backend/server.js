@@ -10,11 +10,26 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 4000;
 
+
+
 // enable CORS
 app.use(cors());
-// app.options('*', cors()) // include before other routes
+// app.options('*', cors()); // include before other routes
 
-// var whitelist = ['http://localhost:3000', "http://bluecityapp-bluecity.apps.us-west-1.starter.openshift-online.com", /** other domains if any */ ]
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "http://localhost:3000"); 
+//   res.header('Access-Control-Allow-Credentials', true);
+//   res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method, Access-Control-Allow-Credentials');
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+//   res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+//   next();
+// });
+
+// var whitelist = [
+//   'http://localhost:3000', 
+//   'https://bluecity.azurewebsites.net',
+//   // "http://bluecityapp-bluecity.apps.us-west-1.starter.openshift-online.com", 
+//   /** other domains if any */ ]
 // var corsOptions = {
 //   credentials: true,
 //   origin: function(origin, callback) {
@@ -27,6 +42,22 @@ app.use(cors());
 // }
 
 // app.use(cors(corsOptions));
+
+// var allowlist = [
+//   'http://localhost:3000', 
+//   'https://bluecity.azurewebsites.net',
+//   // "http://bluecityapp-bluecity.apps.us-west-1.starter.openshift-online.com", 
+//   /** other domains if any */ ]
+// var corsOptionsDelegate = function (req, callback) {
+//   var corsOptions;
+//   if (allowlist.indexOf(req.header('Origin')) !== -1) {
+//     corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+//   } else {
+//     corsOptions = { origin: false } // disable CORS for this request
+//   }
+//   callback(null, corsOptions) // callback expects two parameters: error and options
+// }
+// app.use(cors(corsOptionsDelegate));
 
 // parse application/json
 app.use(bodyParser.json());
@@ -69,6 +100,35 @@ app.use(function (req, res, next) {
   });
 });
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", process.env.BLUECITY_CLIENT);
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method, Access-Control-Allow-Credentials');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+  res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+  next();
+});
+
+// Add headers
+// app.use(function (req, res, next) {
+
+//   // Website you wish to allow to connect
+//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+
+//   // Request methods you wish to allow
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+//   // Request headers you wish to allow
+//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+//   // Set to true if you need the website to include cookies in the requests sent
+//   // to the API (e.g. in case you use sessions)
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+
+//   // Pass to next layer of middleware
+//   next();
+// });
+
 // app.use(function(req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "http://bluecityapp-bluecity.apps.us-west-1.starter.openshift-online.com"); // update to match the domain you will make the request from
 //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -76,7 +136,7 @@ app.use(function (req, res, next) {
 // });
 
 app.get("/api/hello", (req, res) => {
-  res.send({ response: "I am alive" }).status(200);
+  return res.send({ response: "I am alive" }).status(200);
 });
 
 require("./routes/user.routes")(app);
@@ -85,7 +145,14 @@ require("./routes/box.routes")(app);
 require("./routes/scooter.routes")(app);
 
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+  cors: {
+    origin: process.env.BLUECITY_CLIENT,
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+  transports: ['polling', 'websocket']
+});
 
 io.on("connect", (socket) => {
   console.log("New client connected");
@@ -98,6 +165,12 @@ io.on("connect", (socket) => {
 
     // socket.emit("openToIntroduceScooter", {open_to_introduce_scooter: true});
   });
+
+  socket.on("something-changed", (data) => {
+    console.log("something changed: " + data.toString());
+    // socket.emit("refresh", data);      // send to only the client who emited
+    io.sockets.emit('refresh', data);     // send to all
+  })
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");

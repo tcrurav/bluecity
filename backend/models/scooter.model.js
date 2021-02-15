@@ -7,12 +7,12 @@ module.exports = (sequelize, Sequelize) => {
     Scooter.belongsTo(models.box, {
       onDelete: "CASCADE",
       foreignKey: "boxId",
-      as: "boxes",
+      as: "box",
     });
     Scooter.belongsTo(models.user, {
       onDelete: "CASCADE",
       foreignKey: "userId",
-      as: "users",
+      as: "user",
     })
   }
 
