@@ -92,6 +92,7 @@ MYSQL_DATABASE=bluecity_dev
 MYSQL_USER=a_user
 MYSQL_PASSWORD=a_password_for_a_user
 MYSQL_ROOT_PASSWORD=a_password_for_root
+BLUECITY_CLIENT=http://localhost:3000
 
 DB_HOST=127.0.0.1
 
