@@ -3,16 +3,26 @@ import { MyNavbar } from './my-navbar';
 import { MyContainer } from './my-container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
+//import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import Image from 'react-bootstrap/Image';
 import { Footer } from './footer';
 
-export class Main extends React.Component {
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "&:hover": {
+      color: "danger",
+    }
+  },
+}));
 
-  render() {
+export function Main(props) {
+  const classes = useStyles();
+
     return (
       <>
-        <MyNavbar history={this.props.history} />
+        <MyNavbar history={props.history} />
         <MyContainer>
           <Row className="justify-content-md-center h-25"> 
             <Col md={6} className="text-center mt-auto" >
@@ -24,11 +34,11 @@ export class Main extends React.Component {
               <Image fluid src="img/marker.png" alt="marker" />
             </Col>
             <Col xs={6} md={3} className="pt-5">
-              <Row>
-                <Button variant="outline-primary" className="mt-2" href="/parking">Parking</Button>
+              <Row className={classes.root}>
+                <Button variant="contained" color="primary" className="mt-2" href="/parking">Parking</Button>
               </Row>
-              <Row>
-                <Button variant="outline-primary" className="mt-2" href="/renting">Renting</Button>
+              <Row className={classes.root}>
+                <Button variant="contained" color="primary" className="mt-2" href="/renting">Renting</Button>
               </Row>
             </Col>
           </Row>
@@ -37,4 +47,3 @@ export class Main extends React.Component {
       </>
     );
   }
-}

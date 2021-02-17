@@ -2,6 +2,7 @@ import React from 'react';
 import {Map, TileLayer, Marker, Popup} from 'react-leaflet';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import {MyContainer} from './my-container';
 import styled from 'styled-components';
 import ParkingDataService from "../services/parking.service";
@@ -43,6 +44,18 @@ export class ParkingsWithFreeScooters extends React.Component {
         })
     }
 
+    redirectToDetailedParking(p) {
+        console.log("hello");
+        console.log(this.props.history);
+        this.props.history.push({
+          pathname: '/availability',
+          state: {
+            parking: p,
+            checkingForRenting: true
+          }
+        })
+      }
+
     render() {
         const position = [28.128081, -15.4467406]
         const zoom = 13
@@ -61,7 +74,8 @@ export class ParkingsWithFreeScooters extends React.Component {
                                     <Popup>
                                         Parking {p.id}<br/>
                                         {p.name}<br/>
-                                        {p.address}
+                                        {p.address}<br/>
+                                        <Button onClick={() => this.redirectToDetailedParking(p)}>Check availability</Button>
                                     </Popup>
                                 </Marker>;
                             })}

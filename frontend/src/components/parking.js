@@ -9,28 +9,28 @@ export class Parking extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      parkings: []
-    }
+    // this.state = {
+    //   parkings: []
+    // }
 
-    this.getParkings = this.getParkings.bind(this);
+    // this.getParkings = this.getParkings.bind(this);
   }
 
   componentDidMount() {
-    this.getParkings();
+    // this.getParkings();
   }
 
-  getParkings() {
-    ParkingDataService.getAll()
-      .then(response => {
-        this.setState({
-          parkings: response.data
-        })
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
+  // getParkings() {
+  //   ParkingDataService.getAll()
+  //     .then(response => {
+  //       this.setState({
+  //         parkings: response.data
+  //       })
+  //     })
+  //     .catch(e => {
+  //       console.log(e);
+  //     });
+  // }
 
   render() {
     return (

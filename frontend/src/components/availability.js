@@ -266,8 +266,7 @@ export class Availability extends React.Component {
     if (!reservationExpired) {
       return RESERVED;
     }
-    if ((!data.occupied && reservationExpired) ||
-      (this.props.location.state.checkingForRenting && !data.occupied && reservationExpired)) {
+    if ((!data.occupied && reservationExpired) || (this.props.location.state.checkingForRenting && !data.occupied && reservationExpired)) {
       return FREE;
     }
     return OCCUPIED;
