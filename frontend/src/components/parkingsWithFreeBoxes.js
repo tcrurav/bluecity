@@ -47,6 +47,8 @@ export class ParkingsWithFreeBoxes extends React.Component {
   }
 
   redirectToDetailedParking(p) {
+    console.log("hello boxes");
+        console.log(this.props.history);
     this.props.history.push({
       pathname: '/availability',
       state: {
