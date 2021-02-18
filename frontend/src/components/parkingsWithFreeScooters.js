@@ -61,7 +61,8 @@ export class ParkingsWithFreeScooters extends React.Component {
                                     <Popup>
                                         Parking {p.id}<br/>
                                         {p.name}<br/>
-                                        {p.address}
+                                        {p.address} <br/>
+                                        <Button onClick={() => this.redirectToDetailedParking(p)}>Check availability</Button>
                                     </Popup>
                                 </Marker>;
                             })}

@@ -31,7 +31,7 @@ export class Renting extends React.Component {
     return (
       <>
         <MyNavbar history={this.props.history} />
-        {this.state.user ? <ParkingsWithFreeBoxes /> : <ParkingsWithFreeScooters />}
+        {this.state.user ? <ParkingsWithFreeBoxes /> : <ParkingsWithFreeScooters history={props.history}/>}
         <Footer />
       </>
     );
