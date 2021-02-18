@@ -1,9 +1,9 @@
 import React from "react";
 import {Button, Row, Col} from 'react-bootstrap';
-import {MyNavbar} from "./my-navbar";
-import {MyContainer} from "./my-container";
-import {Footer} from "./footer";
-import ScooterDataService from "../services/scooter.service";
+import {MyNavbar} from '../ui/my-navbar'
+import {MyContainer} from "../ui/my-container";
+import {Footer} from "../ui/footer";
+import ScooterDataService from "../../services/scooter.service";
 
 export class Scooter extends React.Component {
 

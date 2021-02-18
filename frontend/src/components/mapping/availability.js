@@ -1,14 +1,14 @@
 import React from 'react';
-import { MyNavbar } from './my-navbar';
-import { MyContainer } from './my-container';
+import { MyNavbar } from '../ui/my-navbar';
+import { MyContainer } from '../ui/my-container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { Footer } from './footer';
-import BoxDataService from '../services/box.service';
-import ParkingDataService from '../services/parking.service';
-import { getApiUser, getDistanceFromLatLonInKm } from '../utils/common';
+import { Footer } from '../ui/footer';
+import BoxDataService from '../../services/box.service';
+import ParkingDataService from '../../services/parking.service';
+import { getApiUser, getDistanceFromLatLonInKm } from '../../utils/common';
 
 import socketIOClient from "socket.io-client"; //Websockets
 

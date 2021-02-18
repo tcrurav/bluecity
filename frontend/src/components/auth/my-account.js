@@ -1,10 +1,10 @@
 import React from 'react';
-import { MyNavbar } from './my-navbar';
-import { Footer } from './footer';
+import { MyNavbar } from '../ui/my-navbar';
+import { Footer } from '../ui/footer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MyContainer } from './my-container';
-import UserDataService from '../services/user.service';
+import { MyContainer } from '../ui/my-container';
+import UserDataService from '../../services/user.service';
 
 export default class MyAccount extends React.Component {
   constructor(props) {

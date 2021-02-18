@@ -1,11 +1,11 @@
 import React from 'react';
-import { MyNavbar } from './my-navbar';
-import { MyContainer } from './my-container';
+import { MyNavbar } from './ui/my-navbar';
+import { MyContainer } from './ui/my-container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
-import { Footer } from './footer';
+import { Footer } from './ui/footer';
 
 export class Main extends React.Component {
 

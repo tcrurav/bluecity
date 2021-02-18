@@ -4,9 +4,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
-import { MyContainer } from './my-container';
+import { MyContainer } from '../ui/my-container';
 import styled from 'styled-components';
-import ParkingDataService from "../services/parking.service";
+import ParkingDataService from "../../services/parking.service";
 
 const MyMap = styled(Map)`
   &.leaflet-container {
