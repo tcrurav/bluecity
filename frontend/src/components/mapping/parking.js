@@ -1,7 +1,7 @@
 import React from 'react';
-import { MyNavbar } from './my-navbar';
-import { Footer } from './footer';
-import ParkingDataService from '../services/parking.service';
+import { MyNavbar } from '../ui/my-navbar';
+import { Footer } from '../ui/footer';
+import ParkingDataService from '../../services/parking.service';
 import { ParkingsWithFreeBoxes } from "./parkingsWithFreeBoxes";
 
 export class Parking extends React.Component {

@@ -1,6 +1,6 @@
 import React from 'react';
-import { MyAuthButtons } from './my-auth-buttons';
-import { MyContainer } from './my-container';
+import { MyAuthButtons } from '../ui/my-auth-buttons';
+import { MyContainer } from '../ui/my-container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';

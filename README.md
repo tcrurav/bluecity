@@ -88,10 +88,11 @@ Take into account the second line to introduce in the file bluecity/frontend/.en
 ```
 JWT_SECRET=V3RY#1MP0RT@NT$3CR3T#
 
-MYSQL_DATABASE=bluecity_dev
-MYSQL_USER=a_user
-MYSQL_PASSWORD=a_password_for_a_user
-MYSQL_ROOT_PASSWORD=a_password_for_root
+DB_DATABASE=bluecity_dev
+DB_USER=a_user
+DB_PASSWORD=a_password_for_user
+DB_ROOT_PASSWORD=a_password_for_root_user
+DB_DIALECT=choose_mysql_or_postgres
 BLUECITY_CLIENT=http://localhost:3000
 
 DB_HOST=127.0.0.1
@@ -191,10 +192,12 @@ Take into account the second line to introduce in the file bluecity/frontend/.en
 ```
 JWT_SECRET=V3RY#1MP0RT@NT$3CR3T#
 
-MYSQL_DATABASE=bluecity_dev
-MYSQL_USER=a_user
-MYSQL_PASSWORD=a_password_for_a_user
-MYSQL_ROOT_PASSWORD=a_password_for_root
+DB_DATABASE=bluecity_dev
+DB_USER=a_user
+DB_PASSWORD=a_password_for_user
+DB_ROOT_PASSWORD=a_password_for_root_user
+DB_DIALECT=choose_mysql_or_postgres
+BLUECITY_CLIENT=http://localhost:3000
 
 DB_HOST=127.0.0.1
 

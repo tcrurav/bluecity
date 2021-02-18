@@ -2,10 +2,10 @@ import React from 'react';
 import {Map, TileLayer, Marker, Popup} from 'react-leaflet';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import {MyContainer} from './my-container';
+import Button from 'react-bootstrap/Button'
+import {MyContainer} from '../ui/my-container';
 import styled from 'styled-components';
-import ParkingDataService from "../services/parking.service";
+import ParkingDataService from "../../services/parking.service";
 
 const MyMap = styled(Map)`
   &.leaflet-container {
@@ -74,7 +74,7 @@ export class ParkingsWithFreeScooters extends React.Component {
                                     <Popup>
                                         Parking {p.id}<br/>
                                         {p.name}<br/>
-                                        {p.address}<br/>
+                                        {p.address} <br/>
                                         <Button onClick={() => this.redirectToDetailedParking(p)}>Check availability</Button>
                                     </Popup>
                                 </Marker>;
