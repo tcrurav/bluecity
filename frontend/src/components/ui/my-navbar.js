@@ -1,24 +1,29 @@
 /* global gapi */
 import React from "react";
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/core/styles";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { removeUserSession } from "../../utils/common";
 import styled from "styled-components";
 
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import HomeIcon from '@material-ui/icons/Home';
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+import Button from "@material-ui/core/Button";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import HomeIcon from "@material-ui/icons/Home";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import LocalParkingIcon from '@material-ui/icons/LocalParking';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
+import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 
 /* const MyIcon = styled.img`
   width: 1em;
@@ -33,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     width: 250,
   },
   fullList: {
-    width: 'auto',
+    width: "auto",
   },
   root: {
     flexGrow: 1,
@@ -62,7 +67,10 @@ export function MyNavbar(props) {
   });
 
   const toggleDrawer = (anchor, open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
       return;
     }
 
@@ -76,7 +84,7 @@ export function MyNavbar(props) {
   const list = (anchor) => (
     <div
       className={clsx(classes.list, {
-        [classes.fullList]: anchor === 'top' || anchor === 'bottom',
+        [classes.fullList]: anchor === "top" || anchor === "bottom",
       })}
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
@@ -87,6 +95,30 @@ export function MyNavbar(props) {
             <HomeIcon />
           </ListItemIcon>
           <ListItemText primary="Main" />
+        </ListItemLink>
+        <ListItemLink href="/my-account">
+          <ListItemIcon>
+            <AccountBoxIcon />
+          </ListItemIcon>
+          <ListItemText primary="My Account" />
+        </ListItemLink>
+        <ListItemLink href="/parking">
+          <ListItemIcon>
+            <LocalParkingIcon />
+          </ListItemIcon>
+          <ListItemText primary="Parking" />
+        </ListItemLink>
+        <ListItemLink href="/renting">
+          <ListItemIcon>
+            <CreditCardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Renting" />
+        </ListItemLink>
+        <ListItemLink href="/contact">
+          <ListItemIcon>
+            <ContactSupportIcon />
+          </ListItemIcon>
+          <ListItemText primary="Contact" />
         </ListItemLink>
       </List>
     </div>
@@ -109,21 +141,33 @@ export function MyNavbar(props) {
           </Nav>
         </Navbar.Collapse>
       </MyNavbarContainer> */
-
-    <React.Fragment key='left'>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={toggleDrawer('left', true)}>
-            <MenuIcon />
-          </IconButton>
-          
-          <Button color="inherit" onClick={handleLogout}>Logout</Button>
-        </Toolbar>
-        <SwipeableDrawer anchor='left' open={state['left']} onClose={toggleDrawer('left', false)}>
-        {list('left')}
-      </SwipeableDrawer>
-      </AppBar>
-    </React.Fragment>
-
+    <div className={classes.root}>
+      <React.Fragment key="left">
+        <AppBar position="fixed">
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+              onClick={toggleDrawer("left", true)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              Bluecity
+            </Typography>
+            <Button color="inherit" endIcon={<ExitToAppIcon/>} onClick={handleLogout}>logout</Button>
+          </Toolbar>
+        </AppBar>
+        <SwipeableDrawer
+          anchor="left"
+          open={state["left"]}
+          onClose={toggleDrawer("left", false)}
+        >
+          {list("left")}
+        </SwipeableDrawer>
+      </React.Fragment>
+    </div>
   );
 }
