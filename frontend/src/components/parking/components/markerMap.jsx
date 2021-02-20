@@ -3,23 +3,19 @@ import PropTypes from 'prop-types';
 
 /**
 |--------------------------------------------------
+| Components
+|--------------------------------------------------
+*/
+import MyPopup from './myPopup';
+
+/**
+|--------------------------------------------------
 | Libraries
 |--------------------------------------------------
 */
-import { Marker, Popup } from 'react-leaflet';
-import { Button } from 'react-bootstrap';
+import { Marker } from 'react-leaflet';
 
 const MarkerMap = ({ parkings, history }) => {
-
-    const redirectToDetailedParking = (p) => {
-        history.push({
-            pathname: '/availability',
-            state: {
-                parking: p,
-                checkingForRenting: false
-            }
-        })
-    };
 
     return (
         parkings.map(p => {
@@ -32,12 +28,13 @@ const MarkerMap = ({ parkings, history }) => {
                 <Marker
                     key={id}
                     position={pos}>
-                    <Popup>
-                        Parking {id}<br />
-                        {name}<br />
-                        {address} <br />
-                        <Button onClick={() => redirectToDetailedParking(p)}>Check availability</Button>
-                    </Popup>
+                    <MyPopup
+                        id={id}
+                        name={name}
+                        address={address}
+                        history={history}
+                        p={p}
+                    />
                 </Marker>
             );
         })
