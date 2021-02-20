@@ -164,6 +164,7 @@ export function MyNavbar(props) {
           anchor="left"
           open={state["left"]}
           onClose={toggleDrawer("left", false)}
+          onOpen={toggleDrawer("left", true)}
         >
           {list("left")}
         </SwipeableDrawer>

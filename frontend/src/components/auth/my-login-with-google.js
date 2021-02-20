@@ -1,6 +1,6 @@
 /* global gapi */
 import React from 'react';
-import { MyGoogleLoginButton } from '../ui/my-google-login-button';
+import MyGoogleLoginButton from '../ui/my-google-login-button';
 import { setUserSession } from '../../utils/common';
 import UserDataService from '../../services/user.service'
 
