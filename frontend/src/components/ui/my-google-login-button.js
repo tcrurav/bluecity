@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import { capitalize } from '@material-ui/core';
 
 const MyImg = styled.img`
   width: 20px;
@@ -29,7 +30,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#fff',
     '&:hover': {
       boxShadow: '0, 0, 16px #4285f4',
-    }
+    },
+    border: '1px solid',
+    borderRadius: '.25rem',
+    padding: '.375rem .75rem',
+    textTransform: 'capitalize',
   },
 }));
 
