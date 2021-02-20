@@ -1,5 +1,5 @@
 import React from 'react';
-import { MyNavbar } from '../ui/my-navbar';
+import { MyNavbar } from '../ui/navbar/my-navbar';
 import { Footer } from '../ui/footer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
