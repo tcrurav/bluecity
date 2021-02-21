@@ -10,7 +10,7 @@ import { MyNavbar } from '../my-navbar';
 import { MyContainer } from '../my-container';
 import { Footer } from '../footer';
 import MyMarker from './components/myMarker';
-import MyColBoxes from './components/mycolBoxes';
+import MyColBoxes from './components/myColBoxes';
 
 /**
 |--------------------------------------------------
@@ -36,6 +36,7 @@ import ParkingDataService from '../../services/parking.service';
 |--------------------------------------------------
 */
 import { getDistanceFromLatLonInKm } from '../../utils/common';
+import { formatTimeLeft } from './utils/util';
 
 /**
 |--------------------------------------------------
@@ -371,16 +372,19 @@ const AvailabilityScreen = ({ location, history }) => {
                                         color='red'
                                         state={stateBox.occupied}
                                         text='occupied'
+                                        icon={faMapMarkerAlt}
                                     />
                                     <MyMarker
                                         color='green'
                                         state={stateBox.free}
                                         text='available'
+                                        icon={faMapMarkerAlt}
                                     />
                                     <MyMarker
                                         color='orange'
                                         state={stateBox.reserved}
                                         text='reserved'
+                                        icon={faMapMarkerAlt}
                                     />
                                 </Col>
                                 <MyColBoxes
@@ -396,8 +400,48 @@ const AvailabilityScreen = ({ location, history }) => {
                         </Card.Body>
                     </Card>
                 </Row>
-                <Row className='pt-3'></Row>
-                <Row></Row>
+                <Row className='pt-3'>
+                    <Col>
+                        {
+                            stateBox.boxReservedByThisUser === THIS_USER_HAS_NO_RESERVATION
+                                ?
+                                <MyMarker
+                                    color='blue'
+                                    state={null}
+                                    text='Click on the Box number to reserve a parking box.'
+                                    icon={faInfoCircle}
+                                />
+                                :
+                                <MyMarker
+                                    color='blue'
+                                    state={null}
+                                    text={`Your reservation for box nº${setStateBox.boxReservedByThisUser + 1} in parking ${parking.name} will expire in ${formatTimeLeft()}`}
+                                    icon={faInfoCircle}
+                                />
+                        }
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        {
+                            setStateBox.geolocationAvailable
+                                ?
+                                <MyMarker
+                                    color='blue'
+                                    state={null}
+                                    text={`Geolocation activated. This parking is ${setStateBox.distanceToParking ? setStateBox.distanceToParking.toFixed(2) : ""}Km from your current location.`}
+                                    icon={faInfoCircle}
+                                />
+                                :
+                                <MyMarker
+                                    color='blue'
+                                    state={null}
+                                    text='Geolocation not available. Please activate it.'
+                                    icon={faInfoCircle}
+                                />
+                        }
+                    </Col>
+                </Row>
             </MyContainer>
             <Footer />
         </>

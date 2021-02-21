@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 |--------------------------------------------------
 */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 
 /**
 |--------------------------------------------------
@@ -16,21 +15,22 @@ import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 */
 import { ColorMarker } from '../styled/styles';
 
-const MyMarker = ({ color, state, text }) => {
+const MyMarker = ({ color, state, text, icon }) => {
 
     return (
         <>
             <ColorMarker color={color}>
-                <FontAwesomeIcon icon={faMapMarkerAlt} />
-            </ColorMarker> {state} {text} <br />
+                <FontAwesomeIcon icon={icon} />
+            </ColorMarker> {(state) && state} {text} <br />
         </>
     )
 };
 
 MyMarker.propTypes = {
-    color: PropTypes.string,
+    color: PropTypes.string.isRequired,
     state: PropTypes.number,
-    text: PropTypes.string
+    text: PropTypes.string.isRequired,
+    icon: PropTypes.object.isRequired
 };
 
 export default MyMarker;
