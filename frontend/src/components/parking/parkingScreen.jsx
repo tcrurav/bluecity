@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 */
 import { MyNavbar } from '../my-navbar';
 import { Footer } from '../footer';
-import ParkingsWithFreeBoxes from './components/parkingsWithFreeBoxes';
+import MyParkingsWithFreeBoxes from './components/myParkingsWithFreeBoxes';
 
 /**
 |--------------------------------------------------
@@ -37,7 +37,7 @@ const ParkingScreen = ({ history }) => {
     return (
         <>
             <MyNavbar history={history} />
-            <ParkingsWithFreeBoxes history={history} />
+            <MyParkingsWithFreeBoxes history={history} />
             <Footer />
         </>
     )

@@ -2,8 +2,9 @@ import React from 'react';
 import { MyNavbar } from './my-navbar';
 import { Footer } from './footer';
 import ScooterDataService from "../services/scooter.service";
-import { ParkingsWithFreeScooters } from "./parkingsWithFreeScooters";
-import ParkingsWithFreeBoxes from './parking/components/parkingsWithFreeBoxes';
+//import { ParkingsWithFreeScooters } from "./parkingsWithFreeScooters";
+import MyParkingsWithFreeScooters from './parking/components/myParkingsWithFreeScooters';
+import MyParkingsWithFreeBoxes from './parking/components/myParkingsWithFreeBoxes';
 
 export class Renting extends React.Component {
 
@@ -31,7 +32,7 @@ export class Renting extends React.Component {
         return (
             <>
                 <MyNavbar history={this.props.history} />
-                {this.state.user ? <ParkingsWithFreeBoxes /> : <ParkingsWithFreeScooters />}
+                {this.state.user ? <MyParkingsWithFreeBoxes /> : <MyParkingsWithFreeScooters />}
                 <Footer />
             </>
         );

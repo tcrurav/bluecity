@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 
 /**
 |--------------------------------------------------
@@ -7,8 +6,8 @@ import PropTypes from 'prop-types';
 |--------------------------------------------------
 */
 import { MyContainer } from '../../my-container';
-import MarkerMap from './markerMap';
-import BtnCurrentPosition from './btnCurrentPosition';
+import MyMarkerMap from './myMarkerMap';
+import MyBtnCurrentPosition from './myBtnCurrentPosition';
 
 /**
 |--------------------------------------------------
@@ -32,7 +31,7 @@ import ParkingDataService from '../../../services/parking.service';
 */
 import { MyMap } from '../styled/styleComponents';
 
-const ParkingsWithFreeBoxes = ({ history }) => {
+const MyParkingsWithFreeBoxes = () => {
 
     const zoom = 13;
 
@@ -62,20 +61,21 @@ const ParkingsWithFreeBoxes = ({ history }) => {
                 <Col>
                     <MyMap
                         center={position}
-                        zoom={zoom}>
+                        zoom={zoom}
+                    >
                         <TileLayer
                             attribution=''
                             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                         />
-                        <MarkerMap
+                        <MyMarkerMap
                             parkings={parkings}
-                            history={history}
+                            type='boxes'
                         />
                     </MyMap>
                 </Col>
             </Row>
             <Row>
-                <BtnCurrentPosition
+                <MyBtnCurrentPosition
                     freeBoxes={freeBoxes}
                     setFreeBoxes={setFreeBoxes}
                 />
@@ -84,8 +84,4 @@ const ParkingsWithFreeBoxes = ({ history }) => {
     )
 };
 
-ParkingsWithFreeBoxes.propTypes = {
-    history: PropTypes.object.isRequired
-};
-
-export default ParkingsWithFreeBoxes;
+export default MyParkingsWithFreeBoxes;

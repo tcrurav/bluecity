@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 | Components
 |--------------------------------------------------
 */
-import BtnPopup from './btnPopup';
+import MyBtnPopup from './myBtnPopup';
 
 /**
 |--------------------------------------------------
@@ -15,16 +15,17 @@ import BtnPopup from './btnPopup';
 */
 import { Popup } from 'react-leaflet';
 
-const MyPopup = ({ id, name, address, p, history }) => {
+const MyPopup = ({ id, name, address, p, type }) => {
+
     return (
         <Popup>
             Parking {id}<br />
             {name}<br />
             {address} <br />
-            <BtnPopup
+            <MyBtnPopup
                 text='Check availability'
-                history={history}
                 p={p}
+                type={type}
             />
         </Popup>
     )
@@ -35,7 +36,7 @@ MyPopup.propTypes = {
     name: PropTypes.string.isRequired,
     address: PropTypes.string.isRequired,
     p: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
+    type: PropTypes.string.isRequired
 };
 
 export default MyPopup;
