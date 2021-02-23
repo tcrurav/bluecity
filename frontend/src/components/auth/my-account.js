@@ -38,7 +38,7 @@ export default class MyAccount extends React.Component {
   render() {
     return (
       <>
-        <MyNavbar history={this.props.history} />
+        <MyNavbar props={this.props} />
         <MyContainer>
           <Row>
             <Col><h5>User Profile</h5><br /></Col>

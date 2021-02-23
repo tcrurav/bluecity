@@ -217,7 +217,7 @@ export function MyNavbar(props) {
               </Grid>
             </Grid>
           </AccordionSummary>
-          <AccordionDetails classes={}>
+          <AccordionDetails>
             <Grid container>
               <ListItemLink href="my-account">
                 <ListItemIcon>
