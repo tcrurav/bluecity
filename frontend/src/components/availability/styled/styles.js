@@ -24,12 +24,7 @@ const ColorMarker = styled.span`
     color: ${(props) => props.color};
 `;
 
-const BlueInfo = styled.span` 
-    color: blue;
-`;
-
 export {
     MyColCustom,
     ColorMarker,
-    BlueInfo
 };

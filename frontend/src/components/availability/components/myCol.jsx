@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { MyColCustom } from '../styled/styles';
 
 const MyCol = ({ id, index, bg }) => {
+
     return (
         <MyColCustom
             key={id}

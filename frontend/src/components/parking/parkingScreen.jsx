@@ -19,7 +19,7 @@ import ParkingDataService from '../../services/parking.service';
 
 const ParkingScreen = ({ history }) => {
 
-    const [allParkings, setAllParkings] = useState({});
+    /*const [allParkings, setAllParkings] = useState({});
 
     const getAllParkings = async () => {
         const parkings = await ParkingDataService.getAll();
@@ -32,7 +32,7 @@ const ParkingScreen = ({ history }) => {
         } catch (error) {
             console.log(error);
         }
-    }, []);
+    }, []);*/
 
     return (
         <>

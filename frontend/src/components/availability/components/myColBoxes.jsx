@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -12,76 +11,76 @@ import MyColReservation from './myColReservation';
 
 /**
 | --------------------------------------------------
-| Libraries
-| --------------------------------------------------
-*/
-import { Row, Col } from 'react-bootstrap';
-
-/**
-| --------------------------------------------------
 | Constants
 | --------------------------------------------------
 */
-import { OCCUPIED, FREE, RESERVED, FIVE_MINUTES, THIS_USER_HAS_NO_RESERVATION, API_USER, CLOSE_DISTANCE_TO_PARKING, BEGIN_OF_TIMES } from '../constants/constants';
+import { OCCUPIED, FREE, RESERVED } from '../constants/constants';
 
-const MyColBoxes = ({ stateBox, checkingForRenting, findOutGreenRedOrOrange }) => {
-    console.log('stateBox in ColBox ', stateBox);
+const MyColBoxes = ({ stateParking, setStateParking, findOutGreenRedOrOrange, findAllBoxesInAParking, idParking, activateCountdown, checkOpenBoxPossible }) => {
 
-    const { boxes } = stateBox;
+    const { boxes } = stateParking;
 
     return (
-        <Col>
-            <Row>
-                {
-                    boxes.map((b, index) => {
+        <>
+            {
+                boxes.map((b, index) => {
 
-                        let { id } = b;
+                    let { id } = b;
 
-                        switch (findOutGreenRedOrOrange(b)) {
+                    switch (findOutGreenRedOrOrange(b)) {
 
-                            case OCCUPIED:
-                                return (
-                                    <MyCol
-                                        bg='red'
-                                        key={id}
-                                        id={id}
-                                        index={index}
-                                    />
-                                );
-                            case FREE:
-                                return (
-                                    <MyColReservation
-                                        bg='green'
-                                        key={id}
-                                        id={id}
-                                        index={index}
-                                    //onClick={(b) => this.handleReservation(index)}
-                                    />
+                        case OCCUPIED:
+                            return (
+                                <MyCol
+                                    bg='red'
+                                    key={id}
+                                    id={id}
+                                    index={index}
+                                />
+                            );
+                        case FREE:
+                            return (
+                                <MyColReservation
+                                    bg='green'
+                                    key={id}
+                                    id={id}
+                                    index={index}
+                                    stateParking={stateParking}
+                                    setStateParking={setStateParking}
+                                    findAllBoxesInAParking={findAllBoxesInAParking}
+                                    idParking={idParking}
+                                    activateCountdown={activateCountdown}
+                                    checkOpenBoxPossible={checkOpenBoxPossible}
+                                />
 
-                                );
-                            case RESERVED:
-                                return (
-                                    <MyCol
-                                        bg='orange'
-                                        key={id}
-                                        id={id}
-                                        index={index}
-                                    />
-                                );
-                            default:
-                                console.log("This case should never take place");
-                                return <></>;
-                        }
-                    })
-                }
-            </Row>
-        </Col>
+                            );
+                        case RESERVED:
+                            return (
+                                <MyCol
+                                    bg='orange'
+                                    key={id}
+                                    id={id}
+                                    index={index}
+                                />
+                            );
+                        default:
+                            console.log("This case should never take place");
+                            return <></>;
+                    }
+                })
+            }
+        </>
     )
 };
 
 MyColBoxes.propTypes = {
-    stateBox: PropTypes.object.isRequired,
-    findOutGreenRedOrOrange: PropTypes.func.isRequired
+    stateParking: PropTypes.object.isRequired,
+    setStateParking: PropTypes.func.isRequired,
+    findOutGreenRedOrOrange: PropTypes.func.isRequired,
+    findAllBoxesInAParking: PropTypes.func.isRequired,
+    idParking: PropTypes.number.isRequired,
+    activateCountdown: PropTypes.func.isRequired,
+    checkOpenBoxPossible: PropTypes.func
 };
 
 export default MyColBoxes;
