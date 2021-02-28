@@ -18,10 +18,12 @@ const formatTimeLeft = (state) => {
 const checkGeolocationAvailability = () => {
     return new Promise((resolve, reject) => {
         if ('geolocation' in navigator) {
-            resolve({ geolocationAvailable: true });
+            resolve(true);
+            //resolve({ geolocationAvailable: true });
             //console.log('Geolocation Available');
         } else {
-            resolve({ geolocationAvailable: false });
+            resolve(false);
+            //resolve({ geolocationAvailable: false });
             //console.log('Geolocation Not Available');
         }
     });
@@ -61,5 +63,6 @@ export {
     formatTimeLeft,
     checkGeolocationAvailability,
     createSocketIOConnection,
-    openBox
+    openBox,
+    socket
 };

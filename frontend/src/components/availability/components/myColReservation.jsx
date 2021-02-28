@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -22,9 +22,11 @@ import { THIS_USER_HAS_NO_RESERVATION, API_USER } from '../constants/constants';
 */
 import { MyColCustom } from '../styled/styles';
 
-const MyColReservation = ({ bg, id, index, stateParking, findAllBoxesInAParking, idParking, activateCountdown, checkOpenBoxPossible }) => {
+const MyColReservation = ({ bg, id, index, stateParking, findAllBoxesInAParking, activateCountdown, checkOpenBoxPossible, stateLatLog }) => {
 
-    const handleReservation = (ind) => {
+    const { lat, long } = stateLatLog;
+
+    const handleReservation = async (ind) => {
 
         if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
             console.log('You have already reserved a Box in this parking');
@@ -34,13 +36,14 @@ const MyColReservation = ({ bg, id, index, stateParking, findAllBoxesInAParking,
         let data = stateParking.boxes[ind];
         data.lastReservationDate = new Date();
         data.userId = API_USER.id;
-        BoxDataService.update(data.id, data)
-            .then(async (res) => {
-                await findAllBoxesInAParking(idParking);
-                activateCountdown();
-                await checkOpenBoxPossible();
-            })
-            .catch((e) => console.error(e));
+        await BoxDataService.update(data.id, data);
+        try {
+            findAllBoxesInAParking();
+            //activateCountdown();
+            checkOpenBoxPossible(lat, long);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
@@ -58,12 +61,11 @@ MyColReservation.propTypes = {
     bg: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     index: PropTypes.number.isRequired,
-    stateParking: PropTypes.object,
-    //setStateBox: PropTypes.func.isRequired,
+    stateParking: PropTypes.object.isRequired,
     findAllBoxesInAParking: PropTypes.func.isRequired,
-    idParking: PropTypes.number.isRequired,
     activateCountdown: PropTypes.func.isRequired,
-    checkOpenBoxPossible: PropTypes.func
+    checkOpenBoxPossible: PropTypes.func.isRequired,
+    stateLatLog: PropTypes.object.isRequired
 };
 
 export default MyColReservation;

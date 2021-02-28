@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -34,7 +34,7 @@ import ParkingDataService from '../../services/parking.service';
 |--------------------------------------------------
 */
 import { getDistanceFromLatLonInKm } from '../../utils/common';
-import { formatTimeLeft, checkGeolocationAvailability, createSocketIOConnection } from './utils/util';
+import { formatTimeLeft, checkGeolocationAvailability, createSocketIOConnection, socket } from './utils/util';
 
 /**
 |--------------------------------------------------
@@ -70,6 +70,7 @@ const AvailabilityScreen = ({ location, history }) => {
     const [distanceToParking, setDistanceToParking] = useState(0);
 
     let reservationInterval = null;
+    let watchID = null;
 
     const findOutGreenRedOrOrange = (data) => {
 
@@ -90,56 +91,60 @@ const AvailabilityScreen = ({ location, history }) => {
 
     const watchPosition = () => {
         if (navigator.geolocation) {
-            navigator.geolocation.watchPosition((position) => {
+            watchID = navigator.geolocation.watchPosition((position) => {
                 setStateLatLog({
                     ...stateLatLog,
                     lat: position.coords.latitude,
                     long: position.coords.longitude
                 });
+                try {
+                    checkOpenBoxPossible(position.coords.latitude, position.coords.longitude);
+                } catch (error) {
+                    console.log(error);
+                }
             });
         }
     };
 
-    const findAllBoxesInAParking = async () => {
-        const newStateBox = await BoxDataService.getAllBoxesInAParking(parking.id);
-        let occupied = 0, free = 0, reserved = 0,
-            boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
-        for (let i = 0; i < newStateBox.data.length; i++) {
-            switch (findOutGreenRedOrOrange(newStateBox.data[i])) {
-                case OCCUPIED:
-                    occupied++;
-                    break;
-                case FREE:
-                    free++;
-                    break;
-                case RESERVED:
-                    reserved++;
-                    if (newStateBox.data[i].userId === API_USER.id) {
-                        boxReservedByThisUser = i;
-                    }
-                    break;
-                default: console.log("This case should never take place");
+    const findAllBoxesInAParking = useCallback(
+        async () => {
+            const newStateBox = await BoxDataService.getAllBoxesInAParking(parking.id);
+            let occupied = 0, free = 0, reserved = 0,
+                boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
+            for (let i = 0; i < newStateBox.data.length; i++) {
+                switch (findOutGreenRedOrOrange(newStateBox.data[i])) {
+                    case OCCUPIED:
+                        occupied++;
+                        break;
+                    case FREE:
+                        free++;
+                        break;
+                    case RESERVED:
+                        reserved++;
+                        if (newStateBox.data[i].userId === API_USER.id) {
+                            boxReservedByThisUser = i;
+                        }
+                        break;
+                    default: console.log("This case should never take place");
+                }
             }
-        }
 
-        setStateParking({
-            ...stateParking,
-            boxes: newStateBox.data,
-            occupied,
-            reserved,
-            free,
-            boxReservedByThisUser
-        });
-    };
+            setStateParking({
+                ...stateParking,
+                boxes: newStateBox.data,
+                occupied,
+                reserved,
+                free,
+                boxReservedByThisUser
+            });
+        }, [parking.id, setStateParking]
+    );
 
     const activateCountdown = () => {
-        if (!stateParking.boxes[stateParking.boxReservedByThisUser].lastReservationDate) return;
 
         reservationInterval = setInterval(() => {
 
             const reservation_time_left = FIVE_MINUTES - (new Date().getTime() - new Date(stateParking.boxes[stateParking.boxReservedByThisUser].lastReservationDate).getTime());
-            //console.log('reservation_time_left, Línea 141 ', stateParking.boxes[stateParking.boxReservedByThisUser]);
-
 
             if (reservation_time_left < 1000) {
                 //five minutes are over
@@ -165,11 +170,18 @@ const AvailabilityScreen = ({ location, history }) => {
     const checkGeolocation = async () => {
         const geolocation = await checkGeolocationAvailability();
         setStateGeolocationAvailable(geolocation);
+        if (geolocation) {
+            try {
+                watchPosition();
+            } catch (error) {
+                console.log(error);
+            }
+        }
     };
 
-    const checkOpenBoxPossible = async () => {
+    const checkOpenBoxPossible = async (latitude, longitude) => {
         const res = await ParkingDataService.get(parking.id);
-        const distanceToParking = getDistanceFromLatLonInKm(stateLatLog.lat, stateLatLog.long, parseFloat(res.data.lat), parseFloat(res.data.long));
+        const distanceToParking = getDistanceFromLatLonInKm(latitude, longitude, parseFloat(res.data.lat), parseFloat(res.data.long));
         if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION &&
             stateGeolocationAvailable.geolocationAvailable &&
             distanceToParking < CLOSE_DISTANCE_TO_PARKING) {
@@ -179,7 +191,6 @@ const AvailabilityScreen = ({ location, history }) => {
         }
         setStateOpenBoxPossible(false);
         setDistanceToParking(distanceToParking);
-
     };
 
     useEffect(() => {
@@ -191,37 +202,19 @@ const AvailabilityScreen = ({ location, history }) => {
                 } catch (error) {
                     console.log(error);
                 }
-            } else {
-                console.log('stateParking.boxReservedByThisUser es igual a THIS_USER_HAS_NO_RESERVATION');
             }
-            checkGeolocation();
         } catch (error) {
             console.log(error);
         }
-
-    }, [stateParking.boxReservedByThisUser]);
-
-    useEffect(() => {
-        try {
-
-        } catch (error) {
-            console.log(error);
-        }
-
-    }, []);
-
-    useEffect(() => {
-        if (stateGeolocationAvailable) {
-            try {
-                watchPosition();
-                checkOpenBoxPossible();
-            } catch (error) {
-                console.log(error);
-            }
-        }
+        checkGeolocation();
         createSocketIOConnection();
-    }, []);
-    console.log(stateParking);
+
+        return () => {
+            cancelCountdown();
+            (socket != null) && socket.disconnect();
+            (watchID != null) && navigator.geolocation.clearWatch(watchID);
+        };
+    }, [findAllBoxesInAParking, stateParking.boxReservedByThisUser]);
 
     return (
         <>
@@ -232,7 +225,6 @@ const AvailabilityScreen = ({ location, history }) => {
                         <MyCard
                             parking={parking}
                             stateParking={stateParking}
-                            setStateParking={setStateParking}
                             findOutGreenRedOrOrange={findOutGreenRedOrOrange}
                             findAllBoxesInAParking={findAllBoxesInAParking}
                             activateCountdown={activateCountdown}
@@ -240,6 +232,7 @@ const AvailabilityScreen = ({ location, history }) => {
                             stateOpenBoxPossible={stateOpenBoxPossible}
                             checkOpenBoxPossible={checkOpenBoxPossible}
                             setStateOpenBoxPossible={setStateOpenBoxPossible}
+                            stateLatLog={stateLatLog}
                         />
                     </Card>
                 </Row>
@@ -267,7 +260,7 @@ const AvailabilityScreen = ({ location, history }) => {
                 <Row>
                     <Col>
                         {
-                            stateGeolocationAvailable
+                            (stateGeolocationAvailable)
                                 ?
                                 <MyMarker
                                     color='blue'

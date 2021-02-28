@@ -40,11 +40,11 @@ import { openBox } from '../utils/util';
 */
 import { THIS_USER_HAS_NO_RESERVATION, BEGIN_OF_TIMES } from '../constants/constants'
 
-const MyCard = ({ parking, stateParking, setStateParking, findOutGreenRedOrOrange, findAllBoxesInAParking, activateCountdown, checkOpenBoxPossible, cancelCountdown, stateOpenBoxPossible, setStateOpenBoxPossible }) => {
+const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange, findAllBoxesInAParking, activateCountdown, checkOpenBoxPossible, cancelCountdown, stateOpenBoxPossible, setStateOpenBoxPossible, stateLatLog }) => {
 
     const { id, address, name } = parking;
 
-    const cancelReservation = (index) => {
+    const cancelReservation = async (index) => {
         if (stateParking.boxReservedByThisUser === THIS_USER_HAS_NO_RESERVATION) {
             // This condition should never be possible but just in the limit it could be.
             console.log(`You haven't reserved a Box in this parking yet`);
@@ -54,13 +54,14 @@ const MyCard = ({ parking, stateParking, setStateParking, findOutGreenRedOrOrang
         let data = stateParking.boxes[index];
         data.lastReservationDate = BEGIN_OF_TIMES;
         data.userId = null;
-        BoxDataService.update(data.id, data)
-            .then(async (res) => {
-                cancelCountdown();
-                await findAllBoxesInAParking(parking.id);
-                setStateOpenBoxPossible(false);
-            })
-            .catch((e) => console.error(e));
+        await BoxDataService.update(data.id, data);
+        cancelCountdown();
+        try {
+            findAllBoxesInAParking();
+        } catch (error) {
+            console.log(error);
+        }
+        setStateOpenBoxPossible(false);
     };
 
     return (
@@ -97,13 +98,11 @@ const MyCard = ({ parking, stateParking, setStateParking, findOutGreenRedOrOrang
                         <Row>
                             <MyColBoxes
                                 stateParking={stateParking}
-                                setStateParking={setStateParking}
                                 findOutGreenRedOrOrange={findOutGreenRedOrOrange}
                                 findAllBoxesInAParking={findAllBoxesInAParking}
-                                idParking={id}
                                 activateCountdown={activateCountdown}
                                 checkOpenBoxPossible={checkOpenBoxPossible}
-
+                                stateLatLog={stateLatLog}
                             />
                         </Row>
                     </Col>
@@ -152,11 +151,14 @@ const MyCard = ({ parking, stateParking, setStateParking, findOutGreenRedOrOrang
 MyCard.propTypes = {
     parking: PropTypes.object.isRequired,
     stateParking: PropTypes.object.isRequired,
-    setStateParking: PropTypes.func.isRequired,
     findOutGreenRedOrOrange: PropTypes.func.isRequired,
     findAllBoxesInAParking: PropTypes.func.isRequired,
     activateCountdown: PropTypes.func.isRequired,
-    checkOpenBoxPossible: PropTypes.func
+    checkOpenBoxPossible: PropTypes.func.isRequired,
+    cancelCountdown: PropTypes.func.isRequired,
+    stateOpenBoxPossible: PropTypes.bool.isRequired,
+    setStateOpenBoxPossible: PropTypes.func.isRequired,
+    stateLatLog: PropTypes.object.isRequired
 };
 
 export default MyCard;

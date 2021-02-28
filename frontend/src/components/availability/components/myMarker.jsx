@@ -21,7 +21,7 @@ const MyMarker = ({ color, state, text, icon }) => {
         <>
             <ColorMarker color={color}>
                 <FontAwesomeIcon icon={icon} />
-            </ColorMarker> {(state) && state} {text} <br />
+            </ColorMarker> {state} {text} <br />
         </>
     )
 };

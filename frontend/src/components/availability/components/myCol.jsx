@@ -21,7 +21,9 @@ const MyCol = ({ id, index, bg }) => {
 };
 
 MyCol.propTypes = {
-
+    id: PropTypes.number.isRequired,
+    index: PropTypes.number.isRequired,
+    bg: PropTypes.string.isRequired
 };
 
 export default MyCol;
