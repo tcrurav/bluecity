@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 | Components
 |--------------------------------------------------
 */
-import { MyNavbar } from '../my-navbar';
-import { Footer } from '../footer';
+import { MyNavbar } from '../ui/navbar/my-navbar';
+import { Footer } from '../ui/footer';
 import MyParkingsWithFreeBoxes from './components/myParkingsWithFreeBoxes';
 
 /**

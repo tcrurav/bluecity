@@ -6,9 +6,9 @@ import PropTypes from 'prop-types';
 | Components
 |--------------------------------------------------
 */
-import { MyNavbar } from '../my-navbar';
-import { MyContainer } from '../my-container';
-import { Footer } from '../footer';
+import { MyNavbar } from '../ui/navbar/my-navbar';
+import { MyContainer } from '../ui/my-container';
+import { Footer } from '../ui/footer';
 import MyCard from './components/myCard';
 import MyMarker from './components/myMarker';
 
