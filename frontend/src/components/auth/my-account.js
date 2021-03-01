@@ -1,10 +1,10 @@
 import React from 'react';
-import { MyNavbar } from './my-navbar';
-import { Footer } from './footer';
+import { MyNavbar } from '../ui/navbar/my-navbar';
+import { Footer } from '../ui/footer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MyContainer } from './my-container';
-import UserDataService from '../services/user.service';
+import { MyContainer } from '../ui/my-container';
+import UserDataService from '../../services/user.service';
 
 export default class MyAccount extends React.Component {
   constructor(props) {
@@ -38,7 +38,7 @@ export default class MyAccount extends React.Component {
   render() {
     return (
       <>
-        <MyNavbar history={this.props.history} />
+        <MyNavbar props={this.props} />
         <MyContainer>
           <Row>
             <Col><h5>User Profile</h5><br /></Col>

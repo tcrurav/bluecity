@@ -1,3 +1,4 @@
 /.idea
 .env
 /azure/certs
+docs/states.txt
