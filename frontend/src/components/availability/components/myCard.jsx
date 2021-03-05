@@ -40,7 +40,7 @@ import { openBox } from '../utils/util';
 */
 import { THIS_USER_HAS_NO_RESERVATION, BEGIN_OF_TIMES } from '../constants/constants'
 
-const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange, findAllBoxesInAParking, activateCountdown, checkOpenBoxPossible, cancelCountdown, stateOpenBoxPossible, setStateOpenBoxPossible, stateLatLog }) => {
+const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange, findAllBoxesInAParking, checkOpenBoxPossible, cancelCountdown, stateOpenBoxPossible, setStateOpenBoxPossible, stateLatLog }) => {
 
     const { id, address, name } = parking;
 
@@ -100,7 +100,6 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange, findAllBoxesIn
                                 stateParking={stateParking}
                                 findOutGreenRedOrOrange={findOutGreenRedOrOrange}
                                 findAllBoxesInAParking={findAllBoxesInAParking}
-                                activateCountdown={activateCountdown}
                                 checkOpenBoxPossible={checkOpenBoxPossible}
                                 stateLatLog={stateLatLog}
                             />
@@ -153,7 +152,6 @@ MyCard.propTypes = {
     stateParking: PropTypes.object.isRequired,
     findOutGreenRedOrOrange: PropTypes.func.isRequired,
     findAllBoxesInAParking: PropTypes.func.isRequired,
-    activateCountdown: PropTypes.func.isRequired,
     checkOpenBoxPossible: PropTypes.func.isRequired,
     cancelCountdown: PropTypes.func.isRequired,
     stateOpenBoxPossible: PropTypes.bool.isRequired,

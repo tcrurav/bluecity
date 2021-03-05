@@ -169,8 +169,8 @@ const AvailabilityScreen = ({ location, history }) => {
 
     const checkGeolocation = async () => {
         const geolocation = await checkGeolocationAvailability();
-        setStateGeolocationAvailable(geolocation);
         if (geolocation) {
+            setStateGeolocationAvailable(geolocation);
             try {
                 watchPosition();
             } catch (error) {
@@ -203,11 +203,11 @@ const AvailabilityScreen = ({ location, history }) => {
                     console.log(error);
                 }
             }
+            checkGeolocation();
+            createSocketIOConnection();
         } catch (error) {
             console.log(error);
         }
-        checkGeolocation();
-        createSocketIOConnection();
 
         return () => {
             cancelCountdown();
@@ -227,7 +227,6 @@ const AvailabilityScreen = ({ location, history }) => {
                             stateParking={stateParking}
                             findOutGreenRedOrOrange={findOutGreenRedOrOrange}
                             findAllBoxesInAParking={findAllBoxesInAParking}
-                            activateCountdown={activateCountdown}
                             cancelCountdown={cancelCountdown}
                             stateOpenBoxPossible={stateOpenBoxPossible}
                             checkOpenBoxPossible={checkOpenBoxPossible}

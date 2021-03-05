@@ -16,7 +16,7 @@ import MyColReservation from './myColReservation';
 */
 import { OCCUPIED, FREE, RESERVED } from '../constants/constants';
 
-const MyColBoxes = ({ stateParking, findOutGreenRedOrOrange, findAllBoxesInAParking, activateCountdown, checkOpenBoxPossible, stateLatLog }) => {
+const MyColBoxes = ({ stateParking, findOutGreenRedOrOrange, findAllBoxesInAParking, checkOpenBoxPossible, stateLatLog }) => {
 
     const { boxes } = stateParking;
 
@@ -47,7 +47,6 @@ const MyColBoxes = ({ stateParking, findOutGreenRedOrOrange, findAllBoxesInAPark
                                     index={index}
                                     stateParking={stateParking}
                                     findAllBoxesInAParking={findAllBoxesInAParking}
-                                    activateCountdown={activateCountdown}
                                     checkOpenBoxPossible={checkOpenBoxPossible}
                                     stateLatLog={stateLatLog}
                                 />
@@ -76,7 +75,6 @@ MyColBoxes.propTypes = {
     stateParking: PropTypes.object.isRequired,
     findOutGreenRedOrOrange: PropTypes.func.isRequired,
     findAllBoxesInAParking: PropTypes.func.isRequired,
-    activateCountdown: PropTypes.func.isRequired,
     checkOpenBoxPossible: PropTypes.func.isRequired,
     stateLatLog: PropTypes.object.isRequired
 };

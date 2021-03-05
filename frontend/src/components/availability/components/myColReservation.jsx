@@ -22,7 +22,7 @@ import { THIS_USER_HAS_NO_RESERVATION, API_USER } from '../constants/constants';
 */
 import { MyColCustom } from '../styled/styles';
 
-const MyColReservation = ({ bg, id, index, stateParking, findAllBoxesInAParking, activateCountdown, checkOpenBoxPossible, stateLatLog }) => {
+const MyColReservation = ({ bg, id, index, stateParking, findAllBoxesInAParking, checkOpenBoxPossible, stateLatLog }) => {
 
     const { lat, long } = stateLatLog;
 
@@ -39,7 +39,6 @@ const MyColReservation = ({ bg, id, index, stateParking, findAllBoxesInAParking,
         await BoxDataService.update(data.id, data);
         try {
             findAllBoxesInAParking();
-            //activateCountdown();
             checkOpenBoxPossible(lat, long);
         } catch (error) {
             console.log(error);
@@ -63,7 +62,6 @@ MyColReservation.propTypes = {
     index: PropTypes.number.isRequired,
     stateParking: PropTypes.object.isRequired,
     findAllBoxesInAParking: PropTypes.func.isRequired,
-    activateCountdown: PropTypes.func.isRequired,
     checkOpenBoxPossible: PropTypes.func.isRequired,
     stateLatLog: PropTypes.object.isRequired
 };
