@@ -95,7 +95,7 @@ app.use(function (req, res, next) {
     } else {
       req.user = user; //set the user to req so other routes can use it
       req.token = token;
-      next();
+      return next();
     }
   });
 });
@@ -106,7 +106,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method, Access-Control-Allow-Credentials');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
   res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-  next();
+  return next();
 });
 
 // Add headers

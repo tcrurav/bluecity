@@ -1,24 +1,24 @@
 import React from 'react';
 import { MyNavbar } from '../ui/my-navbar';
 import { Footer } from '../ui/footer';
-import ParkingDataService from '../../services/parking.service';
+// import ParkingDataService from '../../services/parking.service';
 import { ParkingsWithFreeBoxes } from "./parkingsWithFreeBoxes";
 
 export class Parking extends React.Component {
 
-  constructor(props) {
-    super(props);
+  // constructor(props) {
+  //   super(props);
 
-    // this.state = {
-    //   parkings: []
-    // }
+  //   // this.state = {
+  //   //   parkings: []
+  //   // }
 
-    // this.getParkings = this.getParkings.bind(this);
-  }
+  //   // this.getParkings = this.getParkings.bind(this);
+  // }
 
-  componentDidMount() {
-    // this.getParkings();
-  }
+  // componentDidMount() {
+  //   // this.getParkings();
+  // }
 
   // getParkings() {
   //   ParkingDataService.getAll()

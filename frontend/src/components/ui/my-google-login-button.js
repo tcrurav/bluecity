@@ -10,14 +10,14 @@ const MyImg = styled.img`
   margin-right: 5px;
 `;
 
-const MyA = styled.a`
-  width: 100%;
-  background-color: #fff !important;
+// const MyA = styled.a`
+//   width: 100%;
+//   background-color: #fff !important;
   
-  &:hover {
-    box-shadow: 0 0 16px #4285f4;
-  }
-`;
+//   &:hover {
+//     box-shadow: 0 0 16px #4285f4;
+//   }
+// `;
 
 const MySpan = styled.span`
   font-weight: bold;

@@ -27,11 +27,15 @@ export class ParkingsWithFreeBoxes extends React.Component {
 
   constructor(props) {
     super(props);
-    this.findAllWithAFreeBox = this.findAllWithAFreeBox.bind(this);
+    
     this.state = {
       parkings: [],
       position: [28.128081, -15.4467406]
     }
+
+    this.findAllWithAFreeBox = this.findAllWithAFreeBox.bind(this);
+    this.redirectToDetailedParking = this.redirectToDetailedParking.bind(this);
+    this.getCurrentPosition = this.getCurrentPosition.bind(this);
   }
 
   componentDidMount() {
@@ -48,7 +52,7 @@ export class ParkingsWithFreeBoxes extends React.Component {
 
   redirectToDetailedParking(p) {
     console.log("hello boxes");
-        console.log(this.props.history);
+    console.log(this.props.history);
     this.props.history.push({
       pathname: '/availability',
       state: {
