@@ -35,10 +35,13 @@ export function Main(props) {
             </Col>
             <Col xs={6} md={3} className="pt-5">
               <Row className={classes.root}>
-                <Button variant="contained" color="primary" className="mt-2" onClick={() => {props.history.push("/parking")}}>Parking</Button>
+                {/* It was not working with props.history.push */}
+                {/* <Button variant="contained" color="primary" className="mt-2" onClick={() => {props.history.push("/parking")}}>Parking</Button> */}
+                <Button variant="contained" color="primary" className="mt-2" href="/parking">Parking</Button>
               </Row>
               <Row className={classes.root}>
-                <Button variant="contained" color="primary" className="mt-2" onClick={() => {props.history.push("/renting")}}>Renting</Button>
+                {/* <Button variant="contained" color="primary" className="mt-2" onClick={() => {props.history.push("/renting")}}>Renting</Button> */}
+                <Button variant="contained" color="primary" className="mt-2" href="/renting">Renting</Button>
               </Row>
             </Col>
           </Row>
