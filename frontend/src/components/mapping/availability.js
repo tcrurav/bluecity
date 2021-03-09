@@ -1,5 +1,5 @@
 import React from 'react';
-import { MyNavbar } from '../ui/my-navbar';
+import { MyNavbar } from '../ui/navbar/my-navbar';
 import { MyContainer } from '../ui/my-container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -152,7 +152,6 @@ export class Availability extends React.Component {
 
       console.log("otro2")
     }
-  }
 
   checkOpenBoxPossible() {
     //Condition to check if lat, long of parking has been already queried. Black hole somewhere in athlantic sea lat=0, long=0
@@ -182,17 +181,21 @@ export class Availability extends React.Component {
     this.setState({ openBoxPossible: false, distanceToParking: distanceToParking, lat_parking: lat, long_parking: long });
   }
 
-  checkGeolocationAvailability() {
-    return new Promise((resolve, reject) => {
-      if ("geolocation" in navigator) {
-        resolve({ geolocationAvailable: true });
-        console.log("Geolocation Available");
-      } else {
-        resolve({ geolocationAvailable: false });
-        console.log("Geolocation Not Available");
-      }
-    });
-  }
+    checkOpenBoxPossible() {
+        //Check distance to first box in parking. Notice that all boxes in the same parking have the same location.
+        ParkingDataService.get(this.state.boxes[0].parkingId).then((res) => {
+            console.log("checkOpenBoxPossible")
+            const distanceToParking = getDistanceFromLatLonInKm(this.state.lat, this.state.long, parseFloat(res.data.lat), parseFloat(res.data.long));
+            // console.log(distanceToParking)
+            if (this.state.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION &&
+                this.state.geolocationAvailable &&
+                distanceToParking < CLOSE_DISTANCE_TO_PARKING) {
+                this.setState({ openBoxPossible: true, distanceToParking: distanceToParking });
+                return;
+            }
+            this.setState({ openBoxPossible: false, distanceToParking: distanceToParking });
+        });
+    }
 
   // getCurrentPosition() {
   //   navigator.geolocation.getCurrentPosition(function (position) {
@@ -291,11 +294,19 @@ export class Availability extends React.Component {
     }).catch((e) => console.error(e));
   }
 
-  cancelReservation(index) {
-    if (this.state.boxReservedByThisUser === THIS_USER_HAS_NO_RESERVATION) {
-      // This condition should never be possible but just in the limit it could be.
-      console.log("You haven't reserved a Box in this parking yet");
-      return;
+        let data = this.state.boxes[index];
+        data.lastReservationDate = BEGIN_OF_TIMES;
+        data.userId = null;
+        BoxDataService.update(data.id, data).then((res) => {
+            this.cancelCountdown();
+            this.findAllBoxesInAParking(this.props.location.state.parking.id).then((newState) => {
+                newState.boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
+                newState.reservation_time_left = 0;
+                newState.openBoxPossible = false;
+                this.setState(newState);
+                // this.checkOpenBoxPossible();
+            });
+        }).catch((e) => console.error(e));
     }
 
     let data = this.state.boxes[index];

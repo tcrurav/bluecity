@@ -1,6 +1,6 @@
 import React from 'react';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
-import { MyNavbar } from '../ui/my-navbar';
+import { MyNavbar } from '../ui/navbar/my-navbar';
 import { Footer } from '../ui/footer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
