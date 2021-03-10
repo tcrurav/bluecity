@@ -236,7 +236,7 @@ const AvailabilityScreen = ({ location, history }) => {
                 }
             }
             checkGeolocation();
-            createSocketIOConnection(parking, API_USER);
+            createSocketIOConnection(parking);
         } catch (error) {
             console.log(error);
         }
