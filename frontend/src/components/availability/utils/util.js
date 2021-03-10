@@ -4,7 +4,9 @@
 |--------------------------------------------------
 */
 import socketIOClient from 'socket.io-client';
-import refresh from '../availabilityScreen'
+
+
+import { API_USER } from '../constants/constants'
 
 const formatTimeLeft = (state) => {
     let totalSeconds = Math.floor(state / 1000);
@@ -31,7 +33,7 @@ const checkGeolocationAvailability = () => {
 };
 let socket = null;
 
-const createSocketIOConnection = () => {
+const createSocketIOConnection = (parking) => {
     //console.log('createSocketIOConnection');
     if (!socket) {
         //console.log('victoria');
@@ -45,6 +47,11 @@ const createSocketIOConnection = () => {
             console.log('connection confirmed');
         });
         //console.log('otro2')
+        socket.on('refresh', data => {
+          if (data.who_changed_it !== API_USER.id && data.parking_changed === parking.id) {
+            console.log("connection refreshed");
+          }
+        });
     }
 };
 

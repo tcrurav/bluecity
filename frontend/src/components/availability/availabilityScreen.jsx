@@ -113,11 +113,7 @@ const AvailabilityScreen = ({ location, history }) => {
   const handleRefresh = () => {
     if (!socket) { {
       socket = socketIOClient(process.env.REACT_APP_BASEURL);
-      socket.on('refresh', data => {
-        if (data.who_changed_it !== API_USER.id && data.parking_changed === parking.id) {
-          console.log("connection refreshed");
-        }
-      });
+      
     }
   }}
 
@@ -153,7 +149,7 @@ const AvailabilityScreen = ({ location, history }) => {
                 free,
                 boxReservedByThisUser
             });
-        }, [parking.id]
+        }, [parking.id, setStateParking]
     );
 
     const activateCountdown = () => {
@@ -240,7 +236,7 @@ const AvailabilityScreen = ({ location, history }) => {
                 }
             }
             checkGeolocation();
-            createSocketIOConnection();
+            createSocketIOConnection(parking, API_USER);
         } catch (error) {
             console.log(error);
         }
