@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import socketIOClient from 'socket.io-client';
 
 /**
 |--------------------------------------------------
@@ -34,7 +35,7 @@ import ParkingDataService from '../../services/parking.service';
 |--------------------------------------------------
 */
 import { getDistanceFromLatLonInKm } from '../../utils/common';
-import { formatTimeLeft, checkGeolocationAvailability, createSocketIOConnection, socket } from './utils/util';
+import { formatTimeLeft, checkGeolocationAvailability, createSocketIOConnection } from './utils/util';
 
 /**
 |--------------------------------------------------
@@ -55,6 +56,8 @@ const AvailabilityScreen = ({ location, history }) => {
             free: 0,
             reservation_time_left: 0,
             boxReservedByThisUser: THIS_USER_HAS_NO_RESERVATION,
+            lat_parking: 0,
+            long_parking: 0
         }
     );
 
@@ -70,6 +73,7 @@ const AvailabilityScreen = ({ location, history }) => {
     const [distanceToParking, setDistanceToParking] = useState(0);
 
     let reservationInterval = null;
+    let socket = null;
     let watchID = null;
 
     const findOutGreenRedOrOrange = (data) => {
@@ -106,9 +110,21 @@ const AvailabilityScreen = ({ location, history }) => {
         }
     };
 
+  const handleRefresh = () => {
+    if (!socket) { {
+      socket = socketIOClient(process.env.REACT_APP_BASEURL);
+      socket.on('refresh', data => {
+        if (data.who_changed_it !== API_USER.id && data.parking_changed === parking.id) {
+          console.log("connection refreshed");
+        }
+      });
+    }
+  }}
+
     const findAllBoxesInAParking = useCallback(
         async () => {
             const newStateBox = await BoxDataService.getAllBoxesInAParking(parking.id);
+            console.log("parking: " + parking.id)
             let occupied = 0, free = 0, reserved = 0,
                 boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
             for (let i = 0; i < newStateBox.data.length; i++) {
@@ -137,7 +153,7 @@ const AvailabilityScreen = ({ location, history }) => {
                 free,
                 boxReservedByThisUser
             });
-        }, [parking.id, setStateParking]
+        }, [parking.id]
     );
 
     const activateCountdown = () => {
@@ -193,8 +209,28 @@ const AvailabilityScreen = ({ location, history }) => {
         setDistanceToParking(distanceToParking);
     };
 
+
+    /* const refresh = () => {
+      findAllBoxesInAParking().then((newState) => {
+        setStateParking(newState);
+        if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
+          activateCountdown();
+        }
+      });
+    } */
+
+    /* refresh() {
+      this.findAllBoxesInAParking(this.props.location.state.parking.id).then((newState) => {
+        this.setState(newState);
+        if (this.state.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
+          this.activateCountdown();
+        }
+      });
+    } */
+
     useEffect(() => {
         try {
+            console.log("use effect");
             findAllBoxesInAParking();
             if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
                 try {
@@ -215,6 +251,7 @@ const AvailabilityScreen = ({ location, history }) => {
             (watchID != null) && navigator.geolocation.clearWatch(watchID);
         };
     }, [findAllBoxesInAParking, stateParking.boxReservedByThisUser]);
+
 
     return (
         <>

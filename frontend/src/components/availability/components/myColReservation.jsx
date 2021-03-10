@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import socketIOClient from 'socket.io-client';
 
 /**
 |--------------------------------------------------
@@ -13,7 +14,7 @@ import BoxDataService from '../../../services/box.service';
 | Constants
 |--------------------------------------------------
 */
-import { THIS_USER_HAS_NO_RESERVATION, API_USER } from '../constants/constants';
+import { THIS_USER_HAS_NO_RESERVATION, API_USER, SOCKET } from '../constants/constants';
 
 /**
 |--------------------------------------------------
@@ -22,9 +23,10 @@ import { THIS_USER_HAS_NO_RESERVATION, API_USER } from '../constants/constants';
 */
 import { MyColCustom } from '../styled/styles';
 
-const MyColReservation = ({ bg, id, index, stateParking, findAllBoxesInAParking, checkOpenBoxPossible, stateLatLog }) => {
+const MyColReservation = ({ bg, id, index, stateParking, findAllBoxesInAParking, checkOpenBoxPossible, stateLatLog, parking }) => {
 
     const { lat, long } = stateLatLog;
+    let socket = null
 
     const handleReservation = async (ind) => {
 
@@ -40,6 +42,14 @@ const MyColReservation = ({ bg, id, index, stateParking, findAllBoxesInAParking,
         try {
             findAllBoxesInAParking();
             checkOpenBoxPossible(lat, long);
+            if (!socket) {
+              socket = socketIOClient(process.env.REACT_APP_BASEURL)
+              console.log("something-changed")
+              socket.emit("something-changed", {
+                who_changed_it: API_USER.id,
+                parking_changed: parking.id
+              })
+            }
         } catch (error) {
             console.log(error);
         }
@@ -63,7 +73,8 @@ MyColReservation.propTypes = {
     stateParking: PropTypes.object.isRequired,
     findAllBoxesInAParking: PropTypes.func.isRequired,
     checkOpenBoxPossible: PropTypes.func.isRequired,
-    stateLatLog: PropTypes.object.isRequired
+    stateLatLog: PropTypes.object.isRequired,
+    parking: PropTypes.object.isRequired
 };
 
 export default MyColReservation;

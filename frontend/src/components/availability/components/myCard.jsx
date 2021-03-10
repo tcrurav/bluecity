@@ -102,6 +102,7 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange, findAllBoxesIn
                                 findAllBoxesInAParking={findAllBoxesInAParking}
                                 checkOpenBoxPossible={checkOpenBoxPossible}
                                 stateLatLog={stateLatLog}
+                                parking={parking}
                             />
                         </Row>
                     </Col>

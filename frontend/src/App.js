@@ -5,7 +5,7 @@ import RoutePrivate from './utils/private-route';
 import RoutePublic from './utils/public-route';
 import { Login } from './components/auth/login';
 import { Main } from './components/main';
-import  ParkingScreen  from './components/parking/parkingScreen';
+import  ParkingScreen  from './components/mapping/parking/parkingScreen';
 import { Renting } from './components/mapping/renting';
 import { Contact } from './components/contact/contact';
 import { MyError } from './components/my-error';

@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 | Components
 |--------------------------------------------------
 */
-import { MyNavbar } from '../my-navbar';
-import { Footer } from '../footer';
+import { MyNavbar } from '../../ui/navbar/my-navbar';
+import { Footer } from '../../ui/footer';
 import MyParkingsWithFreeBoxes from './components/myParkingsWithFreeBoxes';
 
 /**
@@ -15,11 +15,11 @@ import MyParkingsWithFreeBoxes from './components/myParkingsWithFreeBoxes';
 | Services
 |--------------------------------------------------
 */
-import ParkingDataService from '../../services/parking.service';
+import ParkingDataService from '../../../services/parking.service';
 
 const ParkingScreen = ({ history }) => {
 
-    const [allParkings, setAllParkings] = useState({});
+    /*const [allParkings, setAllParkings] = useState({});
 
     const getAllParkings = async () => {
         const parkings = await ParkingDataService.getAll();
@@ -32,7 +32,7 @@ const ParkingScreen = ({ history }) => {
         } catch (error) {
             console.log(error);
         }
-    }, []);
+    }, []);*/
 
     return (
         <>
