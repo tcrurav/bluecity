@@ -93,9 +93,10 @@ export function MyNavbar(props) {
       setStateUser({
         ...stateUser,
         name: newStateUser.data.name,
-        email: newStateUser.data.email
+        email: newStateUser.data.email,
+        loading: false
       })
-    }, [API_USER.id, setStateUser]
+    }, [setStateUser]
   );
 
   /* const getUser = () => {
@@ -128,7 +129,7 @@ export function MyNavbar(props) {
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
-      event.type === "keydown" &&
+      event && event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
     ) {
       return;

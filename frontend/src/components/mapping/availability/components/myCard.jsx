@@ -31,7 +31,7 @@ import BoxDataService from '../../../../services/box.service';
 | Utils
 |--------------------------------------------------
 */
-import { openBox } from '../utils/util';
+//import { openBox } from '../utils/util';
 
 /**
 |--------------------------------------------------
@@ -40,11 +40,11 @@ import { openBox } from '../utils/util';
 */
 import { THIS_USER_HAS_NO_RESERVATION, BEGIN_OF_TIMES } from '../constants/constants'
 
-const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange, findAllBoxesInAParking, checkOpenBoxPossible, cancelCountdown, stateOpenBoxPossible, setStateOpenBoxPossible, stateLatLog }) => {
+const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange, findAllBoxesInAParking, checkOpenBoxPossible, cancelCountdown, stateOpenBoxPossible, setStateOpenBoxPossible, stateLatLog, openBox, cancelReservation, socket }) => {
 
     const { id, address, name } = parking;
 
-    const cancelReservation = async (index) => {
+    /* const cancelReservation = async (index) => {
         if (stateParking.boxReservedByThisUser === THIS_USER_HAS_NO_RESERVATION) {
             // This condition should never be possible but just in the limit it could be.
             console.log(`You haven't reserved a Box in this parking yet`);
@@ -62,7 +62,7 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange, findAllBoxesIn
             console.log(error);
         }
         setStateOpenBoxPossible(false);
-    };
+    }; */
 
     return (
         <>
@@ -103,6 +103,7 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange, findAllBoxesIn
                                 checkOpenBoxPossible={checkOpenBoxPossible}
                                 stateLatLog={stateLatLog}
                                 parking={parking}
+                                socket={socket}
                             />
                         </Row>
                     </Col>
