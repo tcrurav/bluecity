@@ -1,10 +1,11 @@
 /* global gapi */
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import clsx from "clsx";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { removeUserSession } from "../../../utils/common";
+import UserDataService from '../../../services/user.service';
 import styled from "styled-components";
 
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
@@ -35,6 +36,7 @@ import LocalParkingIcon from "@material-ui/icons/LocalParking";
 import CreditCardIcon from "@material-ui/icons/CreditCard";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import { ListItemAvatar } from "@material-ui/core";
+import { API_USER } from "../../mapping/availability/constants/constants";
 
 /* const MyIcon = styled.img`
   width: 1em;
@@ -76,6 +78,40 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function MyNavbar(props) {
+
+  const [stateUser, setStateUser] = useState(
+    {
+      name: "",
+      email: "",
+    }
+  )
+
+  const getUser = useCallback(
+    async () => {
+      const newStateUser = await UserDataService.get(API_USER.id)
+      
+      setStateUser({
+        ...stateUser,
+        name: newStateUser.data.name,
+        email: newStateUser.data.email
+      })
+    }, [API_USER.id, setStateUser]
+  );
+
+  /* const getUser = () => {
+    UserDataService.get(props.userId)
+      .then(response => {
+        setStateUser({
+          name: response.data.name,
+          email: response.data.username,
+          loading: false
+        })
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  } */
+
   // handle click event of logout button
   const handleLogout = () => {
     removeUserSession();
@@ -121,7 +157,9 @@ export function MyNavbar(props) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List component="nav">
-        <CustomizedAccordions />
+        <CustomizedAccordions 
+          stateUser={stateUser}
+        />
         <Divider />
         <ListItemLink href="/main">
           <ListItemIcon>
@@ -192,12 +230,15 @@ export function MyNavbar(props) {
     },
   }))(MuiAccordionDetails);
 
-  function CustomizedAccordions() {
+  function CustomizedAccordions({stateUser}) {
     const [expanded, setExpanded] = React.useState("panel1");
 
     const handleChange = (panel) => (event, newExpanded) => {
       setExpanded(newExpanded ? panel : false);
     };
+
+    const avatarLetter = stateUser.name.charAt(0);
+    const onlyNameString = stateUser.name.split(" ")[0];
 
     return (
       <div>
@@ -205,11 +246,11 @@ export function MyNavbar(props) {
           <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
             <Grid container direction="row" alignItems="center">
               <Grid item xs={2}>
-                <Avatar>B</Avatar>
+                <Avatar>{avatarLetter}</Avatar>
               </Grid>
               <Grid item xs={8}>
                 <Container>
-                  <Typography>Bluecity</Typography>
+                  <Typography>{onlyNameString}</Typography>
                 </Container>
               </Grid>
               <Grid item xs={2}>
@@ -237,6 +278,14 @@ export function MyNavbar(props) {
       </div>
     );
   }
+
+  useEffect(() => {
+    try {
+      getUser();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [setStateUser]); 
 
   return (
     <div className={classes.root}>

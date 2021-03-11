@@ -3,7 +3,7 @@
 | Utils
 |--------------------------------------------------
 */
-import { getApiUser } from '../../../utils/common';
+import { getApiUser } from '../../../../utils/common';
 
 const OCCUPIED = 0, FREE = 1, RESERVED = 2;
 const FIVE_MINUTES = 5 * 60 * 1000;

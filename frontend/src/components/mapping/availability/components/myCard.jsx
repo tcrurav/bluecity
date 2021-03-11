@@ -24,7 +24,7 @@ import { Card, Col, Row, Button } from 'react-bootstrap';
 | Services
 |--------------------------------------------------
 */
-import BoxDataService from '../../../services/box.service';
+import BoxDataService from '../../../../services/box.service';
 
 /**
 |--------------------------------------------------

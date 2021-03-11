@@ -7,7 +7,7 @@ import socketIOClient from 'socket.io-client';
 | Services
 |--------------------------------------------------
 */
-import BoxDataService from '../../../services/box.service';
+import BoxDataService from '../../../../services/box.service'
 
 /**
 |--------------------------------------------------

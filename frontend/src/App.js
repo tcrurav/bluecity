@@ -15,7 +15,7 @@ import {Scooter} from "./components/mapping/scooter";
 import MyAccount from "./components/auth/my-account";
 // import {ParkingsWithFreeScooters} from './components/parkingsWithFreeScooters';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AvailabilityScreen from "./components/availability/availabilityScreen";
+import AvailabilityScreen from "./components/mapping/availability/availabilityScreen";
 
 // import 'jquery/dist/jquery.min.js';
 // import 'bootstrap/dist/js/bootstrap.min.js';

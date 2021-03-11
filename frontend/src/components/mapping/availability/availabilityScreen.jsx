@@ -7,9 +7,9 @@ import socketIOClient from 'socket.io-client';
 | Components
 |--------------------------------------------------
 */
-import { MyNavbar } from '../ui/navbar/my-navbar';
-import { MyContainer } from '../ui/my-container';
-import { Footer } from '../ui/footer';
+import { MyNavbar } from '../../ui/navbar/my-navbar';
+import { MyContainer } from '../../ui/my-container';
+import { Footer } from '../../ui/footer';
 import MyCard from './components/myCard';
 import MyMarker from './components/myMarker';
 
@@ -26,15 +26,15 @@ import { Row, Col, Card } from 'react-bootstrap';
 | Services
 |--------------------------------------------------
 */
-import BoxDataService from '../../services/box.service';
-import ParkingDataService from '../../services/parking.service';
+import BoxDataService from '../../../services/box.service';
+import ParkingDataService from '../../../services/parking.service';
 
 /**
 |--------------------------------------------------
 | Utils
 |--------------------------------------------------
 */
-import { getDistanceFromLatLonInKm } from '../../utils/common';
+import { getDistanceFromLatLonInKm } from '../../../utils/common';
 import { formatTimeLeft, checkGeolocationAvailability, createSocketIOConnection } from './utils/util';
 
 /**
@@ -246,6 +246,7 @@ const AvailabilityScreen = ({ location, history }) => {
             (socket != null) && socket.disconnect();
             (watchID != null) && navigator.geolocation.clearWatch(watchID);
         };
+        
     }, [findAllBoxesInAParking, stateParking.boxReservedByThisUser]);
 
 
