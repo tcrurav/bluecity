@@ -48,68 +48,99 @@ exports.findAll = (req, res) => {
     });
 };
 
-function getUniqueParkingIdValues(array) {
-  var flags = [], output = [], l = array.length, i;
-  for (i = 0; i < l; i++) {
-    if (flags[array[i].dataValues.parkingId]) continue;
-    flags[array[i].dataValues.parkingId] = true;
-    output.push(array[i].dataValues.parkingId);
-  }
-  return output;
-}
+// function getUniqueParkingIdValues(array) {
+//   var flags = [], output = [], l = array.length, i;
+//   for (i = 0; i < l; i++) {
+//     if (flags[array[i].dataValues.parkingId]) continue;
+//     flags[array[i].dataValues.parkingId] = true;
+//     output.push(array[i].dataValues.parkingId);
+//   }
+//   return output;
+// }
 
-// as its name explains, it executes the query asynchronously to get properly the desired data.
-function executeQueryAsynchronously(data) {
-  return new Promise(function (resolve, reject) {
-    let uniqueParkingIdValues = getUniqueParkingIdValues(data)
-    let output = uniqueParkingIdValues.map(b => {
-      return Parking.findByPk(b).then(parkingData => {
-        return parkingData.dataValues;
-      })
-    })
-    // waits to return from the output when all the individual promises are solved.
-    Promise.all(output).then(function (results) {
-      resolve(results);
-    })
-  })
-}
+// // as its name explains, it executes the query asynchronously to get properly the desired data.
+// function executeQueryAsynchronously(data) {
+//   return new Promise(function (resolve, reject) {
+//     let uniqueParkingIdValues = getUniqueParkingIdValues(data)
+//     let output = uniqueParkingIdValues.map(b => {
+//       return Parking.findByPk(b).then(parkingData => {
+//         return parkingData.dataValues;
+//       })
+//     })
+//     // waits to return from the output when all the individual promises are solved.
+//     Promise.all(output).then(function (results) {
+//       resolve(results);
+//     })
+//   })
+// }
 
 // Retrieve all Parkings from the database with a free scooter.
 exports.findAllWithAFreeScooter = (req, res) => {
-  Box.findAll({
-    where: { userId: null, occupied: true }
-  })
-    .then(data => {
-      executeQueryAsynchronously(data).then(resultParking => {
-        return res.send(resultParking);
-      })
-    })
-    .catch(err => {
-      return res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving boxes."
-      });
+  Parking.findAll({
+    include: [{
+      model: Box,
+      as: "boxes",
+      attributes: [],
+      where: { userId: null, occupied: true }
+    }]
+  }).then(data => {
+    // console.log(data)
+    return res.send(data);
+  }).catch(err => {
+    return res.status(500).send({
+      message: err.message || "Some error occurred while retrieving boxes."
     });
+  });
+  // Box.findAll({
+  //   where: { userId: null, occupied: true }
+  // })
+  //   .then(data => {
+  //     executeQueryAsynchronously(data).then(resultParking => {
+  //       return res.send(resultParking);
+  //     })
+  //   })
+  //   .catch(err => {
+  //     return res.status(500).send({
+  //       message:
+  //         err.message || "Some error occurred while retrieving boxes."
+  //     });
+  //   });
 };
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 
 // Retrieve all Parkings from the database with a free box.
 exports.findAllWithAFreeBox = (req, res) => {
-  Box.findAll({
-    where: { occupied: false, lastReservationDate: { [Op.lt]: new Date(new Date() - FIVE_MINUTES) } }
-  })
-    .then(data => {
-      executeQueryAsynchronously(data).then(resultParking => {
-        return res.send(resultParking);
-      })
-    })
-    .catch(err => {
-      return res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving boxes."
-      });
+  Parking.findAll({
+    include: [{
+      model: Box,
+      as: "boxes",
+      attributes: [],
+      where: { occupied: false, lastReservationDate: { [Op.lt]: new Date(new Date() - FIVE_MINUTES) } }
+    }]
+  }).then(data => {
+    // console.log(data)
+    return res.send(data);
+  }).catch(err => {
+    return res.status(500).send({
+      message: err.message || "Some error occurred while retrieving boxes."
     });
+  });
+  // Box.findAll({
+  //   where: { occupied: false, lastReservationDate: { [Op.lt]: new Date(new Date() - FIVE_MINUTES) } }
+  // })
+  //   .then(data => {
+  //     executeQueryAsynchronously(data).then(resultParking => {
+  //       return res.send(resultParking);
+  //     })
+  //   })
+  //   .catch(err => {
+  //     return res.status(500).send({
+  //       message:
+  //         err.message || "Some error occurred while retrieving boxes."
+  //     });
+  //   });
+  //   console.log("line which should never be reached.")
 };
 
 // Find a single Parking with an id
@@ -118,6 +149,8 @@ exports.findOne = (req, res) => {
 
   Parking.findByPk(id)
     .then(data => {
+      console.log("encontrado parking..." + id)
+      // console.log(data)
       return res.send(data);
     })
     .catch(err => {

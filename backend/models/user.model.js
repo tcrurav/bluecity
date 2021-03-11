@@ -14,5 +14,18 @@ module.exports = (sequelize, Sequelize) => {
     }
   });
 
+  User.associate = function (models) {
+    User.hasOne(models.box, {
+      onDelete: "CASCADE",
+      foreignKey: "userId",
+      as: "box",
+    })
+    User.hasOne(models.scooter, {
+      onDelete: "CASCADE",
+      foreignKey: "userId",
+      as: "scooter",
+    })
+  }
+
   return User;
 };

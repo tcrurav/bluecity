@@ -1,8 +1,8 @@
 /* global gapi */
 import React from 'react';
-import { MyGoogleLoginButton } from './my-google-login-button';
-import { setUserSession } from '../utils/common';
-import UserDataService from '../services/user.service';
+import MyGoogleLoginButton from '../ui/my-google-login-button';
+import { setUserSession } from '../../utils/common';
+import UserDataService from '../../services/user.service'
 
 // I have implemented the solution of this url:
 // https://w3path.com/react-google-login-with-example/

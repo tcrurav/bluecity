@@ -28,7 +28,7 @@ module.exports = (sequelize, Sequelize) => {
     Box.belongsTo(models.user, {
       onDelete: "CASCADE",
       foreignKey: "userId",
-      as: "users",
+      as: "user",
     })
   }
 

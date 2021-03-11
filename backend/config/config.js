@@ -7,52 +7,27 @@ require('dotenv').config();
 // }
 
 // PostGres
-// module.exports = {
-//   development: {
-//     username: process.env.MYSQL_USER,
-//     password: process.env.MYSQL_PASSWORD,
-//     database: process.env.MYSQL_DATABASE,
-//     host: process.env.DB_HOST,
-//     dialect: 'postgres'
-//   },
-//   test: {
-//     username: process.env.POSTGRES_USER,
-//     password: process.env.POSTGRES_PASSWORD,
-//     database: process.env.POSTGRES_DB,
-//     host: process.env.DB_HOST,
-//     dialect: 'postgres'
-//   },
-//   production: {
-//     username: process.env.POSTGRES_USER,
-//     password: process.env.POSTGRES_PASSWORD,
-//     database: process.env.POSTGRES_DB,
-//     host: process.env.DB_HOST,
-//     dialect: 'postgres',
-//     use_env_variable: 'DATABASE_URL'
-//   }
-// }
-
-// MySQL
 module.exports = {
-  development: {
-    username: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
-    host: process.env.DB_HOST,
-    dialect: 'mysql'
-  },
-  test: {
-    username: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
-    host: process.env.DB_HOST,
-    dialect: 'mysql'
-  },
-  production: {
-    username: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
-    host: process.env.DB_HOST,
-    dialect: 'mysql'
-  }
+    development: {
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_DATABASE,
+        host: process.env.DB_HOST,
+        dialect: process.env.DB_DIALECT
+    },
+    test: {
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_DATABASE,
+        host: process.env.DB_HOST,
+        dialect: process.env.DB_DIALECT
+    },
+    production: {
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_DATABASE,
+        host: process.env.DB_HOST,
+        dialect: process.env.DB_DIALECT,
+        use_env_variable: 'DATABASE_URL'
+    }
 }

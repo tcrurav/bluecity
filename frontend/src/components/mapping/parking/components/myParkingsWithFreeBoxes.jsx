@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 | Components
 |--------------------------------------------------
 */
-import { MyContainer } from '../../my-container';
+import { MyContainer } from '../../../ui/my-container';
 import MyMarkerMap from './myMarkerMap';
 import MyBtnCurrentPosition from './myBtnCurrentPosition';
 
@@ -22,7 +22,7 @@ import { Row, Col } from 'react-bootstrap';
 | Services
 |--------------------------------------------------
 */
-import ParkingDataService from '../../../services/parking.service';
+import ParkingDataService from '../../../../services/parking.service';
 
 /**
 |--------------------------------------------------
