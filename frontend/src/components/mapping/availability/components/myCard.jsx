@@ -17,7 +17,8 @@ import MyColBoxes from './myColBoxes';
 |--------------------------------------------------
 */
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-import { Card, Col, Row, Button } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
 
 /**
 |--------------------------------------------------
@@ -117,8 +118,8 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange, findAllBoxesIn
                                     stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION
                                         ?
                                         <Button
-                                            block
-                                            variant='secondary'
+                                            variant="contained"
+                                            color='#cfd8dc'
                                             onClick={() => cancelReservation(stateParking.boxReservedByThisUser)}
                                         >
                                             Cancel Reservation

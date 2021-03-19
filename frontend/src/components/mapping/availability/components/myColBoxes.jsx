@@ -32,7 +32,7 @@ const MyColBoxes = ({ stateParking, findOutGreenRedOrOrange, findAllBoxesInAPark
                         case OCCUPIED:
                             return (
                                 <MyCol
-                                    bg='red'
+                                    bg='#f44336'
                                     key={id}
                                     id={id}
                                     index={index}
@@ -41,7 +41,7 @@ const MyColBoxes = ({ stateParking, findOutGreenRedOrOrange, findAllBoxesInAPark
                         case FREE:
                             return (
                                 <MyColReservation
-                                    bg='green'
+                                    bg='#4caf50'
                                     key={id}
                                     id={id}
                                     index={index}
@@ -57,7 +57,7 @@ const MyColBoxes = ({ stateParking, findOutGreenRedOrOrange, findAllBoxesInAPark
                         case RESERVED:
                             return (
                                 <MyCol
-                                    bg='orange'
+                                    bg='#ff9800'
                                     key={id}
                                     id={id}
                                     index={index}

@@ -12,6 +12,7 @@ const MyCol = ({ id, index, bg }) => {
 
     return (
         <MyColCustom
+            variant="contained"
             key={id}
             bg={bg}
         >

@@ -11,26 +11,31 @@ import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Image from "material-ui-image";
-import Typography from '@material-ui/core/Typography';
+import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
 
-import Card from '@material-ui/core/Card'
-import CardMedia from '@material-ui/core/CardMedia'
-import CardContent from '@material-ui/core/CardContent'
-import CardHeader from '@material-ui/core/CardHeader'
+import Card from "@material-ui/core/Card";
+import CardMedia from "@material-ui/core/CardMedia";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    "&:hover": {
-      color: "danger",
-    },
-  },
-  container: {
-    marginBottom: "10vh"
-  },
+  root: {},
   image: {
-    marginTop: "10vh",
-    width: "50%",
-    alignItems: "center"
+    maxWidth: "512px",
+  },
+  buttonContainer: {
+    justify: "center",
+    alignItems: "center",
+    //justifyContent: "center",
+  },
+  buttons: {
+    marginTop: "1vh",
+    backgroundColor: '#00a9f4',
+    '&:hover': {
+      backgroundColor: '#007ac1',
+      color: 'white'
+    }
   }
 }));
 
@@ -40,47 +45,23 @@ export function Main(props) {
   return (
     <>
       <MyNavbar history={props.history} />
-      <Container className={classes.container}>
-
-        <Card className= {classes.image}>
-          <CardContent>
-            <CardMedia image="img/bluecity.png"/>
-          </CardContent>
-        </Card>
-
-
-        {/* <Grid container spacing={3} className={classes.image}>
-          <Grid item xs={12} className="mt-3">
-            <Image aspectRatio={(16/9)} src="img/bluecity.png" alt="logo"/>
+      <Paper elevation={2} className={classes.root}>
+        <Container className={classes.image}>
+          <Image src="img/bluecity.png" aspectRatio={16 / 9} />
+        </Container>
+        <Grid container className={classes.buttonContainer} direction="column">
+          <Grid item xs={12}>
+            <Button variant="contained" className={classes.buttons} onClick={() => props.history.push("/parking")}>
+              Parking
+            </Button>
           </Grid>
-          <Grid container spacing={3} className="pt-5">
-            <Grid item xs={12} className={classes.root}>
-              <Button
-                variant="contained"
-                color="primary"
-                className="mt-2"
-                onClick={() => {
-                  props.history.push("/parking");
-                }}
-              >
-                Parking
-                </Button>
-            </Grid>
-            <Grid item xs={12} className={classes.root}>
-              <Button
-                variant="contained"
-                color="primary"
-                className="mt-2"
-                onClick={() => {
-                  props.history.push("/renting");
-                }}
-              >
-                Renting
-                </Button>
-            </Grid>
+          <Grid item xs={12}>
+            <Button variant="contained" className={classes.buttons} onClick={() => props.history.push("/renting")}>
+              Renting
+            </Button>
           </Grid>
-        </Grid> */}
-      </Container>
+        </Grid>
+      </Paper>
       <Footer />
     </>
   );

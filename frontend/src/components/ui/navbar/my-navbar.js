@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
   root: {
     flexGrow: 1,
+    marginBottom: '10vh'
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -75,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
       margin: "auto",
     },
   },
+  appbar: {
+    marginBottom: "10vh"
+  }
 }));
 
 export function MyNavbar(props) {
@@ -291,7 +295,7 @@ export function MyNavbar(props) {
   return (
     <div className={classes.root}>
       <React.Fragment key="left">
-        <AppBar position="fixed">
+        <AppBar position="fixed" className={classes.appbar}>
           <Toolbar>
             <IconButton
               edge="start"
