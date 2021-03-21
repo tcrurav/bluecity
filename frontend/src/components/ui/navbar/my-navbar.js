@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
   root: {
     flexGrow: 1,
+    marginBottom: '10vh'
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -75,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
       margin: "auto",
     },
   },
+  appbar: {
+    marginBottom: "10vh"
+  }
 }));
 
 export function MyNavbar(props) {
@@ -93,9 +97,10 @@ export function MyNavbar(props) {
       setStateUser({
         ...stateUser,
         name: newStateUser.data.name,
-        email: newStateUser.data.email
+        email: newStateUser.data.email,
+        loading: false
       })
-    }, [API_USER.id, setStateUser]
+    }, [setStateUser]
   );
 
   /* const getUser = () => {
@@ -128,7 +133,7 @@ export function MyNavbar(props) {
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
-      event.type === "keydown" &&
+      event && event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
     ) {
       return;
@@ -290,7 +295,7 @@ export function MyNavbar(props) {
   return (
     <div className={classes.root}>
       <React.Fragment key="left">
-        <AppBar position="fixed">
+        <AppBar position="fixed" className={classes.appbar}>
           <Toolbar>
             <IconButton
               edge="start"

@@ -16,7 +16,7 @@ import MyColReservation from './myColReservation';
 */
 import { OCCUPIED, FREE, RESERVED } from '../constants/constants';
 
-const MyColBoxes = ({ stateParking, findOutGreenRedOrOrange, findAllBoxesInAParking, checkOpenBoxPossible, stateLatLog, parking }) => {
+const MyColBoxes = ({ stateParking, findOutGreenRedOrOrange, findAllBoxesInAParking, checkOpenBoxPossible, stateLatLog, parking, socket }) => {
 
     const { boxes } = stateParking;
 
@@ -32,7 +32,7 @@ const MyColBoxes = ({ stateParking, findOutGreenRedOrOrange, findAllBoxesInAPark
                         case OCCUPIED:
                             return (
                                 <MyCol
-                                    bg='red'
+                                    bg='#f44336'
                                     key={id}
                                     id={id}
                                     index={index}
@@ -41,7 +41,7 @@ const MyColBoxes = ({ stateParking, findOutGreenRedOrOrange, findAllBoxesInAPark
                         case FREE:
                             return (
                                 <MyColReservation
-                                    bg='green'
+                                    bg='#4caf50'
                                     key={id}
                                     id={id}
                                     index={index}
@@ -50,13 +50,14 @@ const MyColBoxes = ({ stateParking, findOutGreenRedOrOrange, findAllBoxesInAPark
                                     checkOpenBoxPossible={checkOpenBoxPossible}
                                     stateLatLog={stateLatLog}
                                     parking={parking}
+                                    socket={socket}
                                 />
 
                             );
                         case RESERVED:
                             return (
                                 <MyCol
-                                    bg='orange'
+                                    bg='#ff9800'
                                     key={id}
                                     id={id}
                                     index={index}

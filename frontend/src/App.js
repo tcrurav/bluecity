@@ -37,7 +37,7 @@ class App extends React.Component {
     return (
       <Router>
         <Switch>
-          <RoutePrivate path='/main' component={Main} />
+          <RoutePrivate path='/main' component={(props) => <Main history={props.history}/>} />
           <RoutePrivate path='/my-account' component={(props) => <MyAccount userId={getCurrentUserId()} history={props.history} />}/>
           <RoutePrivate path='/parking' component={ParkingScreen} />
           <RoutePrivate path='/renting' component={(props) => <Renting userId={getCurrentUserId()} history={props.history} />}/>
