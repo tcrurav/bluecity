@@ -6,7 +6,7 @@
 import socketIOClient from 'socket.io-client';
 
 
-import { API_USER } from '../constants/constants'
+import { getApiUser } from '../constants/constants'
 
 const formatTimeLeft = (state) => {
     let totalSeconds = Math.floor(state / 1000);
@@ -49,7 +49,7 @@ const createSocketIOConnection = (parking) => {
         //console.log('otro2')
         socket.on('refresh', data => {
           console.log("refresh on utils");
-          if (data.who_changed_it !== API_USER.id && data.parking_changed === parking.id) {
+          if (data.who_changed_it !== getApiUser().id && data.parking_changed === parking.id) {
             console.log("connection refreshed");
           }
         });

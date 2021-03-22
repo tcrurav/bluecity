@@ -36,7 +36,7 @@ import LocalParkingIcon from "@material-ui/icons/LocalParking";
 import CreditCardIcon from "@material-ui/icons/CreditCard";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import { ListItemAvatar } from "@material-ui/core";
-import { API_USER } from "../../mapping/availability/constants/constants";
+import { getApiUser } from "../../mapping/availability/constants/constants";
 
 /* const MyIcon = styled.img`
   width: 1em;
@@ -92,15 +92,15 @@ export function MyNavbar(props) {
 
   const getUser = useCallback(
     async () => {
-      const newStateUser = await UserDataService.get(API_USER.id)
-      
+      const newStateUser = await UserDataService.get(getApiUser().id)
+
       setStateUser({
         ...stateUser,
         name: newStateUser.data.name,
         email: newStateUser.data.email,
         loading: false
       })
-    }, [setStateUser]
+    }, [stateUser]
   );
 
   /* const getUser = () => {
@@ -162,7 +162,7 @@ export function MyNavbar(props) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List component="nav">
-        <CustomizedAccordions 
+        <CustomizedAccordions
           stateUser={stateUser}
         />
         <Divider />
@@ -235,7 +235,7 @@ export function MyNavbar(props) {
     },
   }))(MuiAccordionDetails);
 
-  function CustomizedAccordions({stateUser}) {
+  function CustomizedAccordions({ stateUser }) {
     const [expanded, setExpanded] = React.useState("panel1");
 
     const handleChange = (panel) => (event, newExpanded) => {
@@ -290,7 +290,7 @@ export function MyNavbar(props) {
     } catch (error) {
       console.error(error);
     }
-  }, [setStateUser]); 
+  }, [setStateUser]);
 
   return (
     <div className={classes.root}>
