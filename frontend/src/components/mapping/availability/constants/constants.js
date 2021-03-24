@@ -10,7 +10,7 @@ const FIVE_MINUTES = 5 * 60 * 1000;
 const THIS_USER_HAS_NO_RESERVATION = -1;
 const CLOSE_DISTANCE_TO_PARKING = 2; //0.01; // 0.01 Kilometers = 10 meters
 const BEGIN_OF_TIMES = new Date('1970-01-01 00:00:00');
-const MINIMUM_DISTANCE_INCREMENT = 0.1;
+const MINIMUM_DISTANCE_INCREMENT = 0.01;
 
 export {
     OCCUPIED,

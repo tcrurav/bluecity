@@ -3,10 +3,7 @@
 | Libraries
 |--------------------------------------------------
 */
-import socketIOClient from 'socket.io-client';
-
-
-import { getApiUser } from '../constants/constants'
+import React, { useEffect, useRef } from 'react';
 
 const formatTimeLeft = (state) => {
     let totalSeconds = Math.floor(state / 1000);
@@ -31,48 +28,31 @@ const checkGeolocationAvailability = () => {
         }
     });
 };
-/* let socket = null;
 
-const createSocketIOConnection = (parking) => {
-    //console.log('createSocketIOConnection');
-    if (!socket) {
-        //console.log('victoria');
-        socket = socketIOClient(process.env.REACT_APP_BASEURL);
-        //console.log('otro1')
-        socket.on('connect', () => {
-            console.log('connected to backend');
-        });
-        //console.log('otro')
-        socket.on('open', data => {
-            console.log('connection confirmed');
-        });
-        //console.log('otro2')
-        socket.on('refresh', data => {
-          console.log("refresh on utils");
-          if (data.who_changed_it !== getApiUser().id && data.parking_changed === parking.id) {
-            console.log("connection refreshed");
-          }
-        });
-    }
-};
 
-const openBox = () => {
-    console.log('openBox');
-    try {
-        socket.emit('open', { open: 'open' });
-        console.log('socket OK');
-    } catch (e) {
-        console.log('error');
-        console.log(e);
-    } finally {
-        console.log('finally log');
+
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
     }
-}; */
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
 
 export {
     formatTimeLeft,
     checkGeolocationAvailability,
-    // createSocketIOConnection,
-    //openBox
-    /* socket */
+    useInterval
 };

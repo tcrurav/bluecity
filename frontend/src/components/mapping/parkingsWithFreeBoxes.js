@@ -32,6 +32,8 @@ export class ParkingsWithFreeBoxes extends React.Component {
       parkings: [],
       position: [28.128081, -15.4467406]
     }
+
+    this.geolocation = props.geolocation;
   }
 
   componentDidMount() {
@@ -106,6 +108,11 @@ export class ParkingsWithFreeBoxes extends React.Component {
               <Image src={`${process.env.REACT_APP_BASEURL}/my-location.png`} width="25" />
             </Button>
             {/* <p className="mt-3 text-center">{this.state.parkings.length} parkings in Gran Canaria now.</p> */}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+          <p>hola: {geolocationState.latitude} - {geolocationState.longitude}</p>
           </Col>
         </Row>
       </MyContainer>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// import PropTypes from 'prop-types';
 
 /**
 |--------------------------------------------------
@@ -80,8 +81,15 @@ const MyParkingsWithFreeBoxes = () => {
                     setFreeBoxes={setFreeBoxes}
                 />
             </Row>
+            {/* <Row>
+                {geolocation.latitude} - {geolocation.longitude} - { geolocation.timestamp}
+            </Row> */}
         </MyContainer>
     )
 };
+
+// MyParkingsWithFreeBoxes.propTypes = {
+//     geolocation: PropTypes.object.isRequired
+// };
 
 export default MyParkingsWithFreeBoxes;

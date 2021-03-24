@@ -157,7 +157,7 @@ const io = socketIo(server, {
 io.on("connect", (socket) => {
   console.log("New client connected");
 
-  socket.emit("hola", { connection_confirmed: true });
+  socket.emit("welcome", { connection_confirmed: true });
 
   socket.on("chacho-tu", (data) => {
     console.log("openToIntroduceScooter")

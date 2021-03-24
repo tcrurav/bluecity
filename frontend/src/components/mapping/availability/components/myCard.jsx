@@ -33,8 +33,8 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
 
   const { id, address, name } = parking;
 
-  console.log("myCard")
-  console.log(stateParking)
+  // console.log("myCard")
+  // console.log(stateParking)
 
   return (
     <>
@@ -103,7 +103,7 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
                     ?
                     <Button
                       block
-                      variant='primary'
+                      variant='outlined'
                       onClick={openBox}
                     >
                       Open box nº{stateParking.boxReservedByThisUser + 1} &gt;&gt;
@@ -129,11 +129,17 @@ MyCard.propTypes = {
   handleReservation: PropTypes.func.isRequired,
 };
 
-const areEqual = (prevProps, nextProps) => {
-  if (prevProps.stateParking != nextProps.stateParking) return false;
-  return true;
-}
+// const areEqual = (prevProps, nextProps) => {
+//   if (prevProps.stateParking != nextProps.stateParking) return false;
+//   return true;
+// }
 
-export default memo(MyCard
-  // , areEqual
-  );
+// export default memo(MyCard
+//   // , areEqual
+//   );
+
+// export default memo(MyCard
+//   // , areEqual
+//   );
+
+export default MyCard;

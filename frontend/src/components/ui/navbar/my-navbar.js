@@ -47,6 +47,7 @@ const MyNavbarContainer = styled(Navbar)`
 `; */
 
 const useStyles = makeStyles((theme) => ({
+  expanded: {},
   list: {
     width: 250,
   },
