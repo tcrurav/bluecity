@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -16,9 +16,9 @@ import MyColReservation from './myColReservation';
 */
 import { OCCUPIED, FREE, RESERVED } from '../constants/constants';
 
-const MyColBoxes = ({ stateParking, findOutGreenRedOrOrange, handleReservation }) => {
+const MyColBoxes = ({ boxes, findOutGreenRedOrOrange, handleReservation }) => {
 
-  const { boxes } = stateParking;
+  // console.log("MyColBoxes")
 
   return (
     <>
@@ -70,7 +70,7 @@ const MyColBoxes = ({ stateParking, findOutGreenRedOrOrange, handleReservation }
 };
 
 MyColBoxes.propTypes = {
-  stateParking: PropTypes.object.isRequired,
+  boxes: PropTypes.array.isRequired,
   findOutGreenRedOrOrange: PropTypes.func.isRequired,
   handleReservation: PropTypes.func.isRequired
 };

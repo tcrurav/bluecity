@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const checkGeolocationAvailability = () => {
   return new Promise((resolve, reject) => {
@@ -19,15 +19,21 @@ const useGeolocation = () => {
     latitude: null,
     longitude: null,
     // speed: null,
-    timestamp: Date.now(),
-    geolocationAvailability: false
+    timestamp: Date.now()
   });
-  let mounted = true;
-  let watchId;
+
+  const [geolocationAvailabilityInside, setGeolocationAvailabilityInside] = useState(false);
+
+  const mounted = useRef(true);
+  const watchId = useRef(null);
 
   const onEvent = event => {
-    if (mounted) {
-      setState({ ...state,
+    // console.log("se produce onEvent")
+    if (mounted.current) {
+      // console.log("va a poner estado")
+      // console.log(geolocationAvailabilityInside)
+      setState({
+        ...state,
         // accuracy: event.coords.accuracy,
         // altitude: event.coords.altitude,
         // altitudeAccuracy: event.coords.altitudeAccuracy,
@@ -35,34 +41,36 @@ const useGeolocation = () => {
         latitude: event.coords.latitude,
         longitude: event.coords.longitude,
         // speed: event.coords.speed,
-        timestamp: event.timestamp
+        timestamp: event.timestamp,
       });
     }
     // console.log("eventuando")
     // console.log(mounted)
   };
 
-  useEffect(
-    () => {
-      checkGeolocationAvailability().then((res) => {
-        setState({...state, geolocationAvailability: res});
-        navigator.geolocation.getCurrentPosition(onEvent);
-        watchId = navigator.geolocation.watchPosition(onEvent);
-      })
+  useEffect(() => {
+      // console.log("principio del useEffect primero")
 
-  return () => {
-    mounted = false;
-    navigator.geolocation.clearWatch(watchId);
-    console.log("se fue")
-  };
-},
-  [0]
+      navigator.geolocation.getCurrentPosition(onEvent);
+      watchId.current = navigator.geolocation.watchPosition(onEvent);
+
+      checkGeolocationAvailability().then((res) => {
+        // console.log(res)
+        setGeolocationAvailabilityInside(res);
+      });
+
+      return () => {
+        mounted.current = false;
+        navigator.geolocation.clearWatch(watchId.current);
+        // console.log("se fue el geolocation principal")
+      };
+    },
+    []
   );
 
-return state;
+  return [ state, geolocationAvailabilityInside ];
 };
 
 export {
-  useGeolocation,
-  checkGeolocationAvailability
+  useGeolocation
 };

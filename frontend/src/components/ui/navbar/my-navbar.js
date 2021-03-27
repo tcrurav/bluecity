@@ -1,15 +1,9 @@
-/* global gapi */
 import React, { useEffect, useState, useCallback } from "react";
 import clsx from "clsx";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
 import { removeUserSession } from "../../../utils/common";
 import UserDataService from '../../../services/user.service';
-import styled from "styled-components";
-
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import Button from "@material-ui/core/Button";
 import MuiAccordion from "@material-ui/core/Accordion";
 import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
 import MuiAccordionDetails from "@material-ui/core/AccordionDetails";
@@ -25,8 +19,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
 import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -35,7 +27,6 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import LocalParkingIcon from "@material-ui/icons/LocalParking";
 import CreditCardIcon from "@material-ui/icons/CreditCard";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
-import { ListItemAvatar } from "@material-ui/core";
 import { getApiUser } from "../../mapping/availability/constants/constants";
 
 /* const MyIcon = styled.img`
@@ -91,18 +82,17 @@ export function MyNavbar(props) {
     }
   )
 
-  const getUser = useCallback(
-    async () => {
-      const newStateUser = await UserDataService.get(getApiUser().id)
+  const getUser = async () => {
+    const newStateUser = await UserDataService.get(getApiUser().id)
 
-      setStateUser({
-        ...stateUser,
-        name: newStateUser.data.name,
-        email: newStateUser.data.email,
-        loading: false
-      })
-    }, [stateUser]
-  );
+    setStateUser(s =>
+    ({
+      ...s,
+      name: newStateUser.data.name,
+      email: newStateUser.data.email,
+      loading: false
+    }))
+  }
 
   /* const getUser = () => {
     UserDataService.get(props.userId)
@@ -125,7 +115,7 @@ export function MyNavbar(props) {
   };
 
   const classes = useStyles();
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     top: false,
     left: false,
     bottom: false,
@@ -140,7 +130,7 @@ export function MyNavbar(props) {
       return;
     }
 
-    setState({ ...state, [anchor]: open });
+    setState(s => ({ ...s, [anchor]: open }));
   };
 
   function ListItemLink(props, anchor) {
@@ -291,7 +281,7 @@ export function MyNavbar(props) {
     } catch (error) {
       console.error(error);
     }
-  }, [setStateUser]);
+  }, []);
 
   return (
     <div className={classes.root}>

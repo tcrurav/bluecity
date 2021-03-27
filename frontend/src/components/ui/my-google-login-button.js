@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { capitalize } from '@material-ui/core';
+// import { capitalize } from '@material-ui/core';
 
 const MyImg = styled.img`
   width: 20px;
@@ -11,14 +11,14 @@ const MyImg = styled.img`
   margin-right: 5px;
 `;
 
-const MyA = styled.a`
-  width: 100%;
-  background-color: #fff !important;
+// const MyA = styled.a`
+//   width: 100%;
+//   background-color: #fff !important;
   
-  &:hover {
-    box-shadow: 0 0 16px #4285f4;
-  }
-`;
+//   &:hover {
+//     box-shadow: 0 0 16px #4285f4;
+//   }
+// `;
 
 const MySpan = styled.span`
   font-weight: bold;

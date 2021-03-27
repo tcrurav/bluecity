@@ -19,7 +19,7 @@ const MyMarker = ({ color, state, text, icon }) => {
 
     return (
         <>
-            <ColorMarker color={color}>
+            <ColorMarker color={color} component="span">
                 <FontAwesomeIcon icon={icon} />
             </ColorMarker> {state} {text} <br />
         </>

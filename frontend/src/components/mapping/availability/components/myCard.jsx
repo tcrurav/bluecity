@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -69,9 +69,8 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
           <Col>
             <Row>
               <MyColBoxes
-                stateParking={stateParking}
+                boxes={stateParking.boxes}
                 findOutGreenRedOrOrange={findOutGreenRedOrOrange}
-                parking={parking}
                 handleReservation={handleReservation}
               />
             </Row>
@@ -102,7 +101,7 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
                   stateOpenBoxPossible
                     ?
                     <Button
-                      block
+                      block="true"
                       variant='outlined'
                       onClick={openBox}
                     >
@@ -128,18 +127,5 @@ MyCard.propTypes = {
   cancelReservation: PropTypes.func.isRequired,
   handleReservation: PropTypes.func.isRequired,
 };
-
-// const areEqual = (prevProps, nextProps) => {
-//   if (prevProps.stateParking != nextProps.stateParking) return false;
-//   return true;
-// }
-
-// export default memo(MyCard
-//   // , areEqual
-//   );
-
-// export default memo(MyCard
-//   // , areEqual
-//   );
 
 export default MyCard;
