@@ -8,13 +8,14 @@ import PropTypes from 'prop-types';
 */
 import MyCarHeader from '../../availability/components/myCarHeader';
 import MyCarImg from '../../availability/components/myCarImg';
+import MyMarker from '../../availability/components/myMarker';
 
 /**
 |--------------------------------------------------
 | Libraries
 |--------------------------------------------------
 */
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Card, Col, Row } from 'react-bootstrap';
 
 /**
@@ -22,7 +23,9 @@ import { Card, Col, Row } from 'react-bootstrap';
 | Constants
 |--------------------------------------------------
 */
-import { NO_ICON } from '../constants/constants';
+import { 
+  PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
+  PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED } from '../constants/constants';
 
 const MyParkingProcessCard = ({ parking, stateParkingProcess }) => {
 
@@ -42,30 +45,30 @@ const MyParkingProcessCard = ({ parking, stateParkingProcess }) => {
         <Row className='pt-2'>
           <Col>
             <MyMarker
-              color={ stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? 'green' : 'black'}
+              color={ stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
               text='Open box door'
-              icon={ stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? faCheckCircle : NO_ICON}
+              icon={ stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>
         </Row>
         <Row className='pt-2'>
           <Col>
             <MyMarker
-              color={ stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? 'green' : 'black'}
+              color={ stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
               text='Introduce scooter in box'
-              icon={ stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? faCheckCircle : NO_ICON}
+              icon={ stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>
         </Row>
         <Row className='pt-2'>
           <Col>
             <MyMarker
-              color={ stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? 'green' : 'black'}
+              color={ stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
               text='Close box door'
-              icon={ stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? faCheckCircle : NO_ICON}
+              icon={ stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>
         </Row>
@@ -75,9 +78,9 @@ const MyParkingProcessCard = ({ parking, stateParkingProcess }) => {
   )
 };
 
-MyCard.propTypes = {
+MyParkingProcessCard.propTypes = {
   parking: PropTypes.object.isRequired,
   stateParkingProcess: PropTypes.number.isRequired,
 };
 
-export default MyCard;
+export default MyParkingProcessCard;

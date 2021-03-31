@@ -20,14 +20,13 @@ import { ColorMarker } from '../styled/styles';
 | Constants
 |--------------------------------------------------
 */
-import { NO_ICON } from '../constants/constants';
 
 const MyMarker = ({ color, state, text, icon }) => {
 
     return (
         <>
             <ColorMarker color={color} component="span">
-                {icon !== NO_ICON ? <FontAwesomeIcon icon={icon} /> : <></>}
+                <FontAwesomeIcon icon={icon} />
             </ColorMarker> {state} {text} <br />
         </>
     )
