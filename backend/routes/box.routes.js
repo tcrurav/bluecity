@@ -15,6 +15,9 @@ module.exports = app => {
   
     // Retrieve a single Box with id
     router.get("/:id", auth.isAuthenticated, boxes.findOne);
+
+    // Retrieve a single Box with userId
+    router.get("/user/:userId", auth.isAuthenticated, boxes.findOneWithUserId);
   
     // Update a Box with id
     router.put("/:id", auth.isAuthenticated, boxes.update);

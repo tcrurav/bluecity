@@ -33,6 +33,8 @@ import { MyMap } from '../styled/styleComponents';
 
 const MyParkingsWithFreeScooters = () => {
 
+    //console.log("parking with free scooters")
+
     const zoom = 13;
 
     const [freeScooter, setFreeScooter] = useState({
@@ -49,6 +51,7 @@ const MyParkingsWithFreeScooters = () => {
 
     useEffect(() => {
         try {
+            //console.log("parking with free scooters")
             allWithAFreeScooters();
         } catch (error) {
             console.log(error);
@@ -70,6 +73,7 @@ const MyParkingsWithFreeScooters = () => {
                         <MyMarkerMap
                             parkings={parkings}
                             type='scooter'
+                            checkingForRenting={true}
                         />
 
                     </MyMap>

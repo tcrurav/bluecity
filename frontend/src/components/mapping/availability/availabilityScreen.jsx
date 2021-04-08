@@ -83,7 +83,7 @@ const AvailabilityScreen = ({ location, history }) => {
       return RESERVED;
     }
     if ((!data.occupied && reservationExpired) ||
-      (checkingForRenting && !data.occupied && reservationExpired)) {
+      (checkingForRenting && data.occupied && reservationExpired & !data.userId)) {
       return FREE;
     }
     return OCCUPIED;
@@ -100,7 +100,7 @@ const AvailabilityScreen = ({ location, history }) => {
 
     let data = stateParking.boxes[ind]; //Possible Stale Closure
     data.lastReservationDate = new Date();
-    data.userId = getApiUser().id;
+    data.userId = getApiUser().id; //???????
     BoxDataService.update(data.id, data).then((res) => {
       findAllBoxesInAParking().then(newState => {
         setStateParking(s => ({
@@ -265,6 +265,7 @@ const AvailabilityScreen = ({ location, history }) => {
 
   useEffect(() => {
     console.log("useEffect primero")
+    console.log(checkingForRenting)
     findAllBoxesInAParking().then((newState) => {
       ParkingDataService.get(parking.id).then(res => {
         setStateParking(s => ({
@@ -281,14 +282,14 @@ const AvailabilityScreen = ({ location, history }) => {
     });
 
     return () => {
-      console.log("return in useEffect")
+      //console.log("return in useEffect")
       cancelCountdown();
     };
 
   }, []);
 
   useEffect(() => {
-    console.log("useEffect socket");
+    //console.log("useEffect socket");
     socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL);
 
     socketRef.current.on('welcome', () => {
@@ -312,7 +313,7 @@ const AvailabilityScreen = ({ location, history }) => {
   }, []);
 
   useEffect(() => {
-    console.log("useEffect countdown")
+    //console.log("useEffect countdown")
     if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
 
       // if (stateParking.reservation_time_left !== 0) return;  //Possible Stale Closure
@@ -362,7 +363,7 @@ const AvailabilityScreen = ({ location, history }) => {
   }, [stateParking.boxReservedByThisUser]);
 
   useEffect(() => {
-    console.log("useEffect de geolocation")
+    //console.log("useEffect de geolocation")
     if (geolocation.latitude === 0 && geolocation.longitude === 0) {
       return;
     }
@@ -419,14 +420,14 @@ const AvailabilityScreen = ({ location, history }) => {
                 <MyMarker
                   color='blue'
                   state={null}
-                  text='Click on the Box number to reserve a parking box.'
+                  text={`Click on the Box number to reserve a ${checkingForRenting ? 'scooter' : 'parking box'}.`}
                   icon={faInfoCircle}
                 />
                 :
                 <MyMarker
                   color='blue'
                   state={null}
-                  text={`Your reservation for box nº${stateParking.boxReservedByThisUser.valueOf() + 1} in parking ${parking.name} will expire in ${formatTimeLeft(stateParking.reservation_time_left.valueOf())}`}
+                  text={`Your reservation for ${checkingForRenting ? 'scooter in' : ''} box nº${stateParking.boxReservedByThisUser.valueOf() + 1} in parking ${parking.name} will expire in ${formatTimeLeft(stateParking.reservation_time_left.valueOf())}`}
                   icon={faInfoCircle}
                 />
             }

@@ -71,6 +71,7 @@ const MyParkingsWithFreeBoxes = () => {
                         <MyMarkerMap
                             parkings={parkings}
                             type='boxes'
+                            checkingForRenting={false}
                         />
                     </MyMap>
                 </Col>

@@ -15,7 +15,7 @@ import MyBtnPopup from './myBtnPopup';
 */
 import { Popup } from 'react-leaflet';
 
-const MyPopup = ({ id, name, address, p, type }) => {
+const MyPopup = ({ id, name, address, p, type, checkingForRenting }) => {
 
     return (
         <Popup>
@@ -26,6 +26,7 @@ const MyPopup = ({ id, name, address, p, type }) => {
                 text='Check availability'
                 p={p}
                 type={type}
+                checkingForRenting={checkingForRenting}
             />
         </Popup>
     )
@@ -36,7 +37,8 @@ MyPopup.propTypes = {
     name: PropTypes.string.isRequired,
     address: PropTypes.string.isRequired,
     p: PropTypes.object.isRequired,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
+    checkingForRenting: PropTypes.bool.isRequired
 };
 
 export default MyPopup;

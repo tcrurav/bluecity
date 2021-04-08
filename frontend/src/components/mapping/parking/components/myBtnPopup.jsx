@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 */
 import { Button } from 'react-bootstrap';
 
-const MyBtnPopup = ({ text, p, type }) => {
+const MyBtnPopup = ({ text, p, type, checkingForRenting }) => {
 
     let history = useHistory();
 
@@ -19,7 +19,7 @@ const MyBtnPopup = ({ text, p, type }) => {
             pathname: '/availability',
             state: {
                 parking: p,
-                checkingForRenting: false
+                checkingForRenting: checkingForRenting
             }
         })
     };
@@ -49,7 +49,8 @@ const MyBtnPopup = ({ text, p, type }) => {
 MyBtnPopup.propTypes = {
     text: PropTypes.string.isRequired,
     p: PropTypes.object.isRequired,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
+    checkingForRenting: PropTypes.bool.isRequired
 };
 
 export default MyBtnPopup;
