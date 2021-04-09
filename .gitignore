@@ -3,3 +3,4 @@
 /azure/certs
 docs/states.txt
 /.vscode
+.vscode/settings.json
