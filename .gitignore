@@ -6,3 +6,4 @@ docs/states.txt
 .vscode/settings.json
 /frontend/.vscode
 /backend/.vscode
+/.vscode/pinned-files.json
