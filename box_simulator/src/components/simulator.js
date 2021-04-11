@@ -10,7 +10,7 @@ import socketIOClient from 'socket.io-client';
 const BOX_CLOSED = 0;
 const BOX_OPENED = 1;
 
-const SIMULATED_BOX_ID = 14 // Box nº2 in Telde
+const SIMULATED_BOX_ID = 2 // Box nº2 in Telde
 
 const Simulator = () => {
   const [stateBox, setStateBox] = useState(BOX_CLOSED);

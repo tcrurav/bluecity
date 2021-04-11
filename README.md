@@ -35,9 +35,10 @@ The best option to start with this project is cloning it in your PC:
 git clone https://github.com/tcrurav/bluecity.git
 ```
 
-This project contains 2 different parts:
+This project contains 3 different parts:
 * Frontend
 * Backend
+* Box_simulator (Just to simulate a parking box)
 
 You need a node.js working environment. The LTS is recommended: https://nodejs.org/es/
 
@@ -48,6 +49,9 @@ cd bluecity/frontend
 npm install
 
 cd bluecity/backend
+npm install
+
+cd bluecity/box_simulator
 npm install
 ```
 
@@ -118,6 +122,13 @@ cd /bluecity/backend
 npx sequelize-cli db:seed:all
 ```
 
+* For your box_simulator part, intended only to test a parking box, in the file bluecity/box_simulator/.env put the following 2 lines: 
+
+```
+REACT_APP_BASEURL=http://localhost:4000
+PORT=8000
+```
+
 Finally to start enjoying this project.
 
 ```
@@ -125,6 +136,9 @@ cd bluecity/frontend
 npm start
 
 cd bluecity/backend
+npm start
+
+cd bluecity/box_simulator
 npm start
 ```
 
