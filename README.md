@@ -16,9 +16,6 @@ Download links:
 
 From Github: https://github.com/tcrurav/bluecity.git
 
-Also available in elrincon.jetbrains.space of the project:
-* HTTPS clone URL: https://git.jetbrains.space/elrincon/bc/learning.git
-
 ## Prerequisites
 
 You need a working environment with:
@@ -35,10 +32,11 @@ The best option to start with this project is cloning it in your PC:
 git clone https://github.com/tcrurav/bluecity.git
 ```
 
-This project contains 3 different parts:
+This project contains 4 different parts:
 * Frontend
 * Backend
-* Box_simulator (Just to simulate a parking box)
+* Box_simulator_frontend (Just to simulate a parking box)
+* Box_simulator_backend (Just to simulate a parking box)
 
 You need a node.js working environment. The LTS is recommended: https://nodejs.org/es/
 
@@ -51,7 +49,10 @@ npm install
 cd bluecity/backend
 npm install
 
-cd bluecity/box_simulator
+cd bluecity/box_simulator_frontend
+npm install
+
+cd bluecity/box_simulator_backend
 npm install
 ```
 
@@ -122,11 +123,18 @@ cd /bluecity/backend
 npx sequelize-cli db:seed:all
 ```
 
-* For your box_simulator part, intended only to test a parking box, in the file bluecity/box_simulator/.env put the following 2 lines: 
+* For your box_simulator_frontend part, intended only to test a parking box, in the file bluecity/box_simulator_frontend/.env put the following 2 lines: 
 
 ```
-REACT_APP_BASEURL=http://localhost:4000
+REACT_APP_BASEURL=http://localhost:9000
 PORT=8000
+```
+
+* For your box_simulator_backend part, intended only to test a parking box, in the file bluecity/box_simulator_backend/.env put the following 2 lines: 
+
+```
+BACKEND_URL=http://localhost:4000
+NODE_ENV=development
 ```
 
 Finally to start enjoying this project.
@@ -138,13 +146,23 @@ npm start
 cd bluecity/backend
 npm start
 
-cd bluecity/box_simulator
+cd bluecity/box_simulator_frontend
+npm start
+
+cd bluecity/box_simulator_backend
 npm start
 ```
 
+If you follow the former instructions the 4 different parts of this project will be running on the following urls:
+* Frontend (http://localhost:3000)
+* Backend (http://localhost:4000)
+* Box_simulator_frontend (http://localhost:8000)
+* Box_simulator_backend (http://localhost:9000)
+
 Enjoy!!!
 
-## Installation instructions for Ubuntu 20.04
+## Installation instructions for Ubuntu 20.04 
+### (this documentation feature needs update)
 
 Ensure you have an updated environment with update/upgrade:
 
@@ -275,6 +293,7 @@ $ npm start
 Enjoy!!!
 
 ## Installation instructions if you want to deploy the project with Docker
+### (this documentation feature needs update)
 
 Clone this project in your PC:
 
@@ -324,6 +343,7 @@ $ docker-compose up
 Enjoy!!!
 
 ## Installation instructions if you want to deploy the project with Openshift
+### (this documentation feature needs update)
 
 Basically you have to first follow the instructions of the section "Installation instructions if you want to deploy the project with Docker" of this document.
 
@@ -453,6 +473,8 @@ Alternatively There are many other possibilities with Openshift including the us
 * [express](https://expressjs.com/) - Fast, unopinionated, minimalist web framework for Node.js.
 * [MySQL Workbench](https://www.mysql.com/products/workbench/) - MySQL Workbench is a unified visual tool for database architects, developers, and DBAs.
 * [dotenv](https://www.npmjs.com/package/dotenv) - Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env. Storing configuration in the environment separate from code is based on The Twelve-Factor App methodology.
+* [axios](https://github.com/axios/axios) - Promise based HTTP client for the browser and node.js.
+* [socket.io](https://socket.io/) - Socket.IO enables real-time, bidirectional and event-based communication.
 
 ## Acknowledgments
 
