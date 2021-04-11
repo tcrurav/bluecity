@@ -15,6 +15,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 */
 import { ColorMarker } from '../styled/styles';
 
+/**
+|--------------------------------------------------
+| Constants
+|--------------------------------------------------
+*/
+
 const MyMarker = ({ color, state, text, icon }) => {
 
     return (

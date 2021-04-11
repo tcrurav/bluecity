@@ -17,6 +17,7 @@ import MyAccount from "./components/auth/my-account";
 // import {ParkingsWithFreeScooters} from './components/parkingsWithFreeScooters';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AvailabilityScreen from "./components/mapping/availability/availabilityScreen";
+import ParkingProcessScreen from "./components/mapping/parking-process/parkingProcessScreen";
 
 // import 'jquery/dist/jquery.min.js';
 // import 'bootstrap/dist/js/bootstrap.min.js';
@@ -44,6 +45,7 @@ class App extends React.Component {
           <RoutePrivate path='/renting' component={RentingScreen} />
           {/* <RoutePrivate path='/renting' component={(props) => <Renting userId={getCurrentUserId()} history={props.history} />}/> */}
           <RoutePrivate path='/availability' component={AvailabilityScreen} />
+          <RoutePrivate path='/parking-process' component={ParkingProcessScreen} />
           {/* <RoutePrivate path='/renting' component={() => <Renting userId={getCurrentUserId()}/>}/> */}
           <RoutePrivate path='/scooter-renting' component={Scooter} />
           <RoutePublic path='/login' component={Login} />
