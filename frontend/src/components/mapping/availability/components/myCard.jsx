@@ -50,7 +50,7 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
             <MyMarker
               color='red'
               state={stateParking.occupied}
-              text='occupied'
+              text='unavailable'
               icon={faMapMarkerAlt}
             />
             <MyMarker

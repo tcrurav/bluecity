@@ -15,6 +15,7 @@ const MyBtnPopup = ({ text, p, type, checkingForRenting }) => {
     let history = useHistory();
 
     const redirectToDetailedParking = (p) => {
+        console.log("checking? " + checkingForRenting);
         history.push({
             pathname: '/availability',
             state: {
@@ -24,24 +25,24 @@ const MyBtnPopup = ({ text, p, type, checkingForRenting }) => {
         })
     };
 
-    const typeOfBtn = (k, t) => {
-        switch (k) {
+    const typeOfBtn = (type, text) => {
+        switch (type) {
             case 'boxes':
                 return (
                     <Button onClick={() => redirectToDetailedParking(p)}>
-                        {t}
+                        {text}
                     </Button>
                 );
             case 'scooter':
                 return (
-                    <Button>
-                        {t}
+                    <Button onClick={() => redirectToDetailedParking(p)}>
+                        {text}
                     </Button>
                 );
             default:
                 break;
         }
-    };
+    }; 
 
     return typeOfBtn(type, text)
 };

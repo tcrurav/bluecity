@@ -82,7 +82,7 @@ const AvailabilityScreen = ({ location, history }) => {
     if (!reservationExpired) {
       return RESERVED;
     }
-    if ((!data.occupied && reservationExpired) ||
+    if ((!checkingForRenting && !data.occupied && reservationExpired) ||
       (checkingForRenting && data.occupied && reservationExpired & !data.userId)) {
       return FREE;
     }

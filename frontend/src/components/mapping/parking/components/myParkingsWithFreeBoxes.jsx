@@ -50,6 +50,7 @@ const MyParkingsWithFreeBoxes = () => {
 
     useEffect(() => {
         try {
+            console.log("My parking with free boxes");
             allWithAFreeBox();
         } catch (error) {
             console.log(error);

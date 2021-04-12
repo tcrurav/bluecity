@@ -17,6 +17,8 @@ import { Popup } from 'react-leaflet';
 
 const MyPopup = ({ id, name, address, p, type, checkingForRenting }) => {
 
+    console.log(checkingForRenting);
+
     return (
         <Popup>
             Parking {id}<br />

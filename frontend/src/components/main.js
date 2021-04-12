@@ -1,6 +1,7 @@
 import React from "react";
 import { MyNavbar } from "./ui/navbar/my-navbar";
 import { Footer } from "./ui/footer";
+import { getCurrentUserId } from "../utils/common";
 
 /*-----------------------------------
         Material-UI Imports
@@ -24,16 +25,35 @@ const useStyles = makeStyles((theme) => ({
   },
   buttons: {
     marginTop: "1vh",
-    backgroundColor: '#00a9f4',
-    '&:hover': {
-      backgroundColor: '#007ac1',
-      color: 'white'
-    }
-  }
+    backgroundColor: "#00a9f4",
+    "&:hover": {
+      backgroundColor: "#007ac1",
+      color: "white",
+    },
+  },
 }));
 
 export function Main(props) {
   const classes = useStyles();
+
+  //Lo dejamos aquí
+  const checkUserRenting = () => {
+  ScooterDataService.getScooterWithUserId(userId).then((res) => {
+    /* console.log("Res data:")
+    console.log(res); */
+    if (res.data  === "") {
+      return false
+    } else {
+      props.history.push({
+        pathname: "/renting",
+        state: {
+          userId: getCurrentUserId(),
+        },
+      });
+      return true
+    }
+  });
+}
 
   return (
     <>
@@ -44,12 +64,27 @@ export function Main(props) {
         </Container>
         <Grid container className={classes.buttonContainer} direction="column">
           <Grid item xs={12}>
-            <Button variant="contained" className={classes.buttons} onClick={() => props.history.push("/parking")}>
+            <Button
+              variant="contained"
+              className={classes.buttons}
+              onClick={() => props.history.push("/parking")}
+            >
               Parking
             </Button>
           </Grid>
           <Grid item xs={12}>
-            <Button variant="contained" className={classes.buttons} onClick={() => props.history.push("/renting")}>
+            <Button
+              variant="contained"
+              className={classes.buttons}
+              onClick={() =>
+                props.history.push({
+                  pathname: "/renting",
+                  state: {
+                    userId: getCurrentUserId(),
+                  },
+                })
+              }
+            >
               Renting
             </Button>
           </Grid>
@@ -57,5 +92,6 @@ export function Main(props) {
       </Paper>
       <Footer />
     </>
+            
   );
 }

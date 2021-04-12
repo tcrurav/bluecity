@@ -17,6 +17,9 @@ import { Marker } from 'react-leaflet';
 
 const MyMarkerMap = ({ parkings, type, checkingForRenting }) => {
 
+    console.log("still in free parkings");
+    console.log(checkingForRenting);
+
     return (
         parkings.map(p => {
 

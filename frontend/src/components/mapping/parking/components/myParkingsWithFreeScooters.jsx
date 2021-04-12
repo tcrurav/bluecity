@@ -51,7 +51,6 @@ const MyParkingsWithFreeScooters = () => {
 
     useEffect(() => {
         try {
-            //console.log("parking with free scooters")
             allWithAFreeScooters();
         } catch (error) {
             console.log(error);
