@@ -2,6 +2,7 @@ import React from "react";
 import { MyNavbar } from "./ui/navbar/my-navbar";
 import { Footer } from "./ui/footer";
 import { getCurrentUserId } from "../utils/common";
+import ScooterDataService from '../services/scooter.service'
 
 /*-----------------------------------
         Material-UI Imports
@@ -14,7 +15,9 @@ import Image from "material-ui-image";
 import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    marginTop: "10vh"
+  },
   image: {
     maxWidth: "512px",
   },
@@ -38,7 +41,7 @@ export function Main(props) {
 
   //Lo dejamos aquí
   const checkUserRenting = () => {
-  ScooterDataService.getScooterWithUserId(userId).then((res) => {
+  ScooterDataService.getScooterWithUserId(getCurrentUserId()).then((res) => {
     /* console.log("Res data:")
     console.log(res); */
     if (res.data  === "") {
