@@ -1,22 +1,4 @@
 import axios from "axios";
-import { getApiToken } from "./common";
-
-// const objToExport = getApiToken() ? axios.create({
-//   baseURL: process.env.REACT_APP_BASEURL + "/api",
-//   headers: {
-//     "Content-type": "application/json",
-//     "Authorization": `Bearer ${getApiToken()}`
-//   }
-// })
-//   :
-//   axios.create({
-//     baseURL: process.env.REACT_APP_BASEURL + "/api",
-//     headers: {
-//       "Content-type": "application/json"
-//     }
-//   });
-
-// export default objToExport;
 
 const fetchClient = () => {
   const defaultOptions = {
@@ -32,7 +14,9 @@ const fetchClient = () => {
 
   // Set the AUTH token for any request
   instance.interceptors.request.use(function (config) {
-    const token = getApiToken();
+    // WARNING: Now is working without Authorisation. To be repaired in the future.
+    //const token = getApiToken();
+    const token = null;
     config.headers.Authorization =  token ? `Bearer ${token}` : '';
     return config;
   });

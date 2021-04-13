@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
+
+import { useGeolocation } from '../../geolocation/geolocation';
 
 /**
 |--------------------------------------------------
@@ -35,22 +37,23 @@ import ParkingDataService from '../../../services/parking.service';
 |--------------------------------------------------
 */
 import { getDistanceFromLatLonInKm } from '../../../utils/common';
-import { formatTimeLeft, checkGeolocationAvailability } from './utils/util';
+import { formatTimeLeft } from './utils/util';
 
 /**
 |--------------------------------------------------
 | Constants
 |--------------------------------------------------
 */
-import { OCCUPIED, FREE, RESERVED, FIVE_MINUTES, THIS_USER_HAS_NO_RESERVATION, API_USER, CLOSE_DISTANCE_TO_PARKING, BEGIN_OF_TIMES } from './constants/constants'
+import { OCCUPIED, FREE, RESERVED, FIVE_MINUTES, THIS_USER_HAS_NO_RESERVATION, getApiUser, CLOSE_DISTANCE_TO_PARKING, BEGIN_OF_TIMES, MINIMUM_DISTANCE_INCREMENT } from './constants/constants'
+import { PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT } from '../parking-process/constants/constants';
 
 const AvailabilityScreen = ({ location, history }) => {
 
+  let [geolocation, geolocationAvailability] = useGeolocation();
+
   const { state: { parking, checkingForRenting } } = location;
 
-  //const [refSocket, setRefSocket] = useRef(() => socketIOClient(process.env.REACT_APP_BASEURL));
-
-  let refSocket = null;
+  const socketRef = useRef();
 
   const [stateParking, setStateParking] = useState(
     {
@@ -65,22 +68,15 @@ const AvailabilityScreen = ({ location, history }) => {
     }
   );
 
-  const [stateLatLog, setStateLatLog] = useState({
-    lat: 0,
-    long: 0,
-  });
-
   const [stateOpenBoxPossible, setStateOpenBoxPossible] = useState(false);
-
-  const [stateGeolocationAvailable, setStateGeolocationAvailable] = useState(false);
 
   const [distanceToParking, setDistanceToParking] = useState(0);
 
-  let reservationInterval = null;
-  let watchID = null;
+  const reservationInterval = useRef(null);
+  const apiUser = getApiUser();
 
   const findOutGreenRedOrOrange = (data) => {
-
+    // console.log("findOutGreenRedOrOrange")
     //To understand this look at the table in the documentation
     const reservationExpired = new Date(data.lastReservationDate) < new Date(new Date() - FIVE_MINUTES + 1000); // five minutes minus 1 second
 
@@ -88,242 +84,284 @@ const AvailabilityScreen = ({ location, history }) => {
       return RESERVED;
     }
     if ((!data.occupied && reservationExpired) ||
-      (checkingForRenting && !data.occupied && reservationExpired)) {
+      (checkingForRenting && data.occupied && reservationExpired & !data.userId)) {
       return FREE;
     }
     return OCCUPIED;
   };
 
-  const cancelCountdown = () => (reservationInterval != null) && clearInterval(reservationInterval);
+  const cancelCountdown = () => (reservationInterval.current !== null) && clearInterval(reservationInterval.current);
 
-  const watchPosition = () => {
-    if (navigator.geolocation) {
-      watchID = navigator.geolocation.watchPosition((position) => {
-        setStateLatLog({
-          ...stateLatLog,
-          lat: position.coords.latitude,
-          long: position.coords.longitude
-        });
-        try {
-          checkOpenBoxPossible(position.coords.latitude, position.coords.longitude);
-        } catch (error) {
-          console.log(error);
-        }
-      });
+  const handleReservation = (ind) => {
+    console.log("handleReservation")
+    if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {  //Possible Stale Closure
+      console.log('You have already reserved a Box in this parking');
+      return;
     }
-  };
 
-  const createSocketIOConnection = (parking) => {
-    //console.log('createSocketIOConnection');
-    if (!refSocket) {
-      console.log('victoria');
-      refSocket = socketIOClient(process.env.REACT_APP_BASEURL)
+    let data = stateParking.boxes[ind]; //Possible Stale Closure
+    data.lastReservationDate = new Date();
+    data.userId = getApiUser().id; //???????
+    BoxDataService.update(data.id, data).then((res) => {
+      findAllBoxesInAParking().then(newState => {
+        setStateParking(s => ({
+          ...s,
+          boxes: newState.boxes,
+          occupied: newState.occupied,
+          reserved: newState.reserved,
+          free: newState.free,
+          boxReservedByThisUser: newState.boxReservedByThisUser
+        }));
 
-      /* setRefSocket(
-        socket
-      ) */
+        socketRef.current.emit("something-changed", { who_changed_it: apiUser.id, parking_changed: parking.id });
 
-      console.log(refSocket)
-      //console.log('otro1')
-      refSocket.on('connect', () => {
-        console.log('connected to backend');
       });
-      //console.log('otro')
-      refSocket.on('open', data => {
-        console.log('connection confirmed');
-      });
-      //console.log('otro2')
-      refSocket.on('refresh', data => {
-        console.log("refresh on utils");
-        if (data.who_changed_it !== API_USER.id && data.parking_changed === parking.id) {
-          console.log("connection refreshed");
-          refresh();
-        }
-      });
-    }
+    }).catch((error) => console.log(error));
   };
 
   const openBox = () => {
     console.log('openBox');
     try {
-      refSocket.emit('open', { open: 'open' });
-      console.log('socket OK');
+      let index = stateParking.boxReservedByThisUser;  //Possible Stale Closure
+      let data = stateParking.boxes[index];  //Possible Stale Closure
+      data.state = PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+      data.lastReservationDate = BEGIN_OF_TIMES;
+      BoxDataService.update(data.id, data).then(() => {
+        socketRef.current.emit('open-box', data);
+
+        history.push({
+          pathname: '/parking-process',
+          state: {
+            parking,
+            boxId: data.id   //Possible stale clossure
+          }
+        })
+      });
     } catch (e) {
-      console.log('error');
       console.log(e);
-    } finally {
-      console.log('finally log');
     }
   };
 
-  const findAllBoxesInAParking = useCallback(
-    async () => {
-      const newStateBox = await BoxDataService.getAllBoxesInAParking(parking.id);
-      console.log("findAllBoxesInAParking")
-      let occupied = 0, free = 0, reserved = 0,
-        boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
-      for (let i = 0; i < newStateBox.data.length; i++) {
-        switch (findOutGreenRedOrOrange(newStateBox.data[i])) {
-          case OCCUPIED:
-            occupied++;
-            break;
-          case FREE:
-            free++;
-            break;
-          case RESERVED:
-            reserved++;
-            if (newStateBox.data[i].userId === API_USER.id) {
-              boxReservedByThisUser = i;
-            }
-            break;
-          default: console.log("This case should never take place");
+  const findAllBoxesInAParking = () => {
+    console.log("findAllBoxesInAParking")
+    return new Promise((resolve, reject) => {
+      BoxDataService.getAllBoxesInAParking(parking.id).then(res => {
+        // console.log(res);
+        let occupied = 0, free = 0, reserved = 0,
+          boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
+        for (let i = 0; i < res.data.length; i++) {
+          switch (findOutGreenRedOrOrange(res.data[i])) {
+            case OCCUPIED:
+              occupied++;
+              break;
+            case FREE:
+              free++;
+              break;
+            case RESERVED:
+              reserved++;
+              if (res.data[i].userId === apiUser.id) {
+                boxReservedByThisUser = i;
+              }
+              break;
+            default: console.log("This case should never take place");
+          }
         }
-      }
 
-      setStateParking({
-        ...stateParking,
-        boxes: newStateBox.data,
-        occupied,
-        reserved,
-        free,
-        boxReservedByThisUser
-      });
-    }, [parking.id, setStateParking]
-  );
-
-  const activateCountdown = () => {
-
-    reservationInterval = setInterval(() => {
-
-      const reservation_time_left = FIVE_MINUTES - (new Date().getTime() - new Date(stateParking.boxes[stateParking.boxReservedByThisUser].lastReservationDate).getTime());
-
-      if (reservation_time_left < 1000) {
-        //five minutes are over
-        cancelCountdown();
-
-        setStateParking({
-          ...stateParking,
-          boxReservedByThisUser: THIS_USER_HAS_NO_RESERVATION,
-          reservation_time_left: 0,
+        resolve({
+          boxes: res.data,
+          occupied,
+          reserved,
+          free,
+          boxReservedByThisUser
         });
-        setStateOpenBoxPossible(false);
-
-        return;
-      }
-      setStateParking({
-        ...stateParking,
-        reservation_time_left
-      });
-
-    }, 1000);
-  };
-
-  const checkGeolocation = async () => {
-    const geolocation = await checkGeolocationAvailability();
-    if (geolocation) {
-      setStateGeolocationAvailable(geolocation);
-      try {
-        watchPosition();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
-  const checkOpenBoxPossible = async (latitude, longitude) => {
-    const res = await ParkingDataService.get(parking.id);
-    const distanceToParking = getDistanceFromLatLonInKm(latitude, longitude, parseFloat(res.data.lat), parseFloat(res.data.long));
-    if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION &&
-      stateGeolocationAvailable.geolocationAvailable &&
-      distanceToParking < CLOSE_DISTANCE_TO_PARKING) {
-      setStateOpenBoxPossible(true);
-      setDistanceToParking(distanceToParking);
-      return;
-    }
-    setStateOpenBoxPossible(false);
-    setDistanceToParking(distanceToParking);
-  };
-
-
-  /* const refresh = () => {
-    findAllBoxesInAParking().then((newState) => {
-      setStateParking(newState);
-      if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
-        activateCountdown();
-      }
+      })
     });
-  } */
 
-  /* refresh() {
-    this.findAllBoxesInAParking(this.props.location.state.parking.id).then((newState) => {
-      this.setState(newState);
-      if (this.state.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
-        this.activateCountdown();
-      }
-    });
-  } */
+  }
 
-  const cancelReservation = async (index) => {
-    if (stateParking.boxReservedByThisUser === THIS_USER_HAS_NO_RESERVATION) {
+  const cancelReservation = () => {
+    console.log("cancelReservation")
+    let index = stateParking.boxReservedByThisUser;  //Possible Stale Closure
+    if (stateParking.boxReservedByThisUser === THIS_USER_HAS_NO_RESERVATION) {  //Possible Stale Closure
       // This condition should never be possible but just in the limit it could be.
       console.log(`You haven't reserved a Box in this parking yet`);
       return;
     }
 
-    let data = stateParking.boxes[index];
+    let data = stateParking.boxes[index];  //Possible Stale Closure
     data.lastReservationDate = BEGIN_OF_TIMES;
     data.userId = null;
-    await BoxDataService.update(data.id, data);
-    cancelCountdown();
-    try {
-      findAllBoxesInAParking();
-      console.log("something-changed")
-      refSocket.emit("something-changed", {
-        who_changed_it: API_USER.id,
-        parking_changed: parking.id
-      })
-    } catch (error) {
-      console.log(error);
-    }
-    setStateOpenBoxPossible(false);
+    BoxDataService.update(data.id, data).then(() => {
+      cancelCountdown();
+      try {
+        findAllBoxesInAParking().then((newState) => {
+          setStateParking(s => ({
+            ...s,
+            boxes: newState.boxes,
+            occupied: newState.occupied,
+            reserved: newState.reserved,
+            free: newState.free,
+            boxReservedByThisUser: THIS_USER_HAS_NO_RESERVATION,
+            reservation_time_left: 0
+          }));
+          socketRef.current.emit("something-changed", {
+            who_changed_it: apiUser.id,
+            parking_changed: parking.id
+          })
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
   };
 
   const refresh = () => {
-    try {
-      console.log("use effect");
-      findAllBoxesInAParking();
-      if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
-        try {
-          activateCountdown();
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      checkGeolocation();
-    } catch (error) {
-      console.log(error);
-    }
+    console.log("refresh")
+
+    findAllBoxesInAParking().then((newState) => {
+      setStateParking(s => ({
+        ...s,
+        boxes: newState.boxes,
+        occupied: newState.occupied,
+        reserved: newState.reserved,
+        free: newState.free,
+        boxReservedByThisUser: newState.boxReservedByThisUser
+      }));
+    });
   }
 
   useEffect(() => {
-    refresh();
-    createSocketIOConnection(parking);
+    console.log("useEffect primero")
+    console.log(checkingForRenting)
+    findAllBoxesInAParking().then((newState) => {
+      ParkingDataService.get(parking.id).then(res => {
+        setStateParking(s => ({
+          ...s,
+          boxes: newState.boxes,
+          occupied: newState.occupied,
+          reserved: newState.reserved,
+          free: newState.free,
+          boxReservedByThisUser: newState.boxReservedByThisUser,
+          lat_parking: res.data.lat,
+          long_parking: res.data.long
+        }));
+      });
+    });
 
     return () => {
-      console.log("log in useEffect")
+      //console.log("return in useEffect")
       cancelCountdown();
-      /* (refSocket != null) && refSocket.disconnect(); */
-      (watchID != null) && navigator.geolocation.clearWatch(watchID);
     };
 
-  }, [findAllBoxesInAParking, stateParking.boxReservedByThisUser]);
+  }, []);
 
   useEffect(() => {
-    //createSocketIOConnection(parking);
+    //console.log("useEffect socket");
+    socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL);
+
+    socketRef.current.on('welcome', () => {
+      console.log('connected to backend');
+    });
+
+    socketRef.current.on('refresh', data => {
+      // console.log("refresh on utils");
+      // console.log(data);
+      // console.log(apiUser.id);
+      // console.log(parking.id);
+      if (data.who_changed_it !== apiUser.id && data.parking_changed === parking.id) {
+        console.log("connection refreshed");
+        refresh();
+      }
+    });
+
     return () => {
-      //(refSocket != null) && refSocket.disconnect();
+      socketRef.current.disconnect();
     }
-  })
+  }, []);
+
+  useEffect(() => {
+    //console.log("useEffect countdown")
+    if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
+
+      // if (stateParking.reservation_time_left !== 0) return;  //Possible Stale Closure
+
+      reservationInterval.current = setInterval(() => {
+
+        try {
+          const reservation_time_left = FIVE_MINUTES - (new Date().getTime() -
+            new Date(stateParking.boxes[stateParking.boxReservedByThisUser].lastReservationDate).getTime()); //Possible Stale Closure
+
+          if (reservation_time_left < 1000) {
+            //five minutes are over
+            cancelCountdown();
+
+            findAllBoxesInAParking().then((newState) => {
+              setStateParking(s => ({
+                ...s,
+                boxes: newState.boxes,
+                occupied: newState.occupied,
+                reserved: newState.reserved,
+                free: newState.free,
+                boxReservedByThisUser: THIS_USER_HAS_NO_RESERVATION,
+                reservation_time_left: 0
+              }));
+
+              socketRef.current.emit("something-changed", {
+                who_changed_it: apiUser.id,
+                parking_changed: parking.id
+              })
+            });
+            return;
+          }
+          setStateParking(s => ({
+            ...s,
+            reservation_time_left
+          }));
+          // setStateReservation_time_left(reservation_time_left);
+        } catch (e) {
+          console.log(e);
+        }
+      }, 1000);
+    };
+
+    return () => {
+      cancelCountdown();
+    }
+  }, [stateParking.boxReservedByThisUser]);
+
+  useEffect(() => {
+    //console.log("useEffect de geolocation")
+    if (geolocation.latitude === 0 && geolocation.longitude === 0) {
+      return;
+    }
+
+    // console.log("useEffect de geolocation después")
+
+    let distanceToParkingNow = getDistanceFromLatLonInKm(geolocation.latitude, geolocation.longitude,
+      stateParking.lat_parking, stateParking.long_parking);
+
+    // console.log(geolocation.latitude)
+    // console.log(geolocation.longitude)
+    // console.log(stateParking.lat_parking)
+    // console.log(stateParking.long_parking)
+    // console.log(distanceToParkingNow)
+    // console.log(distanceToParking)
+
+    if ((Math.abs(distanceToParkingNow - distanceToParking)) < MINIMUM_DISTANCE_INCREMENT) return;
+
+    setDistanceToParking(distanceToParkingNow);
+
+  }, [geolocation.latitude, geolocation.longitude, stateParking.lat_parking, stateParking.long_parking]);
+
+  useEffect(() => {
+    console.log("useEffect de openBoxPossible")
+    if (distanceToParking < CLOSE_DISTANCE_TO_PARKING && stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
+      setStateOpenBoxPossible(true);
+    } else {
+      setStateOpenBoxPossible(false);
+    }
+  }, [distanceToParking, stateParking.boxReservedByThisUser]);
 
   return (
     <>
@@ -335,15 +373,10 @@ const AvailabilityScreen = ({ location, history }) => {
               parking={parking}
               stateParking={stateParking}
               findOutGreenRedOrOrange={findOutGreenRedOrOrange}
-              findAllBoxesInAParking={findAllBoxesInAParking}
-              cancelCountdown={cancelCountdown}
               stateOpenBoxPossible={stateOpenBoxPossible}
-              checkOpenBoxPossible={checkOpenBoxPossible}
-              setStateOpenBoxPossible={setStateOpenBoxPossible}
-              stateLatLog={stateLatLog}
               openBox={openBox}
               cancelReservation={cancelReservation}
-              socket={refSocket}
+              handleReservation={handleReservation}
             />
           </Card>
         </Row>
@@ -355,14 +388,14 @@ const AvailabilityScreen = ({ location, history }) => {
                 <MyMarker
                   color='blue'
                   state={null}
-                  text='Click on the Box number to reserve a parking box.'
+                  text={`Click on the Box number to reserve a ${checkingForRenting ? 'scooter' : 'parking box'}.`}
                   icon={faInfoCircle}
                 />
                 :
                 <MyMarker
                   color='blue'
                   state={null}
-                  text={`Your reservation for box nº${stateParking.boxReservedByThisUser.valueOf() + 1} in parking ${parking.name} will expire in ${formatTimeLeft(stateParking.reservation_time_left.valueOf())}`}
+                  text={`Your reservation for ${checkingForRenting ? 'scooter in' : ''} box nº${stateParking.boxReservedByThisUser.valueOf() + 1} in parking ${parking.name} will expire in ${formatTimeLeft(stateParking.reservation_time_left.valueOf())}`}
                   icon={faInfoCircle}
                 />
             }
@@ -370,8 +403,13 @@ const AvailabilityScreen = ({ location, history }) => {
         </Row>
         <Row>
           <Col>
+            {/* <p>{geolocationAvailability}</p>
+            <p>{geolocation.latitude}</p>
+            <p>{geolocation.longitude}</p> */}
             {
-              (stateGeolocationAvailable)
+
+
+              (geolocationAvailability && distanceToParking)
                 ?
                 <MyMarker
                   color='blue'
