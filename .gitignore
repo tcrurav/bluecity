@@ -3,3 +3,7 @@
 /azure/certs
 docs/states.txt
 /.vscode
+.vscode/settings.json
+/frontend/.vscode
+/backend/.vscode
+/.vscode/pinned-files.json
