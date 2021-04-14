@@ -31,7 +31,7 @@ const checkGeolocationAvailability = () => {
         }
     });
 };
-let socket = null;
+/* let socket = null;
 
 const createSocketIOConnection = (parking) => {
     //console.log('createSocketIOConnection');
@@ -48,6 +48,7 @@ const createSocketIOConnection = (parking) => {
         });
         //console.log('otro2')
         socket.on('refresh', data => {
+          console.log("refresh on utils");
           if (data.who_changed_it !== API_USER.id && data.parking_changed === parking.id) {
             console.log("connection refreshed");
           }
@@ -66,12 +67,12 @@ const openBox = () => {
     } finally {
         console.log('finally log');
     }
-};
+}; */
 
 export {
     formatTimeLeft,
     checkGeolocationAvailability,
-    createSocketIOConnection,
-    openBox,
-    socket
+    // createSocketIOConnection,
+    //openBox
+    /* socket */
 };
