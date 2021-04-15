@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import clsx from "clsx";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { removeUserSession } from "../../../utils/common";
-import UserDataService from '../../../services/user.service';
+import UserDataService from "../../../services/user.service";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import MuiAccordion from "@material-ui/core/Accordion";
 import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
@@ -28,6 +28,7 @@ import LocalParkingIcon from "@material-ui/icons/LocalParking";
 import CreditCardIcon from "@material-ui/icons/CreditCard";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import { getApiUser } from "../../mapping/availability/constants/constants";
+import { getCurrentUserId } from "../../../utils/common";
 
 /* const MyIcon = styled.img`
   width: 1em;
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     width: "auto",
   },
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -68,30 +69,26 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   appbar: {
-    marginBottom: "10vh"
-  }
+    marginBottom: "10vh",
+  },
 }));
 
 export function MyNavbar(props) {
-
-  const [stateUser, setStateUser] = useState(
-    {
-      name: "",
-      email: "",
-    }
-  )
+  const [stateUser, setStateUser] = useState({
+    name: "",
+    email: "",
+  });
 
   const getUser = async () => {
-    const newStateUser = await UserDataService.get(getApiUser().id)
+    const newStateUser = await UserDataService.get(getApiUser().id);
 
-    setStateUser(s =>
-    ({
+    setStateUser((s) => ({
       ...s,
       name: newStateUser.data.name,
       email: newStateUser.data.email,
-      loading: false
-    }))
-  }
+      loading: false,
+    }));
+  };
 
   /* const getUser = () => {
     UserDataService.get(props.userId)
@@ -123,13 +120,14 @@ export function MyNavbar(props) {
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
-      event && event.type === "keydown" &&
+      event &&
+      event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
     ) {
       return;
     }
 
-    setState(s => ({ ...s, [anchor]: open }));
+    setState((s) => ({ ...s, [anchor]: open }));
   };
 
   function ListItemLink(props, anchor) {
@@ -152,9 +150,7 @@ export function MyNavbar(props) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List component="nav">
-        <CustomizedAccordions
-          stateUser={stateUser}
-        />
+        <CustomizedAccordions stateUser={stateUser} />
         <Divider />
         <ListItemLink href="/main">
           <ListItemIcon>
@@ -168,7 +164,16 @@ export function MyNavbar(props) {
           </ListItemIcon>
           <ListItemText primary="Parking" />
         </ListItemLink>
-        <ListItemLink href="/renting">
+        <ListItemLink 
+          onClick={() =>
+            props.history.push({
+              pathname: "/renting",
+              state: {
+                userId: getCurrentUserId(),
+              },
+            })
+          }
+          >
           <ListItemIcon>
             <CreditCardIcon />
           </ListItemIcon>

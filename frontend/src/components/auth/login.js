@@ -39,7 +39,7 @@ export class Login extends React.Component {
           <MyContainer>
             <Row className="justify-content-md-center h-50">
               <Col md={6} className="text-center mt-auto pb-5">
-                <Image fluid src="img/bluecity.jpg" alt="logo" />
+                <Image fluid src="img/bluecity.png" alt="logo" />
               </Col>
             </Row>
             <Row className="justify-content-md-center h-50">

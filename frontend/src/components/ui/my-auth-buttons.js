@@ -9,9 +9,9 @@ export class MyAuthButtons extends React.Component {
         <div className="row">
           <MyLoginWithGoogle history={this.props.history} changeLoadingState={ this.props.changeLoadingState } />
         </div>
-        <div className="row">
+        {/* <div className="row">
           <MyLoginWithFacebook />
-        </div>
+        </div> */}
       </>
     );
   }

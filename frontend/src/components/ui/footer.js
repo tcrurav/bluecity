@@ -35,7 +35,7 @@ export class Footer extends React.Component {
           <Col md={6} className="mt-md-0 mt-3">
             {/* <h5 className="text-uppercase">Footer Content</h5>
             <p>Here you can use rows and columns to organize your footer content.</p> */}
-            <MyLogo className="img-fluid" src="img/bluecity-dark.jpg" alt="logo" />
+            <MyLogo className="img-fluid" src="img/bluecity.png" alt="logo" />
           </Col>
           <Col md={3} className="mb-md-0 mb-3">
             <h5 className="text-uppercase">Participant Organizations</h5>
