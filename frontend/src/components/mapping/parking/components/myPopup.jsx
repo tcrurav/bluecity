@@ -1,4 +1,6 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import PropTypes from 'prop-types';
 
 /**
@@ -16,8 +18,8 @@ import MyBtnPopup from './myBtnPopup';
 import { Popup } from 'react-leaflet';
 
 const MyPopup = ({ id, name, address, p, type, checkingForRenting }) => {
-
-    console.log(checkingForRenting);
+    const { t } = useTranslation();
+    // console.log(checkingForRenting);
 
     return (
         <Popup>
@@ -25,7 +27,7 @@ const MyPopup = ({ id, name, address, p, type, checkingForRenting }) => {
             {name}<br />
             {address} <br />
             <MyBtnPopup
-                text='Check availability'
+                text={t('Check availability')}
                 p={p}
                 type={type}
                 checkingForRenting={checkingForRenting}

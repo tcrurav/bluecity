@@ -8,8 +8,8 @@ import PropTypes from "prop-types";
 */
 import { MyNavbar } from "../../ui/navbar/my-navbar";
 import { Footer } from "../../ui/footer";
-import MyParkingWithFreeScooters from "../parking/components/myParkingsWithFreeScooters";
-import MyParkingWithFreeBoxes from "../parking/components/myParkingsWithFreeBoxes";
+import MyParkingsWithFreeScooters from "../parking/components/myParkingsWithFreeScooters";
+import MyParkingsWithFreeBoxes from "../parking/components/myParkingsWithFreeBoxes";
 import ScooterDataService from "../../../services/scooter.service";
 
 const RentingScreen = ({ location, history }) => {
@@ -39,9 +39,10 @@ const RentingScreen = ({ location, history }) => {
     <>
       <MyNavbar history={history} />
       {!userState ? (
-        <MyParkingWithFreeScooters history={history} />
+        // <MyParkingsWithFreeScooters history={history} />
+        <MyParkingsWithFreeScooters />
       ) : (
-        <MyParkingWithFreeBoxes />
+        <MyParkingsWithFreeBoxes />
       )}
       <Footer />
     </>

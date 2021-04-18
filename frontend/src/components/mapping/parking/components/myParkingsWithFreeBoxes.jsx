@@ -50,7 +50,7 @@ const MyParkingsWithFreeBoxes = () => {
 
     useEffect(() => {
         try {
-            console.log("My parking with free boxes");
+            // console.log("My parking with free boxes");
             allWithAFreeBox();
         } catch (error) {
             console.log(error);
@@ -66,8 +66,8 @@ const MyParkingsWithFreeBoxes = () => {
                         zoom={zoom}
                     >
                         <TileLayer
-                            attribution=''
-                            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                            attribution=""
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
                         <MyMarkerMap
                             parkings={parkings}
@@ -83,9 +83,6 @@ const MyParkingsWithFreeBoxes = () => {
                     setFreeBoxes={setFreeBoxes}
                 />
             </Row>
-            {/* <Row>
-                {geolocation.latitude} - {geolocation.longitude} - { geolocation.timestamp}
-            </Row> */}
         </MyContainer>
     )
 };

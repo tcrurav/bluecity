@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 // import { library } from '@fortawesome/fontawesome-svg-core';
 // import { fab } from '@fortawesome/free-brands-svg-icons';
 import RoutePrivate from './utils/private-route';
 import RoutePublic from './utils/public-route';
 import { Login } from './components/auth/login';
 import { Main } from './components/main';
-import  ParkingScreen  from './components/mapping/parking/parkingScreen';
+import ParkingScreen from './components/mapping/parking/parkingScreen';
 import RentingScreen from './components/mapping/renting/rentingScreen';
 import { Renting } from './components/mapping/renting';
 import { Contact } from './components/contact/contact';
 import { MyError } from './components/my-error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import {getCurrentUserId} from "./utils/common";
-import {Scooter} from "./components/mapping/scooter";
+import { getCurrentUserId } from "./utils/common";
+import { Scooter } from "./components/mapping/scooter";
 import MyAccount from "./components/auth/my-account";
 // import {ParkingsWithFreeScooters} from './components/parkingsWithFreeScooters';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -36,21 +36,23 @@ class App extends React.Component {
 
   render() {
     return (
-      <Router>
-        <Switch>
-          <RoutePrivate path='/main' component={(props) => <Main history={props.history}/>} />
-          <RoutePrivate path='/my-account' component={(props) => <MyAccount userId={getCurrentUserId()} history={props.history} />}/>
-          <RoutePrivate path='/parking' component={ParkingScreen} />
-          <RoutePrivate path='/renting' component={RentingScreen} />
-          {/* <RoutePrivate path='/renting' component={(props) => <Renting userId={getCurrentUserId()} history={props.history} />}/> */}
-          <RoutePrivate path='/availability' component={AvailabilityScreen} />
-          {/* <RoutePrivate path='/renting' component={() => <Renting userId={getCurrentUserId()}/>}/> */}
-          <RoutePrivate path='/scooter-renting' component={Scooter} />
-          <RoutePublic path='/login' component={Login} />
-          <Route path='/contact' component={Contact} />
-          <Route component={MyError} />
-        </Switch>
-      </Router>
+      <Suspense fallback="loading">
+        <Router>
+          <Switch>
+            <RoutePrivate path='/main' component={(props) => <Main history={props.history} />} />
+            <RoutePrivate path='/my-account' component={(props) => <MyAccount userId={getCurrentUserId()} history={props.history} />} />
+            <RoutePrivate path='/parking' component={ParkingScreen} />
+            <RoutePrivate path='/renting' component={RentingScreen} />
+            {/* <RoutePrivate path='/renting' component={(props) => <Renting userId={getCurrentUserId()} history={props.history} />}/> */}
+            <RoutePrivate path='/availability' component={AvailabilityScreen} />
+            {/* <RoutePrivate path='/renting' component={() => <Renting userId={getCurrentUserId()}/>}/> */}
+            <RoutePrivate path='/scooter-renting' component={Scooter} />
+            <RoutePublic path='/login' component={Login} />
+            <Route path='/contact' component={Contact} />
+            <Route component={MyError} />
+          </Switch>
+        </Router>
+      </Suspense>
     );
   }
 }

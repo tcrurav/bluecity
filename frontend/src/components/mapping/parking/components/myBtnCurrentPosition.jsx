@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 /**
@@ -9,6 +10,7 @@ import PropTypes from 'prop-types';
 import { Col, Button, Image } from 'react-bootstrap';
 
 const BtnCurrentPosition = ({ freeBoxes, setFreeBoxes }) => {
+    const { t } = useTranslation();
 
     const { parkings } = freeBoxes;
 
@@ -30,10 +32,10 @@ const BtnCurrentPosition = ({ freeBoxes, setFreeBoxes }) => {
             >
                 <Image
                     src={`${process.env.REACT_APP_BASEURL}/my-location.png`}
-                    width='25'
+                    width="25"
                 />
             </Button>
-            <p className='mt-3 text-center'>{parkings.length} parkings in Gran Canaria now.</p>
+            <p className='mt-3 text-center'>{parkings.length} {t('available stations now')}.</p>
         </Col>
     )
 }

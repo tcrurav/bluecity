@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 */
 import { MyContainer } from '../../../ui/my-container';
 import MyMarkerMap from './myMarkerMap';
-//import MyBtnCurrentPosition from './myBtnCurrentPosition';
+import MyBtnCurrentPosition from './myBtnCurrentPosition';
 
 /**
 |--------------------------------------------------
@@ -32,8 +32,6 @@ import ParkingDataService from '../../../../services/parking.service';
 import { MyMap } from '../styled/styleComponents';
 
 const MyParkingsWithFreeScooters = () => {
-
-    //console.log("parking with free scooters")
 
     const zoom = 13;
 
@@ -66,7 +64,7 @@ const MyParkingsWithFreeScooters = () => {
                         zoom={zoom}
                     >
                         <TileLayer
-                            attribution=''
+                            attribution=""
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
                         <MyMarkerMap
@@ -74,11 +72,15 @@ const MyParkingsWithFreeScooters = () => {
                             type='scooter'
                             checkingForRenting={true}
                         />
-
                     </MyMap>
                 </Col>
             </Row>
-
+            <Row>
+                <MyBtnCurrentPosition
+                    freeBoxes={freeScooter}
+                    setFreeBoxes={setFreeScooter}
+                />
+            </Row>
         </MyContainer >
     )
 };

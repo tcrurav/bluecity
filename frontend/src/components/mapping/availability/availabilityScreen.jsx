@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
 
@@ -47,6 +48,7 @@ import { formatTimeLeft } from './utils/util';
 import { OCCUPIED, FREE, RESERVED, FIVE_MINUTES, THIS_USER_HAS_NO_RESERVATION, getApiUser, CLOSE_DISTANCE_TO_PARKING, BEGIN_OF_TIMES, MINIMUM_DISTANCE_INCREMENT } from './constants/constants'
 
 const AvailabilityScreen = ({ location, history }) => {
+  const { t } = useTranslation();
 
   let [geolocation, geolocationAvailability] = useGeolocation();
 
@@ -92,7 +94,7 @@ const AvailabilityScreen = ({ location, history }) => {
   const cancelCountdown = () => (reservationInterval.current !== null) && clearInterval(reservationInterval.current);
 
   const handleReservation = (ind) => {
-    console.log("handleReservation")
+    // console.log("handleReservation")
     if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {  //Possible Stale Closure
       console.log('You have already reserved a Box in this parking');
       return;
@@ -119,7 +121,7 @@ const AvailabilityScreen = ({ location, history }) => {
   };
 
   const openBox = () => {
-    console.log('openBox');
+    // console.log('openBox');
     try {
       socketRef.current.emit('open', { open: 'open' });
     } catch (e) {
@@ -128,7 +130,7 @@ const AvailabilityScreen = ({ location, history }) => {
   };
 
   const findAllBoxesInAParking = () => {
-    console.log("findAllBoxesInAParking")
+    // console.log("findAllBoxesInAParking")
     return new Promise((resolve, reject) => {
       BoxDataService.getAllBoxesInAParking(parking.id).then(res => {
         // console.log(res);
@@ -209,7 +211,7 @@ const AvailabilityScreen = ({ location, history }) => {
   // };
 
   const cancelReservation = () => {
-    console.log("cancelReservation")
+    // console.log("cancelReservation")
     let index = stateParking.boxReservedByThisUser;  //Possible Stale Closure
     if (stateParking.boxReservedByThisUser === THIS_USER_HAS_NO_RESERVATION) {  //Possible Stale Closure
       // This condition should never be possible but just in the limit it could be.
@@ -249,7 +251,7 @@ const AvailabilityScreen = ({ location, history }) => {
   };
 
   const refresh = () => {
-    console.log("refresh")
+    // console.log("refresh")
 
     findAllBoxesInAParking().then((newState) => {
       setStateParking(s => ({
@@ -264,8 +266,8 @@ const AvailabilityScreen = ({ location, history }) => {
   }
 
   useEffect(() => {
-    console.log("useEffect primero")
-    console.log(checkingForRenting)
+    // console.log("useEffect primero")
+    // console.log(checkingForRenting)
     findAllBoxesInAParking().then((newState) => {
       ParkingDataService.get(parking.id).then(res => {
         setStateParking(s => ({
@@ -302,7 +304,7 @@ const AvailabilityScreen = ({ location, history }) => {
       // console.log(apiUser.id);
       // console.log(parking.id);
       if (data.who_changed_it !== apiUser.id && data.parking_changed === parking.id) {
-        console.log("connection refreshed");
+        // console.log("connection refreshed");
         refresh();
       }
     });
@@ -325,25 +327,27 @@ const AvailabilityScreen = ({ location, history }) => {
             new Date(stateParking.boxes[stateParking.boxReservedByThisUser].lastReservationDate).getTime()); //Possible Stale Closure
 
           if (reservation_time_left < 1000) {
-            //five minutes are over
-            cancelCountdown();
+            // //five minutes are over
+            // cancelCountdown();
 
-            findAllBoxesInAParking().then((newState) => {
-              setStateParking(s => ({
-                ...s,
-                boxes: newState.boxes,
-                occupied: newState.occupied,
-                reserved: newState.reserved,
-                free: newState.free,
-                boxReservedByThisUser: THIS_USER_HAS_NO_RESERVATION,
-                reservation_time_left: 0
-              }));
 
-              socketRef.current.emit("something-changed", {
-                who_changed_it: apiUser.id,
-                parking_changed: parking.id
-              })
-            });
+            // findAllBoxesInAParking().then((newState) => {
+            //   setStateParking(s => ({
+            //     ...s,
+            //     boxes: newState.boxes,
+            //     occupied: newState.occupied,
+            //     reserved: newState.reserved,
+            //     free: newState.free,
+            //     boxReservedByThisUser: THIS_USER_HAS_NO_RESERVATION,
+            //     reservation_time_left: 0
+            //   }));
+
+            //   socketRef.current.emit("something-changed", {
+            //     who_changed_it: apiUser.id,
+            //     parking_changed: parking.id
+            //   })
+            // });
+            cancelReservation();
             return;
           }
           setStateParking(s => ({
@@ -387,7 +391,7 @@ const AvailabilityScreen = ({ location, history }) => {
   }, [geolocation.latitude, geolocation.longitude, stateParking.lat_parking, stateParking.long_parking]);
 
   useEffect(() => {
-    console.log("useEffect de openBoxPossible")
+    // console.log("useEffect de openBoxPossible")
     if (distanceToParking < CLOSE_DISTANCE_TO_PARKING && stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
       setStateOpenBoxPossible(true);
     } else {
@@ -420,14 +424,14 @@ const AvailabilityScreen = ({ location, history }) => {
                 <MyMarker
                   color='blue'
                   state={null}
-                  text={`Click on the Box number to reserve a ${checkingForRenting ? 'scooter' : 'parking box'}.`}
+                  text={`${t('Click on a Box number to reserve')} ${checkingForRenting ? t('a scooter') : t('a parking box')}.`}
                   icon={faInfoCircle}
                 />
                 :
                 <MyMarker
                   color='blue'
                   state={null}
-                  text={`Your reservation for ${checkingForRenting ? 'scooter in' : ''} box nº${stateParking.boxReservedByThisUser.valueOf() + 1} in parking ${parking.name} will expire in ${formatTimeLeft(stateParking.reservation_time_left.valueOf())}`}
+                  text={`${t('Your reservation for')} ${checkingForRenting ? t('a scooter in') : ''} ${t('parking')}${stateParking.boxReservedByThisUser.valueOf() + 1} ${t('in station')} ${parking.name} ${t('will expire in')} ${formatTimeLeft(stateParking.reservation_time_left.valueOf())}`}
                   icon={faInfoCircle}
                 />
             }
@@ -435,25 +439,20 @@ const AvailabilityScreen = ({ location, history }) => {
         </Row>
         <Row>
           <Col>
-            {/* <p>{geolocationAvailability}</p>
-            <p>{geolocation.latitude}</p>
-            <p>{geolocation.longitude}</p> */}
             {
-
-
               (geolocationAvailability && distanceToParking)
                 ?
                 <MyMarker
                   color='blue'
                   state={null}
-                  text={`Geolocation activated. This parking is ${distanceToParking ? distanceToParking.toFixed(2) : ""}Km from your current location.`}
+                  text={`${t('Geolocation activated. This parking is')} ${distanceToParking ? distanceToParking.toFixed(2) : ""}${t('Km from your current location')}.`}
                   icon={faInfoCircle}
                 />
                 :
                 <MyMarker
                   color='blue'
                   state={null}
-                  text='Geolocation not available. Please activate it.'
+                  text={t('Geolocation not available. Please activate it.')}
                   icon={faInfoCircle}
                 />
             }

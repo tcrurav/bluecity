@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
+import { useTranslation } from 'react-i18next';
 import clsx from "clsx";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { removeUserSession } from "../../../utils/common";
@@ -74,6 +75,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function MyNavbar(props) {
+  const { t  } = useTranslation();
   const [stateUser, setStateUser] = useState({
     name: "",
     email: "",
@@ -156,13 +158,18 @@ export function MyNavbar(props) {
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
-          <ListItemText primary="Main" />
+          <ListItemText primary={t('Home')} />
         </ListItemLink>
-        <ListItemLink href="/parking">
+        <ListItemLink  
+          onClick={() =>
+            props.history.push({
+              pathname: "/parking"
+            })
+          }>
           <ListItemIcon>
             <LocalParkingIcon />
           </ListItemIcon>
-          <ListItemText primary="Parking" />
+          <ListItemText primary={t('Parking')} />
         </ListItemLink>
         <ListItemLink 
           onClick={() =>
@@ -177,13 +184,17 @@ export function MyNavbar(props) {
           <ListItemIcon>
             <CreditCardIcon />
           </ListItemIcon>
-          <ListItemText primary="Renting" />
+          <ListItemText primary={t('Renting')} />
         </ListItemLink>
-        <ListItemLink href="/contact">
+        <ListItemLink onClick={() =>
+            props.history.push({
+              pathname: "/contact"
+            })
+          }>
           <ListItemIcon>
             <ContactSupportIcon />
           </ListItemIcon>
-          <ListItemText primary="Contact" />
+          <ListItemText primary={t('Contact')} />
         </ListItemLink>
       </List>
     </div>
@@ -231,6 +242,7 @@ export function MyNavbar(props) {
   }))(MuiAccordionDetails);
 
   function CustomizedAccordions({ stateUser }) {
+    const { t } = useTranslation();
     const [expanded, setExpanded] = React.useState("panel1");
 
     const handleChange = (panel) => (event, newExpanded) => {
@@ -264,13 +276,13 @@ export function MyNavbar(props) {
                 <ListItemIcon>
                   <AccountBoxIcon />
                 </ListItemIcon>
-                <ListItemText primary="My Account" />
+                <ListItemText primary={t('My Account')} />
               </ListItemLink>
               <ListItem button onClick={handleLogout}>
                 <ListItemIcon>
                   <ExitToAppIcon />
                 </ListItemIcon>
-                <ListItemText primary="Logout" />
+                <ListItemText primary={t('Logout')} />
               </ListItem>
             </Grid>
           </AccordionDetails>

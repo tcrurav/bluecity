@@ -1,63 +1,105 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MyNavbar } from '../ui/navbar/my-navbar';
 import { Footer } from '../ui/footer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MyContainer } from '../ui/my-container';
+import FlagIcon from '../languages/flagIcon';
+import { BallBeat } from "react-pure-loaders";
+
 import UserDataService from '../../services/user.service';
 
-export default class MyAccount extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: "",
-      email: "",
-    }
+/*-----------------------------------
+        Material-UI Imports
+------------------------------------*/
+import { Select, MenuItem } from '@material-ui/core';
 
-    this.getUser = this.getUser.bind(this);
-  }
+import { useTranslation } from 'react-i18next';
 
-  componentDidMount() {
-    this.getUser();
-  }
+export default function MyAccount(props) {
+  const { t, i18n } = useTranslation();
+  const [loadingState, setLoadingState] = useState(true);
+  const { userId, history } = props;
+  const [profileState, setProfileState] = useState(null);
 
-  getUser() {
-    UserDataService.get(this.props.userId)
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const changeLanguage = (event) => {
+    i18n.changeLanguage(event.target.value);
+    setProfileState({
+      ...profileState,
+      language: event.target.value
+    });
+    UserDataService.update(userId, { language: event.target.value }).then(()=>{
+      console.log("language updated");
+    }).catch(e => {
+      console.log("error updating language");
+    })
+  };
+
+  const getUser = () => {
+    UserDataService.get(userId)
       .then(response => {
-        this.setState({
+        setProfileState({
           name: response.data.name,
           email: response.data.username,
-          loading: false
-        })
+          language: response.data.language
+        });
+        setLoadingState(false);
       })
       .catch(e => {
-        this.changeLoadingState(false);
+        setLoadingState(false);
       });
   }
 
-  render() {
-    return (
-      <>
-        <MyNavbar props={this.props} />
+  return (
+    <>
+      { loadingState ?
         <MyContainer>
-          <Row>
-            <Col><h5>User Profile</h5><br /></Col>
-          </Row>
-          <Row>
-            <Col>
-              <p className="font-weight-bold">Name</p>
-              <p className="text-capitalize">{this.state.name.toLowerCase()}</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <p className="font-weight-bold">Email</p>
-              <p className="text-lowercase">{this.state.email}</p>
+          <Row className="justify-content-md-center h-50">
+            <Col md={6} className="text-center mt-auto pb-5">
+              <BallBeat color={"#123abc"} loading={loadingState} />
             </Col>
           </Row>
         </MyContainer>
-        <Footer />
-      </>
-    )
-  }
+        :
+        <>
+          <MyNavbar history={history} />
+          <MyContainer>
+            <Row>
+              <Col><h5>{t('User Profile')}</h5><br /></Col>
+            </Row>
+            <Row>
+              <Col>
+                <p className="font-weight-bold">{t('Name')}</p>
+                <p className="text-capitalize">{profileState.name.toLowerCase()}</p>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <p className="font-weight-bold">Email</p>
+                <p className="text-lowercase">{profileState.email}</p>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <p className="font-weight-bold">{t('Language')}</p>
+                  <Select labelId="language" id="select" value={profileState.language} onChange={changeLanguage}>
+                    <MenuItem value="es">
+                      <FlagIcon code="es" />&nbsp;Español</MenuItem>
+                    <MenuItem value="es-ca">
+                      <FlagIcon code="es-ca" />&nbsp;Catalá</MenuItem>
+                    <MenuItem value="en">
+                      <FlagIcon code="gb" />&nbsp;English</MenuItem>
+                  </Select>
+              </Col>
+            </Row>
+          </MyContainer>
+          <Footer />
+        </>
+      }
+    </>
+  );
 }

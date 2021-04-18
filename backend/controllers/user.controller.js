@@ -17,6 +17,7 @@ exports.create = (req, res) => {
     password: req.body.password,
     name: req.body.name,
     username: req.body.username,
+    language: req.body.language,
     isAdmin: req.body.isAdmin ? req.body.isAdmin : false
   };
 

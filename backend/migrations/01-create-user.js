@@ -21,6 +21,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      language: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       isAdmin: {
         type: Sequelize.BOOLEAN,
         allowNull: false,

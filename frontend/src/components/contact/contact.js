@@ -14,43 +14,35 @@ const MyMap = styled(Map)`
   }
 `;
 
-export class Contact extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      lat: 28.128081,
-      lng: -15.4467406,
-      zoom: 13,
-    }
-  }
+export function Contact(props) {
 
-  render() {
-    const position = [this.state.lat, this.state.lng]
-    return (
-      <>
-        <MyNavbar history={this.props.history} />
-        <MyContainer>
-          <Row>
-            <Col>
-              <MyMap center={position} zoom={this.state.zoom}>
-                <TileLayer
-                  attribution=''
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker position={position}>
-                  <Popup>
-                    IES El Rincón<br />
+  const zoom = 13;
+  const position = [28.128081, -15.4467406];
+
+  return (
+    <>
+      <MyNavbar history={props.history} />
+      <MyContainer>
+        <Row>
+          <Col>
+            <MyMap center={position} zoom={zoom}>
+              <TileLayer
+                attribution=""
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={position}>
+                <Popup>
+                  IES El Rincón<br />
                     Guanarteme Building<br />
                     My school.<br />
                     I miss it so much.
                   </Popup>
-                </Marker>
-              </MyMap>
-            </Col>
-          </Row>
-        </MyContainer>
-        <Footer />
-      </>
-    )
-  }
+              </Marker>
+            </MyMap>
+          </Col>
+        </Row>
+      </MyContainer>
+      <Footer />
+    </>
+  )
 }

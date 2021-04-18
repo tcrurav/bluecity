@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 /**
@@ -30,7 +31,7 @@ import { THIS_USER_HAS_NO_RESERVATION } from '../constants/constants'
 const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
   stateOpenBoxPossible,
   openBox, cancelReservation, handleReservation }) => {
-
+  const { t } = useTranslation();
   const { id, address, name } = parking;
 
   // console.log("myCard")
@@ -44,25 +45,25 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
       />
       <MyCarImg id={id} />
       <Card.Body>
-        <Card.Title>{stateParking.boxes.length} boxes in total</Card.Title>
+        <Card.Title>{stateParking.boxes.length} {t('boxes in total')}</Card.Title>
         <Row className='pt-2'>
           <Col>
             <MyMarker
               color='red'
               state={stateParking.occupied}
-              text='unavailable'
+              text={t('unavailable')}
               icon={faMapMarkerAlt}
             />
             <MyMarker
               color='green'
               state={stateParking.free}
-              text='available'
+              text={t('available')}
               icon={faMapMarkerAlt}
             />
             <MyMarker
               color='orange'
               state={stateParking.reserved}
-              text='reserved'
+              text={t('reserved')}
               icon={faMapMarkerAlt}
             />
           </Col>
@@ -89,7 +90,7 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
                       color='primary'
                       onClick={cancelReservation}
                     >
-                      Cancel Reservation
+                      {t('Cancel Reservation')}
                     </Button>
                     : <></>
                 }
@@ -105,7 +106,7 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
                       variant='outlined'
                       onClick={openBox}
                     >
-                      Open box nº{stateParking.boxReservedByThisUser + 1} &gt;&gt;
+                      {t('Open box no.')}{stateParking.boxReservedByThisUser + 1} &gt;&gt;
                                         </Button>
                     : <></>
                 }</Col>

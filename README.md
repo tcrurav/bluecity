@@ -439,6 +439,8 @@ Alternatively There are many other possibilities with Openshift including the us
 * [express](https://expressjs.com/) - Fast, unopinionated, minimalist web framework for Node.js.
 * [MySQL Workbench](https://www.mysql.com/products/workbench/) - MySQL Workbench is a unified visual tool for database architects, developers, and DBAs.
 * [dotenv](https://www.npmjs.com/package/dotenv) - Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env. Storing configuration in the environment separate from code is based on The Twelve-Factor App methodology.
+* [react-i18next](https://react.i18next.com) - react-i18next integrates internationalization i18n in React.
+* [react-flag-icon-css](https://www.npmjs.com/package/react-flag-icon-css) - A simple React SVG country flags component: it works with Css Modules (default) or standard Css.
 
 ## Acknowledgments
 
@@ -449,3 +451,5 @@ Alternatively There are many other possibilities with Openshift including the us
 * https://www.theserverside.com/video/Follow-these-git-commit-message-guidelines. Guidelines to write properly git commit messages.
 * https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04. Excellent tutorial to install mysql-server in Ubuntu 20.04.
 * https://github.com/vishnubob/wait-for-it. wait-for-it.sh is a pure bash script that will wait on the availability of a host and TCP port. In our bluecity project makes it possible that the api waits for mysql when the docker-compose.yml file gets launched.
+* https://react.i18next.com/latest/using-with-hooks. Step by step guide using react-i18next.
+* https://www.npmjs.com/package/react-flag-icon-css. A simple React SVG country flags component: it works with Css Modules (default) or standard Css.

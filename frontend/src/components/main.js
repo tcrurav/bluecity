@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
+
 import { MyNavbar } from "./ui/navbar/my-navbar";
 import { Footer } from "./ui/footer";
 import { getCurrentUserId } from "../utils/common";
@@ -49,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function Main(props) {
+  const { t } = useTranslation();
   const classes = useStyles();
   const [loadingState, setLoadingState] = useState(true);
   const [userState, setUserState] = useState(null);
@@ -119,7 +122,7 @@ export function Main(props) {
                   className={classes.buttons}
                   onClick={() => props.history.push("/parking")}
                 >
-                  Parking
+                  {t('Parking')}
                 </Button>
               </Grid>
               <Grid item xs={12}>
@@ -135,7 +138,7 @@ export function Main(props) {
                     })
                   }
                 >
-                  Renting
+                  {t('Renting')}
                 </Button>
               </Grid>
             </Grid>
