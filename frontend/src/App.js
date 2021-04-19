@@ -7,7 +7,7 @@ import { Login } from './components/auth/login';
 import { Main } from './components/main';
 import ParkingScreen from './components/mapping/parking/parkingScreen';
 import RentingScreen from './components/mapping/renting/rentingScreen';
-import { Renting } from './components/mapping/renting';
+// import { Renting } from './components/mapping/renting';
 import { Contact } from './components/contact/contact';
 import { MyError } from './components/my-error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -21,7 +21,7 @@ import AvailabilityScreen from "./components/mapping/availability/availabilitySc
 // import 'jquery/dist/jquery.min.js';
 // import 'bootstrap/dist/js/bootstrap.min.js';
 
-class App extends React.Component {
+function App() {
   /*constructor(props) {
      super(props);
 
@@ -34,27 +34,25 @@ class App extends React.Component {
   // READ following web to uderstand the use of history in react-router-dom
   // https://github.com/ReactTraining/react-router/blob/master/FAQ.md#how-do-i-pass-props-to-the-component-rendered-by-a-route
 
-  render() {
-    return (
-      <Suspense fallback="loading">
-        <Router>
-          <Switch>
-            <RoutePrivate path='/main' component={(props) => <Main history={props.history} />} />
-            <RoutePrivate path='/my-account' component={(props) => <MyAccount userId={getCurrentUserId()} history={props.history} />} />
-            <RoutePrivate path='/parking' component={ParkingScreen} />
-            <RoutePrivate path='/renting' component={RentingScreen} />
-            {/* <RoutePrivate path='/renting' component={(props) => <Renting userId={getCurrentUserId()} history={props.history} />}/> */}
-            <RoutePrivate path='/availability' component={AvailabilityScreen} />
-            {/* <RoutePrivate path='/renting' component={() => <Renting userId={getCurrentUserId()}/>}/> */}
-            <RoutePrivate path='/scooter-renting' component={Scooter} />
-            <RoutePublic path='/login' component={Login} />
-            <Route path='/contact' component={Contact} />
-            <Route component={MyError} />
-          </Switch>
-        </Router>
-      </Suspense>
-    );
-  }
+  return (
+    <Suspense fallback="loading">
+      <Router>
+        <Switch>
+          <RoutePrivate path='/main' component={(props) => <Main history={props.history} />} />
+          <RoutePrivate path='/my-account' component={(props) => <MyAccount userId={getCurrentUserId()} history={props.history} />} />
+          <RoutePrivate path='/parking' component={ParkingScreen} />
+          <RoutePrivate path='/renting' component={RentingScreen} />
+          {/* <RoutePrivate path='/renting' component={(props) => <Renting userId={getCurrentUserId()} history={props.history} />}/> */}
+          <RoutePrivate path='/availability' component={AvailabilityScreen} />
+          {/* <RoutePrivate path='/renting' component={() => <Renting userId={getCurrentUserId()}/>}/> */}
+          <RoutePrivate path='/scooter-renting' component={Scooter} />
+          <RoutePublic path='/login' component={Login} />
+          <Route path='/contact' component={Contact} />
+          <Route component={MyError} />
+        </Switch>
+      </Router>
+    </Suspense>
+  );
 }
 
 export default App;

@@ -7,6 +7,8 @@ import { MyContainer } from '../ui/my-container';
 import FlagIcon from '../languages/flagIcon';
 import { BallBeat } from "react-pure-loaders";
 
+import { getApiUser, setApiUser } from '../../utils/common';
+
 import UserDataService from '../../services/user.service';
 
 /*-----------------------------------
@@ -33,6 +35,9 @@ export default function MyAccount(props) {
       language: event.target.value
     });
     UserDataService.update(userId, { language: event.target.value }).then(()=>{
+      let apiUser = getApiUser();
+      apiUser.language = event.target.value;
+      setApiUser(apiUser);
       console.log("language updated");
     }).catch(e => {
       console.log("error updating language");
@@ -42,6 +47,7 @@ export default function MyAccount(props) {
   const getUser = () => {
     UserDataService.get(userId)
       .then(response => {
+        // console.log(response)
         setProfileState({
           name: response.data.name,
           email: response.data.username,
@@ -50,7 +56,7 @@ export default function MyAccount(props) {
         setLoadingState(false);
       })
       .catch(e => {
-        setLoadingState(false);
+        console.log("error retrieving user data");
       });
   }
 
