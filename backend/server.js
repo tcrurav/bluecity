@@ -161,6 +161,33 @@ app.post("/open_box_confirmed/:parking_id/:box_id", (req, res) => {
   return res.send({ response: "open-box sent" }).status(200);
 });
 
+/////////////////app.post de charger plugged//////////////////////////////////////////////
+app.post("/charger_plugged_in/:parking_id/:box_id/:charger_state", (req, res) => {
+  // From Box
+  console.log("charger_plugged_in in backend")
+
+  const data = { boxId: parseInt(req.params.box_id) };
+
+  Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED, occupied: true }, {
+    where: { id: data.boxId }
+  }).then(num => {
+    if (num == 1) {
+      // refresh information in mobile phones
+      io.sockets.emit('refresh-box-state', data);
+    } else {
+      // Cannot update Box with id. Maybe Box was not found
+    }
+  }).catch(err => {
+    // Error updating Box. It should be controlled in the future.
+  });
+
+  return res.send({ response: "charger_plugged_in sent" }).status(200);
+});
+
+///////////////////////////////////////////////////////////////////////////////////
+
+
+
 app.post("/box_closed/:parking_id/:box_id/:charger_state", (req, res) => {
   // From Box
 
@@ -192,7 +219,8 @@ const server = http.createServer(app);
 const Box = db.box;
 
 const PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED = 12;
-const PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED = 13;
+const  PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED=13;
+const PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED = 14;
 
 const io = socketIo(server, {
   cors: {

@@ -126,14 +126,16 @@ io.on("connect", (socket) => {
 
   });
 
-  socket.on("simulator-charger-connected", (data) => {
+
+  //////////////////////////////////////////////////////////////////////////////
+  socket.on("simulator-charger-plugged-in", (data) => {
     // from box device
-    console.log("simulator-charger-connected")
+    console.log("simulator-charger-plugged-in")
     console.log(data);
 
-    axios.post(`${process.env.BACKEND_URL}/charger_connected/${data.parkingId}/${data.boxId}`)
+    axios.post(`${process.env.BACKEND_URL}/charger_plugged_in/${data.parkingId}/${data.boxId}/${data.chargerState}`)
       .then(res => {
-        console.log("charger_connected sent")
+        console.log("charger_plugged_in sent")
         // console.log(`statusCode: ${res.statusCode}`)
         // console.log(res)
       })
@@ -142,6 +144,8 @@ io.on("connect", (socket) => {
       });
 
   });
+
+  ////////////////////////////////////////////////////////////////////////7
 
   socket.on("simulator-open-box-confirmed", (data) => {
     // from box device

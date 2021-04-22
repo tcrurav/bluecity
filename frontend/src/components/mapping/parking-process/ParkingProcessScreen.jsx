@@ -37,6 +37,7 @@ import BoxDataService from '../../../services/box.service';
 |--------------------------------------------------
 */
 import { 
+  PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
   PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
   PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
   NEITHER_PARKING_NOT_RENTING } from './constants/constants';
@@ -115,7 +116,14 @@ const ParkingProcessScreen = ({ location, history }) => {
                   <MyMarker
                     color='blue'
                     state={null}
-                    text='The door is open. Introduce your scooter and close the door.'
+                    text='The door is open. Please, introduce your scooter and plug the charger in.'
+                    icon={faInfoCircle}
+                  />
+                  :stateParkingProcess === PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ?
+                  <MyMarker
+                    color='blue'
+                    state={null}
+                    text='The charger is plugged in. Please, close the door.'
                     icon={faInfoCircle}
                   />
                   :

@@ -7,14 +7,21 @@ import socketIOClient from 'socket.io-client';
 // const PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED = 12;
 // const PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED = 13;
 
-const BOX_CLOSED = 0;
-const BOX_OPENED = 1;
+const BOX_CLOSED = 1;
+const BOX_OPENED = 2;
+const CHARGER_PLUGGED_OUT= 3;
+const CHARGER_PLUGGED_IN= 4;
+
+
+
+
 
 const SIMULATED_BOX_ID = 14 // Box nº2 in Telde
 const SIMULATED_PARKING_ID = 3 // Parking in Telde
 
 const Simulator = () => {
   const [stateBox, setStateBox] = useState(BOX_CLOSED);
+  const [stateCharger, setStateCharger]= useState(CHARGER_PLUGGED_OUT);
 
   const socketRef = useRef();
 
@@ -47,7 +54,15 @@ const Simulator = () => {
     setStateBox(BOX_CLOSED);
 
     // boxService.update(SIMULATED_BOX_ID, { state: PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED }).then(() => {
-      socketRef.current.emit('simulator-box-closed', { parkingId: SIMULATED_PARKING_ID, boxId: SIMULATED_BOX_ID, chargerState: true });
+      socketRef.current.emit('simulator-box-closed', { parkingId: SIMULATED_PARKING_ID, boxId: SIMULATED_BOX_ID, chargerState: stateCharger });
+    // });
+  }
+
+  const plugChargerIn = () => {
+    setStateCharger(CHARGER_PLUGGED_IN);
+
+    // boxService.update(SIMULATED_BOX_ID, { state: PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED }).then(() => {
+      socketRef.current.emit('simulator-charger-plugged-in', { parkingId: SIMULATED_PARKING_ID, boxId: SIMULATED_BOX_ID, chargerState: stateCharger });
     // });
   }
 
@@ -58,10 +73,15 @@ const Simulator = () => {
           <Col>
             <h1>Box Id: {SIMULATED_BOX_ID}</h1>
             <p>Door {stateBox === BOX_CLOSED ? 'closed' : 'opened'}</p>
+            <p>Charger {stateCharger === CHARGER_PLUGGED_OUT ? 'plugged out' : 'plugged in'}</p>
           </Col>
           <Col>
-            {stateBox === BOX_OPENED ? <Button onClick={closeBox}>Close Door</Button> : <></>}
+            {stateCharger === CHARGER_PLUGGED_OUT && stateBox === BOX_OPENED ? <Button onClick={plugChargerIn}>Plug the Charger in</Button> : <></>}
           </Col>
+           <Col>
+            {stateBox === BOX_OPENED && stateCharger === CHARGER_PLUGGED_IN ? <Button onClick={closeBox}>Close Door</Button> : <></>}
+          </Col>
+         
         </Row>
       </Container>
     </>
