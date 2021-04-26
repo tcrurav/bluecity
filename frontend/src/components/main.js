@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 
 import { MyNavbar } from "./ui/navbar/my-navbar";
-import { Footer } from "./ui/footer";
+import {Footer} from './ui/footer'
 import { getCurrentUserId } from "../utils/common";
 import ScooterDataService from "../services/scooter.service";
 
@@ -96,7 +96,7 @@ export function Main(props) {
       ) : userState ? (
         <>
           <MyNavbar history={props.history}/>
-          <Paper elevation={2} className={classes.root}>
+          <Paper elevation={0} className={classes.root}>
             <Container className={classes.image}>
               <Typography>Hello, world</Typography>
               <Button onClick={redirectToParking}>Accept</Button>
@@ -107,7 +107,7 @@ export function Main(props) {
       ) : (
         <>
           <MyNavbar history={props.history} />
-          <Paper elevation={2} className={classes.root}>
+          <Paper elevation={0} className={classes.root}>
             <Container className={classes.image}>
               <Image src="img/bluecity.png" aspectRatio={16 / 9} />
             </Container>

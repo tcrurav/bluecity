@@ -23,12 +23,13 @@ const MyContainer = styled(Container)`
 `;
 
 const MyLogo = styled.img`
-  
+  width: auto;
+  height: 192px;
 `;
 
 // <hr className="clearfix w-100 d-md-none pb-3" />
 
-export function Footer() {
+export function Footer2() {
   const { t } = useTranslation();
 
   return (
