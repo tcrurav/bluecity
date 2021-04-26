@@ -5,12 +5,11 @@ const express = require('express');
 const http = require("http");
 const socketIo = require("socket.io");
 const cors = require('cors');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
+const axios = require('axios')
 
 const app = express();
 const port = process.env.PORT || 4000;
-
-
 
 // enable CORS
 app.use(cors());
@@ -60,9 +59,9 @@ app.use(cors());
 // app.use(cors(corsOptionsDelegate));
 
 // parse application/json
-app.use(bodyParser.json());
+app.use(express.json());
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 // pathing to parkings images
 app.use(express.static('data/img'));
 
@@ -101,7 +100,8 @@ app.use(function (req, res, next) {
 });
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", process.env.BLUECITY_CLIENT);
+  // res.header("Access-Control-Allow-Origin", process.env.BLUECITY_CLIENT);
+  res.header("Access-Control-Allow-Origin", '*');
   res.header('Access-Control-Allow-Credentials', true);
   res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method, Access-Control-Allow-Credentials');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
@@ -139,15 +139,93 @@ app.get("/api/hello", (req, res) => {
   return res.send({ response: "I am alive" }).status(200);
 });
 
+app.post("/open_box_confirmed/:parking_id/:box_id", (req, res) => {
+  // From Box
+  console.log("open_box_confirmed in backend")
+
+  const data = { boxId: parseInt(req.params.box_id) };
+
+  Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED }, {
+    where: { id: data.boxId }
+  }).then(num => {
+    if (num == 1) {
+      // refresh information in mobile phones
+      io.sockets.emit('refresh-box-state', data);
+    } else {
+      // Cannot update Box with id. Maybe Box was not found
+    }
+  }).catch(err => {
+    // Error updating Box. It should be controlled in the future.
+  });
+
+  return res.send({ response: "open-box sent" }).status(200);
+});
+
+/////////////////app.post de charger plugged//////////////////////////////////////////////
+app.post("/charger_plugged_in/:parking_id/:box_id/:charger_state", (req, res) => {
+  // From Box
+  console.log("charger_plugged_in in backend")
+
+  const data = { boxId: parseInt(req.params.box_id) };
+
+  Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED, occupied: true }, {
+    where: { id: data.boxId }
+  }).then(num => {
+    if (num == 1) {
+      // refresh information in mobile phones
+      io.sockets.emit('refresh-box-state', data);
+    } else {
+      // Cannot update Box with id. Maybe Box was not found
+    }
+  }).catch(err => {
+    // Error updating Box. It should be controlled in the future.
+  });
+
+  return res.send({ response: "charger_plugged_in sent" }).status(200);
+});
+
+///////////////////////////////////////////////////////////////////////////////////
+
+
+
+app.post("/box_closed/:parking_id/:box_id/:charger_state", (req, res) => {
+  // From Box
+
+  const data = { boxId: parseInt(req.params.box_id) };
+
+  Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, occupied: true }, {
+    where: { id: data.boxId }
+  }).then(num => {
+    if (num == 1) {
+      // refresh information in mobile phones
+      io.sockets.emit('refresh-box-state', data);
+    } else {
+      // Cannot update Box with id. Maybe Box was not found
+    }
+  }).catch(err => {
+    // Error updating Box. It should be controlled in the future.
+  });
+
+  return res.send({ response: "box-closed received" }).status(200);
+});
+
 require("./routes/user.routes")(app);
 require("./routes/parking.routes")(app);
 require("./routes/box.routes")(app);
 require("./routes/scooter.routes")(app);
 
 const server = http.createServer(app);
+
+const Box = db.box;
+
+const PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED = 12;
+const  PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED=13;
+const PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED = 14;
+
 const io = socketIo(server, {
   cors: {
-    origin: process.env.BLUECITY_CLIENT,
+    // origin: process.env.BLUECITY_CLIENT,
+    origin: '*',
     methods: ["GET", "POST"],
     credentials: true
   },
@@ -159,16 +237,73 @@ io.on("connect", (socket) => {
 
   socket.emit("welcome", { connection_confirmed: true });
 
-  socket.on("chacho-tu", (data) => {
-    console.log("openToIntroduceScooter")
+  socket.on("open-box", (data) => {
+    // from mobile phone
+    console.log("open-box")
     console.log(data);
 
-    // socket.emit("openToIntroduceScooter", {open_to_introduce_scooter: true});
+    // to box device
+    // io.sockets.emit('open-box', { boxId: data.id });
+
+    // ATTENTION: To be changed!!!!!
+    //let parking_url = `http://parking${data.parkingId}/somosbluecity.es`;
+    let parking_url = "http://localhost:9000";
+
+    axios.post(`${parking_url}/open_box/${data.id}`)
+      .then(res => {
+        console.log("open-box sent from backend to box backend");
+        // console.log(`statusCode: ${res.statusCode}`)
+        // console.log(res)
+      })
+      .catch(error => {
+        console.error(error)
+      });
   });
+
+  // socket.on("close-box-confirmed", (data) => {
+  //   // from box device
+  //   console.log("close-box-confirmed")
+  //   console.log(data);
+
+  //   Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, occupied: true }, {
+  //     where: { id: data.boxId }
+  //   }).then(num => {
+  //     if (num == 1) {
+  //       // refresh information in mobile phones
+  //       io.sockets.emit('refresh-box-state', data);
+  //     } else {
+  //       // Cannot update Box with id. Maybe Box was not found
+  //     }
+  //   }).catch(err => {
+  //     // Error updating Box. It should be controlled in the future.
+  //   });
+
+  // });
+
+  // socket.on("open-box-confirmed", (data) => {
+  //   // from box device
+  //   console.log("open-box-confirmed")
+  //   console.log(data);
+
+  //   Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED }, {
+  //     where: { id: data.boxId }
+  //   }).then(num => {
+  //     if (num == 1) {
+  //       // refresh information in mobile phones
+  //       io.sockets.emit('refresh-box-state', data);
+  //     } else {
+  //       // Cannot update Box with id. Maybe Box was not found
+  //     }
+  //   }).catch(err => {
+  //     // Error updating Box. It should be controlled in the future.
+  //   });
+
+  // });
 
   socket.on("something-changed", (data) => {
     console.log("something changed: " + data.toString());
     // socket.emit("refresh", data);      // send to only the client who emited
+
     io.sockets.emit('refresh', data);     // send to all
   })
 
