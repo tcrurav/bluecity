@@ -9,6 +9,7 @@ import ParkingScreen from './components/mapping/parking/parkingScreen';
 import RentingScreen from './components/mapping/renting/rentingScreen';
 // import { Renting } from './components/mapping/renting';
 import { Contact } from './components/contact/contact';
+import { MyLogo } from './components/my-logo';
 import { MyError } from './components/my-error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { getCurrentUserId } from "./utils/common";
@@ -50,6 +51,7 @@ function App() {
           <RoutePrivate path='/scooter-renting' component={Scooter} />
           <RoutePublic path='/login' component={Login} />
           <Route path='/contact' component={Contact} />
+          <Route path="/" component={MyLogo}/>
           <Route component={MyError} />
         </Switch>
       </Router>

@@ -427,7 +427,7 @@ const AvailabilityScreen = ({ location, history }) => {
           </Col>
         </Row>
       </MyContainer>
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 };
