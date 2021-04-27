@@ -9,9 +9,10 @@ import socketIOClient from 'socket.io-client';
 
 const BOX_CLOSED = 0;
 const BOX_OPENED = 1;
+const SCOOTER_PLUGGED = 2;
 
-const SIMULATED_BOX_ID = 14 // Box nº2 in Telde
-const SIMULATED_PARKING_ID = 3 // Parking in Telde
+const SIMULATED_BOX_ID = 4 // Box nº2 in Telde
+const SIMULATED_PARKING_ID = 1 // Parking in Telde
 
 const Simulator = () => {
   const [stateBox, setStateBox] = useState(BOX_CLOSED);
@@ -43,11 +44,16 @@ const Simulator = () => {
     }
   }, []);
 
+  const plugScooter = () =>{
+    setStateBox(SCOOTER_PLUGGED); 
+	
+	socketRef.current.emit('simulator-charger-connected', { parkingId: SIMULATED_PARKING_ID, boxId: SIMULATED_BOX_ID, chargerState: true });
+  }
   const closeBox = () => {
     setStateBox(BOX_CLOSED);
 
     // boxService.update(SIMULATED_BOX_ID, { state: PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED }).then(() => {
-      socketRef.current.emit('simulator-box-closed', { parkingId: SIMULATED_PARKING_ID, boxId: SIMULATED_BOX_ID, chargerState: true });
+    socketRef.current.emit('simulator-box-closed', { parkingId: SIMULATED_PARKING_ID, boxId: SIMULATED_BOX_ID, chargerState: true });
     // });
   }
 
@@ -60,7 +66,15 @@ const Simulator = () => {
             <p>Door {stateBox === BOX_CLOSED ? 'closed' : 'opened'}</p>
           </Col>
           <Col>
-            {stateBox === BOX_OPENED ? <Button onClick={closeBox}>Close Door</Button> : <></>}
+            {stateBox >= BOX_OPENED ? <Button onClick={closeBox}>Close Door</Button> : <></>}
+          </Col>
+          <Col>
+          {
+              stateBox === BOX_OPENED ?
+                <button onClick={plugScooter}>Plug Scooter</button>
+              :
+				<p> The charger might be connected I guess </p>
+            }
           </Col>
         </Row>
       </Container>

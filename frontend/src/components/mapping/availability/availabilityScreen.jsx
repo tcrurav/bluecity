@@ -22,6 +22,8 @@ import MyMarker from './components/myMarker';
 */
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { Row, Col, Card } from 'react-bootstrap';
+import { makeStyles } from "@material-ui/core/styles";
+//import { Button, Row } from 'react-bootstrap';
 
 /**
 |--------------------------------------------------
@@ -30,6 +32,7 @@ import { Row, Col, Card } from 'react-bootstrap';
 */
 import BoxDataService from '../../../services/box.service';
 import ParkingDataService from '../../../services/parking.service';
+import ScooterDataService from '../../../services/scooter.service';
 
 /**
 |--------------------------------------------------
@@ -67,6 +70,33 @@ const AvailabilityScreen = ({ location, history }) => {
       long_parking: 0
     }
   );
+
+  const [hasBoxOccupied, setBoxOccupied] = useState(
+    {
+      hasOne: false,
+      numberOfBox: -1,
+    } 
+  );
+  const useStyles = makeStyles((theme) => ({
+    root: {},
+    image: {
+      maxWidth: "512px",
+    },
+    buttonContainer: {
+      justify: "center",
+      alignItems: "center",
+      //justifyContent: "center",
+    },
+    buttons: {
+      marginTop: "1vh",
+      backgroundColor: '#00a9f4',
+      '&:hover': {
+        backgroundColor: '#007ac1',
+        color: 'white'
+      }
+    }
+  }));
+  const classes = useStyles();
 
   const [stateOpenBoxPossible, setStateOpenBoxPossible] = useState(false);
 
@@ -119,6 +149,47 @@ const AvailabilityScreen = ({ location, history }) => {
     }).catch((error) => console.log(error));
   };
 
+  const checkHasBoxOccupied = () => {
+    setBoxOccupied({
+      hasOne: false,
+      numberOfBox: 0
+    });
+    ScooterDataService.getScooterWithUserId(apiUser.id)
+    .then(res => {
+      console.log("BoxId: " + res.data.boxId)
+      if(!res.data.boxId instanceof Number){
+        return;
+      }
+      else {
+        setBoxOccupied({
+          numberOfBox: res.data.boxId
+        });
+        BoxDataService.getAllBoxesInAParking(parking.id)
+        .then(res => {
+          for(var i=0;i<res.data.length;i++){
+            console.log("BoxId2: " + res.data[i].id)
+            console.log("BoxId5: " + hasBoxOccupied.numberOfBox)
+            if(res.data[i].id == hasBoxOccupied.numberOfBox) {
+              setBoxOccupied({
+                hasOne: true
+              })
+              return;
+            } else {
+              console.log(res.data[i].id + " / " + hasBoxOccupied.numberOfBox)
+              setBoxOccupied({
+                hasOne: true,
+                numberOfBox: -5
+              })
+            }
+          }
+        });
+      }
+    });
+  }
+
+  const handleReservation2 = () =>{
+    console.log("Heyy que pasa amigo")
+  }
   const openBox = () => {
     console.log('openBox');
     try {
@@ -128,14 +199,29 @@ const AvailabilityScreen = ({ location, history }) => {
       data.lastReservationDate = BEGIN_OF_TIMES;
       BoxDataService.update(data.id, data).then(() => {
         socketRef.current.emit('open-box', data);
-
-        history.push({
+        ScooterDataService.getScooterWithUserId(apiUser.id)
+        .then(res => {
+          //console.log(res.data.userId)
+          var a = 1
+          if(a===1){ 
+          history.push({
+            pathname: '/renting-process',
+            state: {
+              parking,
+              boxId: data.id   //Possible stale clossure
+            }
+          });
+        } else {
+          history.push({
           pathname: '/parking-process',
           state: {
             parking,
             boxId: data.id   //Possible stale clossure
           }
+        });
+        }
         })
+        
       });
     } catch (e) {
       console.log(e);
@@ -233,6 +319,7 @@ const AvailabilityScreen = ({ location, history }) => {
 
   useEffect(() => {
     console.log("useEffect primero")
+    //checkHasBoxOccupied()
     console.log(checkingForRenting)
     findAllBoxesInAParking().then((newState) => {
       ParkingDataService.get(parking.id).then(res => {
@@ -377,6 +464,9 @@ const AvailabilityScreen = ({ location, history }) => {
               openBox={openBox}
               cancelReservation={cancelReservation}
               handleReservation={handleReservation}
+              hasBoxOccupied={hasBoxOccupied}
+              handleReservation2={handleReservation2}
+              //checkingForRenting={history['location'].state.checkingForRenting}
             />
           </Card>
         </Row>

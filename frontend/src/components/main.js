@@ -49,7 +49,12 @@ export function Main(props) {
             </Button>
           </Grid>
           <Grid item xs={12}>
-            <Button variant="contained" className={classes.buttons} onClick={() => props.history.push("/renting")}>
+            <Button variant="contained" 
+              className={classes.buttons} 
+              onClick={() => props.history.push({
+                pathname: "/renting",
+                state: {data: 'Renting'}
+              })}>
               Renting
             </Button>
           </Grid>

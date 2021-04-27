@@ -109,10 +109,14 @@ io.on("connect", (socket) => {
   //   io.sockets.emit('open-box', { boxId: data.id });
   // });
 
+  socket.on("welcome", (data) =>{
+    console.log("welcome received from simulator backend")
+  })
+  //Close door
   socket.on("simulator-box-closed", (data) => {
     // from box device
     console.log("simulator-box-closed")
-    console.log(data);
+    //console.log(data);
 
     axios.post(`${process.env.BACKEND_URL}/box_closed/${data.parkingId}/${data.boxId}/${data.chargerState}`)
       .then(res => {
@@ -123,30 +127,26 @@ io.on("connect", (socket) => {
       .catch(error => {
         console.error(error)
       });
-
   });
 
+  //Scooter plugged
   socket.on("simulator-charger-connected", (data) => {
-    // from box device
-    console.log("simulator-charger-connected")
+    console.log("La orden ha sido recibida, simulator-charger-connected")
     console.log(data);
-
-    axios.post(`${process.env.BACKEND_URL}/charger_connected/${data.parkingId}/${data.boxId}`)
-      .then(res => {
-        console.log("charger_connected sent")
-        // console.log(`statusCode: ${res.statusCode}`)
-        // console.log(res)
-      })
-      .catch(error => {
-        console.error(error)
-      });
-
+	
+	axios.post(`${process.env.BACKEND_URL}/charger_connected/${data.parkingId}/${data.boxId}`)
+    .then(res => {
+       console.log("charger_connected sent")
+    })
+    .catch(error => {
+      console.error("Ha petado amigo mío" + error.message)
+    });
   });
 
   socket.on("simulator-open-box-confirmed", (data) => {
     // from box device
     console.log("simulator-open-box-confirmed")
-    console.log(data);
+    console.log(`${process.env.BACKEND_URL}/open_box_confirmed/${data.parkingId}/${data.boxId}`);
 
     axios.post(`${process.env.BACKEND_URL}/open_box_confirmed/${data.parkingId}/${data.boxId}`)
       .then(res => {

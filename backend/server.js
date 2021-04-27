@@ -145,7 +145,7 @@ app.post("/open_box_confirmed/:parking_id/:box_id", (req, res) => {
 
   const data = { boxId: parseInt(req.params.box_id) };
 
-  Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED }, {
+  Box.update({ state: RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED }, {
     where: { id: data.boxId }
   }).then(num => {
     if (num == 1) {
@@ -166,7 +166,7 @@ app.post("/box_closed/:parking_id/:box_id/:charger_state", (req, res) => {
 
   const data = { boxId: parseInt(req.params.box_id) };
 
-  Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, occupied: true }, {
+  Box.update({ state: RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, occupied: true }, {
     where: { id: data.boxId }
   }).then(num => {
     if (num == 1) {
@@ -182,6 +182,26 @@ app.post("/box_closed/:parking_id/:box_id/:charger_state", (req, res) => {
   return res.send({ response: "box-closed received" }).status(200);
 });
 
+app.post("/charger_connected/:parking_id/:box_id", (req, res) => {
+
+  const data = { boxId: parseInt(req.params.box_id) };
+
+  Box.update({ state: RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED, occupied: true }, {
+    where: { id: data.boxId }
+  }).then(num => {
+    if (num == 1) {
+      // refresh information in mobile phones
+      io.sockets.emit('refresh-box-state', data);
+    } else {
+      // Cannot update Box with id. Maybe Box was not found
+    }
+  }).catch(err => {
+	  console.log("Something is broken guys ...")
+  });
+
+  return res.send({ response: "charger-connected received" }).status(200);
+});
+
 require("./routes/user.routes")(app);
 require("./routes/parking.routes")(app);
 require("./routes/box.routes")(app);
@@ -191,8 +211,10 @@ const server = http.createServer(app);
 
 const Box = db.box;
 
-const PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED = 12;
-const PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED = 13;
+const RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED = 26;
+const RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED = 27;
+const RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED = 28;
+
 
 const io = socketIo(server, {
   cors: {
@@ -224,14 +246,30 @@ io.on("connect", (socket) => {
     axios.post(`${parking_url}/open_box/${data.id}`)
       .then(res => {
         console.log("open-box sent from backend to box backend");
+        socket.emit("box-opened", { connection_confirmed: true });
         // console.log(`statusCode: ${res.statusCode}`)
         // console.log(res)
-      })
-      .catch(error => {
-        console.error(error)
-      });
-  });
+    })
+    .catch(error => {
+      console.error(error)
+    });
+	  
+	//Scooter plugged
+	axios.post(`/charger_connected/${data.parkingId}/${data.boxId}`)
+	.then(res => {
+	  console.log("charger_connected received from box backend");
+      socket.emit("simulator-charger-connected", { connection_confirmed: true });
+	});
+   
+   //Door closed
+   axios.post(`/box_closed/${data.parkingId}/${data.boxId}/${data.chargerState}`)
+	.then(res => {
+	  console.log("box_closed received from box backend");
+      socket.emit("box-closed-confirmed", { connection_confirmed: true });
+	});
 
+	
+	
   // socket.on("close-box-confirmed", (data) => {
   //   // from box device
   //   console.log("close-box-confirmed")
@@ -282,8 +320,12 @@ io.on("connect", (socket) => {
   socket.on("disconnect", () => {
     console.log("Client disconnected");
   });
+  
 });
 
+});
 server.listen(port, () => {
   console.log('Server started on: ' + port);
 });
+
+
