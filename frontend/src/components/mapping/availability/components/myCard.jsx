@@ -78,42 +78,43 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
           </Col>
         </Row>
         <Row className='mt-3'>
-          <Col></Col>
+          {/* <Col></Col> 
           <Col>
-            <Row>
-              <Col>
-                {
-                  stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION
-                    ?
-                    <Button
-                      variant="contained"
-                      color='primary'
-                      onClick={cancelReservation}
-                    >
-                      {t('Cancel Reservation')}
-                    </Button>
-                    : <></>
-                }
-              </Col>
-            </Row>
-            <Row className='mt-1'>
-              <Col>
-                {
-                  stateOpenBoxPossible
-                    ?
-                    <Button
-                      block="true"
-                      variant='outlined'
-                      onClick={openBox}
-                    >
-                      {t('Open box no.')}{stateParking.boxReservedByThisUser + 1} &gt;&gt;
+             <Row>*/}
+              <Col> 
+            {
+              stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION
+                ?
+                <Button
+                  variant="contained"
+                  color='primary'
+                  onClick={cancelReservation}
+                >
+                  {t('Cancel Reservation')}
+                </Button>
+                : <></>
+            }
+            </Col>
+              {/* </Row>
+            <Row className='mt-1'> */}
+            <Col>
+              {
+                stateOpenBoxPossible
+                  ?
+                  <Button
+                    block="true"
+                    variant='outlined'
+                    onClick={openBox}
+                  >
+                    {t('Open box no.')}{stateParking.boxReservedByThisUser + 1} &gt;&gt;
                                         </Button>
-                    : <></>
-                }</Col>
-            </Row>
-          </Col>
+                  : <></>
+              }
+            </Col>
+            {/* </Row>
+          </Col> */}
         </Row>
-      </Card.Body>
+    </Card.Body>
     </>
 
   )

@@ -114,6 +114,7 @@ exports.update = (req, res) => {
       }
     })
     .catch((err) => {
+      console.log(err);
       return res.status(500).send({
         message: "Error updating Box with id=" + id,
       });

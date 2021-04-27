@@ -26,7 +26,7 @@ const MySpan = styled.span`
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    width: '75vw',
     backgroundColor: '#fff',
     '&:hover': {
       boxShadow: '0, 0, 16px #4285f4',
@@ -36,13 +36,16 @@ const useStyles = makeStyles((theme) => ({
     padding: '.375rem .75rem',
     textTransform: 'capitalize',
   },
+  myButton: {
+    margin: '0 auto',
+  }
 }));
 
 export default function MyGoogleLoginButton() {
 
   const classes = useStyles();
     return (
-      <div className="col-12">
+      <div className={classes.myButton}>
         {/* <MyA className="btn btn-outline-dark" id="login-button" role="button">
           <MyImg
             alt="Google sign-in"
