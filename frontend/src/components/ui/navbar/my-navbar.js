@@ -71,7 +71,8 @@ const useStyles = makeStyles((theme) => ({
   },
   appbar: {
     marginBottom: "10vh",
-  },
+    background: "#00569F",
+    },
 }));
 
 export function MyNavbar(props) {

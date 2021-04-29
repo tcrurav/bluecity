@@ -51,7 +51,7 @@ function App() {
           <RoutePrivate path='/scooter-renting' component={Scooter} />
           <RoutePublic path='/login' component={Login} />
           <Route path='/contact' component={Contact} />
-          <Route path="/" component={MyLogo}/>
+          {/* <Route path="/" component={MyLogo}/> */}
           <Route component={MyError} />
         </Switch>
       </Router>
