@@ -95,8 +95,8 @@ export default function MyAccount(props) {
                   <Select labelId="language" id="select" value={profileState.language} onChange={changeLanguage}>
                     <MenuItem value="es">
                       <FlagIcon code="es" />&nbsp;Español</MenuItem>
-                    <MenuItem value="es-ca">
-                      <FlagIcon code="es-ca" />&nbsp;Catalá</MenuItem>
+                    <MenuItem value="es-CA">
+                      <FlagIcon code="es-ca" />&nbsp;Catal&agrave;</MenuItem>
                     <MenuItem value="en">
                       <FlagIcon code="gb" />&nbsp;English</MenuItem>
                   </Select>
