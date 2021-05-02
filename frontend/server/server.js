@@ -1,3 +1,11 @@
+//Using https
+const https = require('https');
+const fs = require('fs');
+const options = {
+   key: fs.readFileSync('server/.cert/certificate.key'),
+   cert: fs.readFileSync('server/.cert/certificate.crt')
+ };
+
 const path = require('path');
 const express = require('express');
 const app = express();
@@ -7,6 +15,10 @@ app.use(express.static(publicPath));
 app.get('*', (req, res) => {
    res.sendFile(path.join(publicPath, 'index.html'));
 });
-app.listen(port, () => {
+
+//Using https
+const server = https.createServer(options, app);
+
+server.listen(port, () => {
    console.log('Server is up!');
 });

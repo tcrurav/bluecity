@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from "@material-ui/core/styles";
+import { useMediaQuery } from 'react-responsive';
+import { useHistory } from "react-router-dom";
 
 import { MyAuthButtons } from '../ui/my-auth-buttons';
 import { MyContainer } from '../ui/my-container';
@@ -37,11 +39,16 @@ const useStyles = makeStyles({
 });
 
 export function Login(props) {
+  const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  let history = useHistory();
 
+  useEffect(() => {
+    if(!isMobile){
+      history.push("/");
+    }
   });
 
   // constructor(props) {

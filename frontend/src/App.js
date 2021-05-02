@@ -19,6 +19,7 @@ import MyAccount from "./components/auth/my-account";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AvailabilityScreen from "./components/mapping/availability/availabilityScreen";
 import ParkingProcessScreen from "./components/mapping/parking-process/ParkingProcessScreen";
+// import Site from './components/site/site';
 
 // import 'jquery/dist/jquery.min.js';
 // import 'bootstrap/dist/js/bootstrap.min.js';
@@ -51,7 +52,8 @@ function App() {
           <RoutePrivate path='/scooter-renting' component={Scooter} />
           <RoutePublic path='/login' component={Login} />
           <Route path='/contact' component={Contact} />
-          {/* <Route path="/" component={MyLogo}/> */}
+          {/* <Route path="/" component={Site}/> */}
+          <Route path="/" component={MyLogo}/>
           <Route component={MyError} />
         </Switch>
       </Router>

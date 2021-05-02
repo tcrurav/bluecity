@@ -30,19 +30,21 @@
     "react-bottom-drawer": "^0.1.0",
     "react-dom": "^16.13.0",
     "react-flag-icon-css": "^1.0.25",
+    "react-ga": "^3.3.0",
     "react-google-login": "^5.1.2",
     "react-i18next": "^11.8.13",
     "react-leaflet": "^2.6.3",
     "react-loadingmask": "^4.0.5",
     "react-pure-loaders": "^3.0.1",
+    "react-responsive": "^8.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^4.0.3",
     "socket.io-client": "^3.1.1",
     "styled-components": "^5.0.1"
   },
   "scripts": {
-    "start-build": "node server/server.js",
-    "start": "react-scripts start",
+    "start": "node server/server.js",
+    "start-development": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
