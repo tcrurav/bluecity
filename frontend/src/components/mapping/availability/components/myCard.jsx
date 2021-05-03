@@ -44,10 +44,10 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
         name={name}
       />
       <MyCarImg id={id} />
-      <Card.Body>
-        <Card.Title>{stateParking.boxes.length} {t('boxes in total')}</Card.Title>
-        <Row className='pt-2'>
-          <Col>
+      <Card.ImgOverlay className="mt-5 text-white">
+        {/* <Col> */}
+          <Card.Title className="mt-5">{stateParking.boxes.length} {t('boxes in total')}</Card.Title>
+          <Card.Text>
             <MyMarker
               color='red'
               state={stateParking.occupied}
@@ -66,9 +66,34 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
               text={t('reserved')}
               icon={faMapMarkerAlt}
             />
-          </Col>
-          <Col>
-            <Row>
+          </Card.Text>
+        {/* </Col> */}
+      </Card.ImgOverlay>
+      <Card.Body>
+        {/* <Card.Title>{stateParking.boxes.length} {t('boxes in total')}</Card.Title> */}
+        <Row className='pt-2'>
+          {/* <Col>
+            <MyMarker
+              color='red'
+              state={stateParking.occupied}
+              text={t('unavailable')}
+              icon={faMapMarkerAlt}
+            />
+            <MyMarker
+              color='green'
+              state={stateParking.free}
+              text={t('available')}
+              icon={faMapMarkerAlt}
+            />
+            <MyMarker
+              color='orange'
+              state={stateParking.reserved}
+              text={t('reserved')}
+              icon={faMapMarkerAlt}
+            />
+          </Col> */}
+          <Col >
+            <Row className="mx-auto">
               <MyColBoxes
                 boxes={stateParking.boxes}
                 findOutGreenRedOrOrange={findOutGreenRedOrOrange}
@@ -77,11 +102,11 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
             </Row>
           </Col>
         </Row>
-        <Row className='mt-3'>
+        <Row className='mt-2'>
           {/* <Col></Col> 
           <Col>
              <Row>*/}
-              <Col> 
+          <Col>
             {
               stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION
                 ?
@@ -94,27 +119,27 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
                 </Button>
                 : <></>
             }
-            </Col>
-              {/* </Row>
+          </Col>
+          {/* </Row>
             <Row className='mt-1'> */}
-            <Col>
-              {
-                stateOpenBoxPossible
-                  ?
-                  <Button
-                    block="true"
-                    variant='outlined'
-                    onClick={openBox}
-                  >
-                    {t('Open box no.')}{stateParking.boxReservedByThisUser + 1} &gt;&gt;
+          <Col>
+            {
+              stateOpenBoxPossible
+                ?
+                <Button
+                  block="true"
+                  variant='outlined'
+                  onClick={openBox}
+                >
+                  {t('Open box no.')}{stateParking.boxReservedByThisUser + 1} &gt;&gt;
                                         </Button>
-                  : <></>
-              }
-            </Col>
-            {/* </Row>
+                : <></>
+            }
+          </Col>
+          {/* </Row>
           </Col> */}
         </Row>
-    </Card.Body>
+      </Card.Body>
     </>
 
   )
