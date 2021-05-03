@@ -6,6 +6,20 @@ const express = require('express');
 //Using http
 // const http = require("http");
 
+// set up plain http server for redirection to https
+// var http = express();
+
+// set up a route to redirect http to https
+// http.get('*', function(req, res) {  
+//     // res.redirect('https://' + req.headers.host + req.url);
+
+//     // Or, if you don't want to automatically detect the domain name from the request header, you can hard code it:
+//     res.redirect('https://somosbluecity.es' + req.url);
+// })
+
+// have it listen on 80
+// http.listen(80);
+
 //Using https
 const https = require('https');
 const fs = require('fs');

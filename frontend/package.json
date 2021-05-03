@@ -19,6 +19,7 @@
     "cupertino-pane": "^1.2.61",
     "express": "^4.17.1",
     "fs": "*",
+    "http": "*",
     "https": "^1.0.0",
     "i18next": "^20.2.1",
     "i18next-browser-languagedetector": "^6.1.0",
@@ -26,7 +27,6 @@
     "immer": "^8.0.1",
     "leaflet": "^1.6.0",
     "material-ui-image": "^3.3.1",
-    
     "path": "^0.12.7",
     "react": "^16.13.0",
     "react-bootstrap": "^1.4.3",

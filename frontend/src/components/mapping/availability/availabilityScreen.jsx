@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
+import { BallBeat } from "react-pure-loaders";
 
 import { useGeolocation } from '../../geolocation/geolocation';
 
@@ -49,6 +50,9 @@ import { OCCUPIED, FREE, RESERVED, FIVE_MINUTES, THIS_USER_HAS_NO_RESERVATION, g
 import { PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT } from '../parking-process/constants/constants';
 
 const AvailabilityScreen = ({ location, history }) => {
+
+  const [loadingState, setLoadingState] = useState(true);
+
   const { t } = useTranslation();
 
   let [geolocation, geolocationAvailability] = useGeolocation();
@@ -248,6 +252,7 @@ const AvailabilityScreen = ({ location, history }) => {
           lat_parking: res.data.lat,
           long_parking: res.data.long
         }));
+        setLoadingState(false);
       });
     });
 
@@ -370,63 +375,77 @@ const AvailabilityScreen = ({ location, history }) => {
   return (
     <>
       <MyNavbar history={history} />
-      <MyContainer>
-        <Row>
-          <Card className='m-2'>
-            <MyCard
-              parking={parking}
-              stateParking={stateParking}
-              findOutGreenRedOrOrange={findOutGreenRedOrOrange}
-              stateOpenBoxPossible={stateOpenBoxPossible}
-              openBox={openBox}
-              cancelReservation={cancelReservation}
-              handleReservation={handleReservation}
-            />
-          </Card>
-        </Row>
-        <Row className='pt-3'>
-          <Col>
-            {
-              stateParking.boxReservedByThisUser === THIS_USER_HAS_NO_RESERVATION
-                ?
-                <MyMarker
-                  color='blue'
-                  state={null}
-                  text={`${t('Click on a Box number to reserve')} ${checkingForRenting ? t('a scooter') : t('a parking box')}.`}
-                  icon={faInfoCircle}
-                />
-                :
-                <MyMarker
-                  color='blue'
-                  state={null}
-                  text={`${t('Your reservation for')} ${checkingForRenting ? t('a scooter in') : ''} ${t('parking')}${stateParking.boxReservedByThisUser.valueOf() + 1} ${t('in station')} ${parking.name} ${t('will expire in')} ${formatTimeLeft(stateParking.reservation_time_left.valueOf())}`}
-                  icon={faInfoCircle}
-                />
-            }
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            {
-              (geolocationAvailability && distanceToParking)
-                ?
-                <MyMarker
-                  color='blue'
-                  state={null}
-                  text={`${t('Geolocation activated. This parking is')} ${distanceToParking ? distanceToParking.toFixed(2) : ""}${t('Km from your current location')}.`}
-                  icon={faInfoCircle}
-                />
-                :
-                <MyMarker
-                  color='blue'
-                  state={null}
-                  text={t('Geolocation not available. Please activate it.')}
-                  icon={faInfoCircle}
-                />
-            }
-          </Col>
-        </Row>
-      </MyContainer>
+
+      { loadingState ? (
+        <>
+          <MyContainer>
+            <Row className="justify-content-md-center h-50">
+              <Col md={6} className="text-center mt-auto pb-5">
+                <BallBeat color={"#123abc"} loading={loadingState} />
+              </Col>
+            </Row>
+          </MyContainer>
+        </>
+      ) :
+
+        <MyContainer>
+          <Row>
+            <Card className='m-2'>
+              <MyCard
+                parking={parking}
+                stateParking={stateParking}
+                findOutGreenRedOrOrange={findOutGreenRedOrOrange}
+                stateOpenBoxPossible={stateOpenBoxPossible}
+                openBox={openBox}
+                cancelReservation={cancelReservation}
+                handleReservation={handleReservation}
+              />
+            </Card>
+          </Row>
+          <Row className='pt-3'>
+            <Col>
+              {
+                stateParking.boxReservedByThisUser === THIS_USER_HAS_NO_RESERVATION
+                  ?
+                  <MyMarker
+                    color='blue'
+                    state={null}
+                    text={`${t('Click on a Box number to reserve')} ${checkingForRenting ? t('a scooter') : t('a parking box')}.`}
+                    icon={faInfoCircle}
+                  />
+                  :
+                  <MyMarker
+                    color='blue'
+                    state={null}
+                    text={`${t('Your reservation for')} ${checkingForRenting ? t('a scooter in') : ''} ${t('parking')}${stateParking.boxReservedByThisUser.valueOf() + 1} ${t('in station')} ${parking.name} ${t('will expire in')} ${formatTimeLeft(stateParking.reservation_time_left.valueOf())}`}
+                    icon={faInfoCircle}
+                  />
+              }
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              {
+                (geolocationAvailability && distanceToParking)
+                  ?
+                  <MyMarker
+                    color='blue'
+                    state={null}
+                    text={`${t('Geolocation activated. This parking is')} ${distanceToParking ? distanceToParking.toFixed(2) : ""}${t('Km from your current location')}.`}
+                    icon={faInfoCircle}
+                  />
+                  :
+                  <MyMarker
+                    color='blue'
+                    state={null}
+                    text={t('Geolocation not available. Please activate it.')}
+                    icon={faInfoCircle}
+                  />
+              }
+            </Col>
+          </Row>
+        </MyContainer>
+      }
       {/* <Footer /> */}
     </>
   )

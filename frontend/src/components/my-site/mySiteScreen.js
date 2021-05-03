@@ -6,7 +6,6 @@ import Container from "@material-ui/core/Container";
 import Image from "material-ui-image";
 import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
 
 import mobileLogo from './assets/images/mobile-logo.png';
 
