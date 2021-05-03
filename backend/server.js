@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 
 //Using http
-// const http = require("http");
+const http = require("http");
 
 // set up plain http server for redirection to https
 // var http = express();
@@ -21,12 +21,12 @@ const express = require('express');
 // http.listen(80);
 
 //Using https
-const https = require('https');
-const fs = require('fs');
-const options = {
-  key: fs.readFileSync('.cert/certificate.key'),
-  cert: fs.readFileSync('.cert/certificate.crt')
-};
+// const https = require('https');
+// const fs = require('fs');
+// const options = {
+//   key: fs.readFileSync('.cert/certificate.key'),
+//   cert: fs.readFileSync('.cert/certificate.crt')
+// };
 
 const socketIo = require("socket.io");
 const cors = require('cors');
@@ -240,10 +240,10 @@ require("./routes/box.routes")(app);
 require("./routes/scooter.routes")(app);
 
 //Using http
-// const server = http.createServer(app);
+const server = http.createServer(app);
 
 //Using https
-const server = https.createServer(options, app);
+// const server = https.createServer(options, app);
 
 const Box = db.box;
 

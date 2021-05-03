@@ -31,10 +31,10 @@ import { THIS_USER_HAS_NO_RESERVATION } from '../constants/constants'
 
 const MyImgOverlay = styled(Card.ImgOverlay)({
   backgroundColor: 'rgba(211, 211, 211, 0.8)',
-  width: '13em',
+  width: '15em',
   height: '9em',
-  marginLeft: '1em',
-  marginTop: '7em',
+  marginLeft: '0.5em',
+  marginTop: '0.5em',
   fontWeight: "bold"
 });
 
@@ -49,13 +49,10 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
 
   return (
     <>
-      <MyCarHeader
-        address={address}
-        name={name}
-      />
       <MyCarImg id={id} />
       <MyImgOverlay
       className="">
+        
         {/* <Col> */}
           <Card.Title className="">{stateParking.boxes.length} {t('boxes in total')}</Card.Title>
           <Card.Text>
@@ -80,6 +77,10 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
           </Card.Text>
         {/* </Col> */}
       </MyImgOverlay>
+      <MyCarHeader
+        address={address}
+        name={name}
+      />
       <Card.Body>
         {/* <Card.Title>{stateParking.boxes.length} {t('boxes in total')}</Card.Title> */}
         <Row className='pt-2'>
