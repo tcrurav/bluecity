@@ -20,6 +20,7 @@ import MyColBoxes from './myColBoxes';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { Card, Col, Row } from 'react-bootstrap';
 import Button from '@material-ui/core/Button';
+import { styled } from '@material-ui/core/styles';
 
 /**
 |--------------------------------------------------
@@ -27,6 +28,15 @@ import Button from '@material-ui/core/Button';
 |--------------------------------------------------
 */
 import { THIS_USER_HAS_NO_RESERVATION } from '../constants/constants'
+
+const MyImgOverlay = styled(Card.ImgOverlay)({
+  backgroundColor: 'rgba(211, 211, 211, 0.8)',
+  width: '13em',
+  height: '9em',
+  marginLeft: '1em',
+  marginTop: '7em',
+  fontWeight: "bold"
+});
 
 const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
   stateOpenBoxPossible,
@@ -44,9 +54,10 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
         name={name}
       />
       <MyCarImg id={id} />
-      <Card.ImgOverlay className="mt-5 text-white">
+      <MyImgOverlay
+      className="">
         {/* <Col> */}
-          <Card.Title className="mt-5">{stateParking.boxes.length} {t('boxes in total')}</Card.Title>
+          <Card.Title className="">{stateParking.boxes.length} {t('boxes in total')}</Card.Title>
           <Card.Text>
             <MyMarker
               color='red'
@@ -68,7 +79,7 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
             />
           </Card.Text>
         {/* </Col> */}
-      </Card.ImgOverlay>
+      </MyImgOverlay>
       <Card.Body>
         {/* <Card.Title>{stateParking.boxes.length} {t('boxes in total')}</Card.Title> */}
         <Row className='pt-2'>
