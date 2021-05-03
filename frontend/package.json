@@ -18,6 +18,9 @@
     "bootstrap": "^4.6.0",
     "cupertino-pane": "^1.2.61",
     "express": "^4.17.1",
+    "fs": "*",
+    "http": "*",
+    "https": "^1.0.0",
     "i18next": "^20.2.1",
     "i18next-browser-languagedetector": "^6.1.0",
     "i18next-http-backend": "^1.2.1",
@@ -35,14 +38,15 @@
     "react-leaflet": "^2.6.3",
     "react-loadingmask": "^4.0.5",
     "react-pure-loaders": "^3.0.1",
+    "react-responsive": "^8.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^4.0.3",
     "socket.io-client": "^3.1.1",
     "styled-components": "^5.0.1"
   },
   "scripts": {
-    "start-build": "node server/server.js",
-    "start": "react-scripts start",
+    "start": "node server/server.js",
+    "start-develop": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

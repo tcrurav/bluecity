@@ -1,8 +1,8 @@
 import React from "react";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import { Container, Typography, Grid, Link } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { Typography, Grid, Link } from "@material-ui/core";
 import Image from "material-ui-image";
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +40,7 @@ export function Footer() {
     <div className={classes.root}>
       <Grid container >
         <Grid item xs={2} md={4} className={classes.imageGrid}>
-          <Image src="img/bluecity-favicon.png" aspectRatio={1/1} color=""/>
+          <Image src="img/bluecity-favicon.png" aspectRatio={1 / 1} color="" />
         </Grid>
         <Grid item xs={10} md={8} className={classes.textGrid}>
           <Typography variant="body1" fontWeight="fontWeightBold">{t('Participating Organizations')}</Typography>

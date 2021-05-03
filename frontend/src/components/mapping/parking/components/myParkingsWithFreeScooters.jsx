@@ -33,56 +33,58 @@ import { MyMap } from '../styled/styleComponents';
 
 const MyParkingsWithFreeScooters = () => {
 
-    const zoom = 13;
+  const zoom = 13;
 
-    const [freeScooter, setFreeScooter] = useState({
-        parkings: [],
-        position: [28.128081, -15.4467406]
-    });
+  const [freeScooter, setFreeScooter] = useState({
+    parkings: [],
+    position: [28.128081, -15.4467406]
+  });
 
-    const { parkings, position } = freeScooter;
+  const { parkings, position } = freeScooter;
 
-    const allWithAFreeScooters = async () => {
-        const free = await ParkingDataService.findAllWithAFreeScooter();
-        if (free) setFreeScooter({ ...freeScooter, parkings: free.data });
-    };
+  const allWithAFreeScooters = async () => {
+    const free = await ParkingDataService.findAllWithAFreeScooter();
+    if (free) setFreeScooter({ ...freeScooter, parkings: free.data });
+  };
 
-    useEffect(() => {
-        try {
-            allWithAFreeScooters();
-        } catch (error) {
-            console.log(error);
-        }
-    }, []);
+  useEffect(() => {
+    try {
+      allWithAFreeScooters();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
-    return (
-        <MyContainer>
-            <Row>
-                <Col>
-                    <MyMap
-                        center={position}
-                        zoom={zoom}
-                    >
-                        <TileLayer
-                            attribution=""
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
-                        <MyMarkerMap
-                            parkings={parkings}
-                            type='scooter'
-                            checkingForRenting={true}
-                        />
-                    </MyMap>
-                </Col>
-            </Row>
-            <Row>
-                <MyBtnCurrentPosition
-                    freeBoxes={freeScooter}
-                    setFreeBoxes={setFreeScooter}
-                />
-            </Row>
-        </MyContainer >
-    )
+  return (
+    <MyContainer>
+      <Row>
+        <Col>
+          <MyMap
+            center={position}
+            zoom={zoom}
+          >
+            <TileLayer
+              attribution=""
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <MyMarkerMap
+              parkings={parkings}
+              type='scooter'
+              checkingForRenting={true}
+            />
+          </MyMap>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <MyBtnCurrentPosition
+            freeBoxes={freeScooter}
+            setFreeBoxes={setFreeScooter}
+          />
+        </Col>
+      </Row>
+    </MyContainer >
+  )
 };
 
 export default MyParkingsWithFreeScooters;

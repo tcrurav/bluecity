@@ -116,3 +116,4 @@ _
 
 #oAuth
 credentials.json
+.cert/

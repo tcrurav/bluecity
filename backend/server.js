@@ -2,7 +2,32 @@ require('dotenv').config();
 
 const jwt = require('jsonwebtoken');
 const express = require('express');
-const http = require("http");
+
+//Using http
+// const http = require("http");
+
+// set up plain http server for redirection to https
+// var http = express();
+
+// set up a route to redirect http to https
+// http.get('*', function(req, res) {  
+//     // res.redirect('https://' + req.headers.host + req.url);
+
+//     // Or, if you don't want to automatically detect the domain name from the request header, you can hard code it:
+//     res.redirect('https://somosbluecity.es' + req.url);
+// })
+
+// have it listen on 80
+// http.listen(80);
+
+//Using https
+const https = require('https');
+const fs = require('fs');
+const options = {
+  key: fs.readFileSync('.cert/certificate.key'),
+  cert: fs.readFileSync('.cert/certificate.crt')
+};
+
 const socketIo = require("socket.io");
 const cors = require('cors');
 // const bodyParser = require('body-parser');
@@ -214,7 +239,11 @@ require("./routes/parking.routes")(app);
 require("./routes/box.routes")(app);
 require("./routes/scooter.routes")(app);
 
-const server = http.createServer(app);
+//Using http
+// const server = http.createServer(app);
+
+//Using https
+const server = https.createServer(options, app);
 
 const Box = db.box;
 

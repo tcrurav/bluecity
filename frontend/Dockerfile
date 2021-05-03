@@ -4,7 +4,8 @@ FROM node
 WORKDIR /usr/src/app
 
 # add `/app/node_modules/.bin` to $PATH
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
+#Only for developing
+#ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 # ALTERNATIVE FOR BUILD
 #COPY build ./
@@ -21,13 +22,18 @@ ENV PATH /usr/src/app/node_modules/.bin:$PATH
 COPY package*.json ./
 
 RUN npm install
+# RUN npm rebuild node-sass
 # RUN npm install react-scripts@3.4.1 -g --silent
 
 # If you are building your code for production
 # RUN npm ci --only=production
 
 # Bundle app source
+#Only for developping
 COPY . ./
+
+# COPY build ./
+# COPY server ./
 
 EXPOSE 3000
 
