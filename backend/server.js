@@ -2,7 +2,18 @@ require('dotenv').config();
 
 const jwt = require('jsonwebtoken');
 const express = require('express');
-const http = require("http");
+
+//Using http
+// const http = require("http");
+
+//Using https
+const https = require('https');
+const fs = require('fs');
+const options = {
+  key: fs.readFileSync('.cert/certificate.key'),
+  cert: fs.readFileSync('.cert/certificate.crt')
+};
+
 const socketIo = require("socket.io");
 const cors = require('cors');
 // const bodyParser = require('body-parser');
@@ -214,7 +225,11 @@ require("./routes/parking.routes")(app);
 require("./routes/box.routes")(app);
 require("./routes/scooter.routes")(app);
 
-const server = http.createServer(app);
+//Using http
+// const server = http.createServer(app);
+
+//Using https
+const server = https.createServer(options, app);
 
 const Box = db.box;
 
