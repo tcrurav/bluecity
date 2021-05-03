@@ -83,7 +83,7 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
       />
       <Card.Body>
         {/* <Card.Title>{stateParking.boxes.length} {t('boxes in total')}</Card.Title> */}
-        <Row className='pt-2'>
+        <Row>
           {/* <Col>
             <MyMarker
               color='red'
@@ -114,7 +114,7 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
             </Row>
           </Col>
         </Row>
-        <Row className='mt-2'>
+        <Row className='mt-1'>
           {/* <Col></Col> 
           <Col>
              <Row>*/}
