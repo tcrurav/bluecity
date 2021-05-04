@@ -130,3 +130,11 @@
 @import "core/base/helpers";
 
 }
+
+@import "core/abstracts/functions",
+		"settings/settings",
+        "core/abstracts/mixins",
+        'core/abstracts/include-media';
+
+@import "settings/base/scroll-reveal";
+@import "core/base/scroll-reveal";
