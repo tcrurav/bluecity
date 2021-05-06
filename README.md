@@ -103,6 +103,8 @@ BLUECITY_CLIENT=http://localhost:3000
 DB_HOST=127.0.0.1
 
 NODE_ENV=development
+
+HTTPS=false
 ```
 
 2. You need a mysql server working.

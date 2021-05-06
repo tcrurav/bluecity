@@ -4,7 +4,10 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 
 //Using http
-// const http = require("http");
+let http = null;
+if(process.env.HTTPS == "false"){
+  http = require("http");
+} 
 
 // set up plain http server for redirection to https
 // var http = express();
@@ -21,12 +24,19 @@ const express = require('express');
 // http.listen(80);
 
 //Using https
-const https = require('https');
-const fs = require('fs');
-const options = {
-  key: fs.readFileSync('.cert/certificate.key'),
-  cert: fs.readFileSync('.cert/certificate.crt')
-};
+let https = null;
+let fs = null;
+let options = null;
+
+if(process.env.HTTPS == "true"){
+  console.log("hola");
+  https = require('https');
+  fs = require('fs');
+  options = {
+    key: fs.readFileSync('.cert/certificate.key'),
+    cert: fs.readFileSync('.cert/certificate.crt')
+  };
+} 
 
 const socketIo = require("socket.io");
 const cors = require('cors');
@@ -240,10 +250,16 @@ require("./routes/box.routes")(app);
 require("./routes/scooter.routes")(app);
 
 //Using http
-// const server = http.createServer(app);
+let server = null;
+if(process.env.HTTPS == "false"){
+  server = http.createServer(app);
+}
 
 //Using https
-const server = https.createServer(options, app);
+if(process.env.HTTPS == "true"){
+  server = https.createServer(options, app);
+}
+
 
 const Box = db.box;
 
