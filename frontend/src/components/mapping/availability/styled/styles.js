@@ -3,25 +3,27 @@
 | Libraries
 |--------------------------------------------------
 */
-import { Col } from 'react-bootstrap';
-import styled from 'styled-components';
+import { styled } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 
-const MyColCustom = styled(Col)` 
-    border: 1px solid black;
-    font-size: 2em;
-    color: white;
-    background-color: ${(props) => props.bg};
-    transition: box-shadow 350ms ease-in-out;
-    &:hover {
-        box-shadow: 5px 10px 18px #888888;
-        color: black;
-        font-size: 2.1em;
-    }
-`;
+const MyColCustom = styled(Button)({
+    border: '1px solid black',
+    borderRadius: '4px',
+    fontSize: '2em',
+    color: 'white',
+    backgroundColor: (props) => props.bg,
+    transition: 'box-shadow 350ms ease-in-out',
+    '& :hover': {
+        color: 'black'
+    },
+    marginBottom: '1vh',
+    marginRight: '1vh'
+});
 
-const ColorMarker = styled.span` 
-    color: ${(props) => props.color};
-`;
+const ColorMarker = styled(Box) ({
+    color: (props) => props.color
+});
 
 export {
     MyColCustom,

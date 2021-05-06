@@ -9,11 +9,10 @@ import PropTypes from 'prop-types';
 import { Card } from 'react-bootstrap';
 
 const MyCarHeader = ({ address, name }) => {
-
     return (
         <Card.Header>
-            <h4>{name}</h4>
-            <p>{address}</p>
+            <Card.Title>{name}</Card.Title>
+            <Card.Text>{address}</Card.Text>
         </Card.Header>
     )
 };
