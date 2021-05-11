@@ -17,6 +17,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "cupertino-pane": "^1.2.61",
+    "chokidar": "^3.5.1",
     "express": "^4.17.1",
     "fs": "*",
     "http": "*",

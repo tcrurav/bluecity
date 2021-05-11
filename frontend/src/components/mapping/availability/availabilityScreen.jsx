@@ -24,6 +24,8 @@ import MyMarker from './components/myMarker';
 */
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { Row, Col, Card } from 'react-bootstrap';
+import { makeStyles } from "@material-ui/core/styles";
+//import { Button, Row } from 'react-bootstrap';
 
 /**
 |--------------------------------------------------
@@ -32,6 +34,7 @@ import { Row, Col, Card } from 'react-bootstrap';
 */
 import BoxDataService from '../../../services/box.service';
 import ParkingDataService from '../../../services/parking.service';
+import ScooterDataService from '../../../services/scooter.service';
 
 /**
 |--------------------------------------------------
@@ -47,7 +50,10 @@ import { formatTimeLeft } from './utils/util';
 |--------------------------------------------------
 */
 import { OCCUPIED, FREE, RESERVED, FIVE_MINUTES, THIS_USER_HAS_NO_RESERVATION, getApiUser, CLOSE_DISTANCE_TO_PARKING, BEGIN_OF_TIMES, MINIMUM_DISTANCE_INCREMENT } from './constants/constants'
-import { PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT } from '../parking-process/constants/constants';
+import { 
+	PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
+	RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
+ } from '../renting-process-in/constants/constants';
 
 const AvailabilityScreen = ({ location, history }) => {
 
@@ -73,6 +79,33 @@ const AvailabilityScreen = ({ location, history }) => {
       long_parking: 0
     }
   );
+
+  const [hasBoxOccupied, setBoxOccupied] = useState(
+    {
+      hasOne: false,
+      numberOfBox: -1,
+    } 
+  );
+  const useStyles = makeStyles((theme) => ({
+    root: {},
+    image: {
+      maxWidth: "512px",
+    },
+    buttonContainer: {
+      justify: "center",
+      alignItems: "center",
+      //justifyContent: "center",
+    },
+    buttons: {
+      marginTop: "1vh",
+      backgroundColor: '#00a9f4',
+      '&:hover': {
+        backgroundColor: '#007ac1',
+        color: 'white'
+      }
+    }
+  }));
+  const classes = useStyles();
 
   const [stateOpenBoxPossible, setStateOpenBoxPossible] = useState(false);
 
@@ -118,7 +151,6 @@ const AvailabilityScreen = ({ location, history }) => {
           free: newState.free,
           boxReservedByThisUser: newState.boxReservedByThisUser
         }));
-
         socketRef.current.emit("something-changed", { who_changed_it: apiUser.id, parking_changed: parking.id });
 
       });
@@ -128,21 +160,43 @@ const AvailabilityScreen = ({ location, history }) => {
   const openBox = () => {
     // console.log('openBox');
     try {
-      let index = stateParking.boxReservedByThisUser;  //Possible Stale Closure
-      let data = stateParking.boxes[index];  //Possible Stale Closure
-      data.state = PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+      let index = stateParking.boxReservedByThisUser;  
+      let data = stateParking.boxes[index];  
+	  if(checkingForRenting) {
+        data.state = RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+      }
+      else {
+        data.state = PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+      }
       data.lastReservationDate = BEGIN_OF_TIMES;
       BoxDataService.update(data.id, data).then(() => {
-        socketRef.current.emit('open-box', data);
-
-        history.push({
-          pathname: '/parking-process',
-          state: {
-            parking,
-            boxId: data.id   //Possible stale clossure
-          }
-        })
+		socketRef.current.emit('open-renting-box', data);
+        ScooterDataService.getScooterWithUserId(apiUser.id)
+        .then(res => {
+		     if(true){  //This information is necessary for whileRenting component.
+          history.push({
+            pathname: '/renting-process-out',
+            state: {
+              parking,
+			  boxId: data.id,
+			  stateParking: stateParking,
+			  boxes: stateParking.boxes,
+			  long_parking: stateParking.long_parking,
+			  lat_parking: stateParking.lat_parking,
+			  boxReservedByThisUser: stateParking.boxReservedByThisUser,
+            }
+          })
+        } else {
+         history.push({
+            pathname: '/parking-process',
+            state: {
+              parking,
+              boxId: data.id 
+            }
+          })
+        }
       });
+    });
     } catch (e) {
       console.log(e);
     }
@@ -152,7 +206,6 @@ const AvailabilityScreen = ({ location, history }) => {
     // console.log("findAllBoxesInAParking")
     return new Promise((resolve, reject) => {
       BoxDataService.getAllBoxesInAParking(parking.id).then(res => {
-        // console.log(res);
         let occupied = 0, free = 0, reserved = 0,
           boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
         for (let i = 0; i < res.data.length; i++) {
