@@ -117,7 +117,6 @@ const Simulator = () => {
             <button onClick={plugScooter}>Plug Scooter</button>
             {stateBox >= BOX_OPENED ? <Button onClick={closeBox}>Close Door</Button> : <></>}
           </Col>
-
         </Row>
       </Container>
     </>
