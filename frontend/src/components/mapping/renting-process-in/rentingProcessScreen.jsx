@@ -41,7 +41,8 @@ import {
   RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
   RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
   RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
-  NEITHER_PARKING_NOT_RENTING } from './constants/constants';
+  NEITHER_PARKING_NOT_RENTING 
+  } from './constants/constants';
 
 const RentingProcessScreen = ({ location, history }) => {
 
@@ -49,7 +50,7 @@ const RentingProcessScreen = ({ location, history }) => {
 
   const socketRef = useRef();
 
-  const [stateRentingProcess, setStateRentingProcess] = useState( NEITHER_PARKING_NOT_RENTING );
+  const [stateRentingProcess, setStateRentingProcess] = useState( RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT );
 
   const refreshBoxState = () => {
     console.log("refreshBoxState")
@@ -72,7 +73,7 @@ const RentingProcessScreen = ({ location, history }) => {
 
   useEffect(() => {
     console.log("useEffect socket");
-    socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL); // Port 4000
+    socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL); 
 
     socketRef.current.on('welcome', () => {
       console.log('connected to backend');

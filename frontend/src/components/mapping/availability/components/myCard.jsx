@@ -29,7 +29,7 @@ import { THIS_USER_HAS_NO_RESERVATION } from '../constants/constants'
 
 const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
   stateOpenBoxPossible,
-  openBox, cancelReservation, handleReservation, openRentingBox }) => {
+  openBox, cancelReservation, handleReservation }) => {
 
   const { id, address, name } = parking;
 
@@ -65,10 +65,6 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
               text='reserved'
               icon={faMapMarkerAlt}
             />
-            <br/>
-            <p style={{backgroundColor: '#45FF63', width: '70%'}}>
-              Solo quería decirte hola 😉
-            </p>
           </Col>
           <Col>
             <Row>

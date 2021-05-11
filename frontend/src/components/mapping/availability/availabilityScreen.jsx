@@ -48,7 +48,10 @@ import { formatTimeLeft } from './utils/util';
 |--------------------------------------------------
 */
 import { OCCUPIED, FREE, RESERVED, FIVE_MINUTES, THIS_USER_HAS_NO_RESERVATION, getApiUser, CLOSE_DISTANCE_TO_PARKING, BEGIN_OF_TIMES, MINIMUM_DISTANCE_INCREMENT } from './constants/constants'
-import { PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT } from '../parking-process/constants/constants';
+import { 
+	PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
+	RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
+ } from '../renting-process-in/constants/constants';
 
 const AvailabilityScreen = ({ location, history }) => {
 
@@ -142,87 +145,52 @@ const AvailabilityScreen = ({ location, history }) => {
           free: newState.free,
           boxReservedByThisUser: newState.boxReservedByThisUser
         }));
-
         socketRef.current.emit("something-changed", { who_changed_it: apiUser.id, parking_changed: parking.id });
 
       });
     }).catch((error) => console.log(error));
   };
 
-  const checkHasBoxOccupied = () => {
-    setBoxOccupied({
-      hasOne: false,
-      numberOfBox: 0
-    });
-    ScooterDataService.getScooterWithUserId(apiUser.id)
-    .then(res => {
-      console.log("BoxId: " + res.data.boxId)
-      if(!res.data.boxId instanceof Number){
-        return;
-      }
-      else {
-        setBoxOccupied({
-          numberOfBox: res.data.boxId
-        });
-        BoxDataService.getAllBoxesInAParking(parking.id)
-        .then(res => {
-          for(var i=0;i<res.data.length;i++){
-            console.log("BoxId2: " + res.data[i].id)
-            console.log("BoxId5: " + hasBoxOccupied.numberOfBox)
-            if(res.data[i].id == hasBoxOccupied.numberOfBox) {
-              setBoxOccupied({
-                hasOne: true
-              })
-              return;
-            } else {
-              console.log(res.data[i].id + " / " + hasBoxOccupied.numberOfBox)
-              setBoxOccupied({
-                hasOne: true,
-                numberOfBox: -5
-              })
-            }
-          }
-        });
-      }
-    });
-  }
-
-  const handleReservation2 = () =>{
-    console.log("Heyy que pasa amigo")
-  }
   const openBox = () => {
     console.log('openBox');
     try {
-      let index = stateParking.boxReservedByThisUser;  //Possible Stale Closure
-      let data = stateParking.boxes[index];  //Possible Stale Closure
-      data.state = PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+      let index = stateParking.boxReservedByThisUser;  
+      let data = stateParking.boxes[index];  
+	  if(checkingForRenting) {
+        data.state = RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+      }
+      else {
+        data.state = PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+      }
       data.lastReservationDate = BEGIN_OF_TIMES;
       BoxDataService.update(data.id, data).then(() => {
-        socketRef.current.emit('open-box', data);
+		socketRef.current.emit('open-renting-box', data);
         ScooterDataService.getScooterWithUserId(apiUser.id)
         .then(res => {
-          //console.log(res.data.userId)
-          var a = 1
-          if(a===1){ 
+		 if(true){  //This information is necessary for whileRenting component.
           history.push({
-            pathname: '/renting-process',
+            pathname: '/renting-process-out',
             state: {
               parking,
-              boxId: data.id   //Possible stale clossure
+			  boxId: data.id,
+			  stateParking: stateParking,
+			  boxes: stateParking.boxes,
+			  long_parking: stateParking.long_parking,
+			  lat_parking: stateParking.lat_parking,
+			  boxReservedByThisUser: stateParking.boxReservedByThisUser,
             }
-          });
+          })
         } else {
-          history.push({
-          pathname: '/parking-process',
-          state: {
-            parking,
-            boxId: data.id   //Possible stale clossure
-          }
-        });
+         history.push({
+            pathname: '/parking-process',
+            state: {
+              parking,
+              boxId: data.id 
+            }
+          })
         }
-        })
-        
       });
+    });
     } catch (e) {
       console.log(e);
     }
@@ -232,7 +200,6 @@ const AvailabilityScreen = ({ location, history }) => {
     console.log("findAllBoxesInAParking")
     return new Promise((resolve, reject) => {
       BoxDataService.getAllBoxesInAParking(parking.id).then(res => {
-        // console.log(res);
         let occupied = 0, free = 0, reserved = 0,
           boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
         for (let i = 0; i < res.data.length; i++) {
@@ -319,7 +286,6 @@ const AvailabilityScreen = ({ location, history }) => {
 
   useEffect(() => {
     console.log("useEffect primero")
-    //checkHasBoxOccupied()
     console.log(checkingForRenting)
     findAllBoxesInAParking().then((newState) => {
       ParkingDataService.get(parking.id).then(res => {
@@ -465,8 +431,6 @@ const AvailabilityScreen = ({ location, history }) => {
               cancelReservation={cancelReservation}
               handleReservation={handleReservation}
               hasBoxOccupied={hasBoxOccupied}
-              handleReservation2={handleReservation2}
-              //checkingForRenting={history['location'].state.checkingForRenting}
             />
           </Card>
         </Row>

@@ -18,7 +18,9 @@ import MyAccount from "./components/auth/my-account";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AvailabilityScreen from "./components/mapping/availability/availabilityScreen";
 import ParkingProcessScreen from "./components/mapping/parking-process/parkingProcessScreen";
-import RentingProcessScreen from "./components/mapping/renting-process/rentingProcessScreen";
+import RentingProcessInScreen from "./components/mapping/renting-process-in/rentingProcessScreen";
+import RentingProcessOutScreen from "./components/mapping/renting-process-out/rentingProcessScreen";
+import WhileRenting from "./components/mapping/renting-process-in/whileRenting";
 
 // import 'jquery/dist/jquery.min.js';
 // import 'bootstrap/dist/js/bootstrap.min.js';
@@ -33,7 +35,7 @@ class App extends React.Component {
      }
   }*/
 
-  // READ following web to uderstand the use of history in react-router-dom
+  // READ following web to understand the use of history in react-router-dom
   // https://github.com/ReactTraining/react-router/blob/master/FAQ.md#how-do-i-pass-props-to-the-component-rendered-by-a-route
 
   render() {
@@ -47,7 +49,9 @@ class App extends React.Component {
           {/* <RoutePrivate path='/renting' component={(props) => <Renting userId={getCurrentUserId()} history={props.history} />}/> */}
           <RoutePrivate path='/availability' component={AvailabilityScreen} />
           <RoutePrivate path='/parking-process' component={ParkingProcessScreen} />
-          <RoutePrivate path='/renting-process' component={RentingProcessScreen} />
+          <RoutePrivate path='/renting-process-in' component={RentingProcessInScreen} />
+		  <RoutePrivate path='/renting-process-out' component={RentingProcessOutScreen} />
+		  <RoutePrivate path='/while-renting' component={WhileRenting} />
           {/* <RoutePrivate path='/renting' component={() => <Renting userId={getCurrentUserId()}/>}/> */}
           <RoutePrivate path='/scooter-renting' component={Scooter} />
           <RoutePublic path='/login' component={Login} />
