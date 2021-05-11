@@ -1,56 +1,188 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+// import Drawer from "react-bottom-drawer";
+
 import { MyNavbar } from '../ui/navbar/my-navbar';
 import { Footer } from '../ui/footer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+// import Image from 'react-bootstrap/Image';
 import { MyContainer } from '../ui/my-container';
 import styled from 'styled-components';
+
+// import Grid from "@material-ui/core/Grid";
+import Image from "material-ui-image";
+// import Paper from "@material-ui/core/Paper";
+
+import { makeStyles } from "@material-ui/core/styles";
+
+// import { CupertinoPane } from 'cupertino-pane';
 
 const MyMap = styled(Map)`
   &.leaflet-container {
     width: 100%;
-    height: 100vh;
+    height: 50vh;
+    margin-bottom: 1vh;
   }
 `;
+// height: 60vh;
+// width: 50%;
+//     height: auto;
 
-export class Contact extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      lat: 28.128081,
-      lng: -15.4467406,
-      zoom: 13,
-    }
+const useStyles = makeStyles((theme) => ({
+  popup: {
+    // maxHeight: "50vw"
+    // height: "30vh"
+  },
+  popupImage: {
+    width: "50vw",
+    // height: "auto",
+    // maxHeight: "30vw",
+    // height: "30vw",
+    borderRadius: "5px"
+  },
+  map: {
+    width: "100%",
+    height: "100vh"
+  },
+  h6: {
+    marginTop: "1em",
+    fontWeight: "bolder",
+    maxWidth: "50vw"
+  },
+  paragraph: {
+    maxWidth: "50vw"
+  },
+  mec: {
+    height: ""
+  }
+}));
+
+export function Contact(props) {
+  const classes = useStyles();
+  // const [isVisible, setIsVisible] = useState(true);
+  const [currentLocation, setCurrentLocation] = useState(3); //Ciudad Real is chosen as center at the beginning
+  const [zoom, setZoom] = useState(4);
+
+  // const zoom = 4;
+  const locations = [{
+    id: 1,
+    lat: '28.127729',
+    long: '-15.4464768',
+    address: 'Av. José Sánchez Peñate, s/n, Las Palmas de GC',
+    name: 'IES El Rincón',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }, {
+    id: 4,
+    lat: '41.4107854',
+    long: '2.0247707',
+    address: 'Carrer Ntra. Sra. de Lourdes, 34, Barcelona',
+    name: 'IES Bernat el Ferrer',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }, {
+    id: 5,
+    lat: '41.3558269',
+    long: '2.0752466',
+    address: 'Carrer Bonavista, 70, Barcelona',
+    name: 'IES Esteve Terradas i Illa',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }, {
+    id: 6,
+    lat: '38.997992',
+    long: '-3.919667',
+    address: 'Inst. de Tec. y Sistemas de Información, Ciudad Real',
+    name: 'Furious Koalas',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }];
+
+  // const initial_position = [locations[3].lat, locations[3].long]; //Ciudad Real is chosen as center
+
+  // const onClose = React.useCallback(() => {
+  //   setIsVisible(false);
+  // }, []);
+
+  // const openDrawer = React.useCallback(() => setIsVisible(true), []);
+
+  // const drawer = new CupertinoPane('.cupertino-pane', { 
+  //   parentElement: 'body', // Parent container
+  //   breaks: {
+  //       middle: { enabled: true, height: 300, bounce: true },
+  //       bottom: { enabled: true, height: 80 },
+  //   },
+  //   onDrag: () => console.log('Drag event')
+  // });
+
+  // useEffect(() => {
+  //   drawer.present({ animated: true });
+  // }, [])
+
+  const changeLocation = (id) => {
+    setCurrentLocation(id);
+    setZoom(13);
   }
 
-  render() {
-    const position = [this.state.lat, this.state.lng]
-    return (
-      <>
-        <MyNavbar history={this.props.history} />
-        <MyContainer>
-          <Row>
-            <Col>
-              <MyMap center={position} zoom={this.state.zoom}>
-                <TileLayer
-                  attribution=''
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker position={position}>
-                  <Popup>
-                    IES El Rincón<br />
-                    Guanarteme Building<br />
-                    My school.<br />
-                    I miss it so much.
-                  </Popup>
-                </Marker>
-              </MyMap>
-            </Col>
-          </Row>
-        </MyContainer>
-        <Footer />
-      </>
-    )
-  }
+  return (
+    <>
+      <MyNavbar history={props.history} />
+      {/* <Drawer
+        hideScrollbars={true}
+        isVisible={isVisible}
+        onClose={onClose}
+      >
+        <p>Hola holita</p>
+      </Drawer> */}
+      <MyContainer>
+        <Row>
+          <Col>
+            <MyMap center={[locations[currentLocation].lat, locations[currentLocation].long]} zoom={zoom} zoomAnimation="true">
+              <TileLayer
+                attribution=""
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {
+                locations.map(l => {
+                  let position = [l.lat, l.long];
+                  return (
+                    <Marker key={l.id} position={position}>
+                      <Popup className={classes.popup}>
+                        {/* <Image src={`${process.env.REACT_APP_BASEURL}/parking${l.id}.jpg`} className={classes.popupImage} /> */}
+                        <h6 className={classes.h6}>{l.name}</h6>
+                        <p className={classes.paragraph}>{l.address}</p>
+                      </Popup>
+                    </Marker>
+                  );
+                })
+              }
+            </MyMap>
+          </Col>
+        </Row>
+        <Row>
+          {
+            locations.map((l, index) => {
+              return (
+                <Col key={l.id}>
+                  <Image src={`img/centro${l.id}.png`} onClick={() => changeLocation(index)}/>
+                </Col>
+              );
+            })
+          }
+        </Row>
+        {/* <Row>
+          <Col>
+            <Image src="img/mec-2.png" />
+          </Col>
+        </Row> */}
+      </MyContainer>
+      {/* <div className="cupertino-pane">
+        <h1>Header</h1>
+        <div className="content">Content</div>
+      </div> */}
+
+      <Footer />
+    </>
+  )
 }

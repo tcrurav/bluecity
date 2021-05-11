@@ -15,7 +15,10 @@ import MyPopup from './myPopup';
 */
 import { Marker } from 'react-leaflet';
 
-const MyMarkerMap = ({ parkings, type }) => {
+const MyMarkerMap = ({ parkings, type, checkingForRenting }) => {
+
+    // console.log("still in free parkings");
+    // console.log(checkingForRenting);
 
     return (
         parkings.map(p => {
@@ -34,6 +37,7 @@ const MyMarkerMap = ({ parkings, type }) => {
                         address={address}
                         p={p}
                         type={type}
+                        checkingForRenting={checkingForRenting}
                     />
                 </Marker>
             );
@@ -43,7 +47,8 @@ const MyMarkerMap = ({ parkings, type }) => {
 
 MyMarkerMap.propTypes = {
     parkings: PropTypes.array.isRequired,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
+    checkingForRenting: PropTypes.bool.isRequired
 };
 
 export default MyMarkerMap;

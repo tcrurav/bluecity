@@ -24,11 +24,15 @@ export const getApiUser = () => {
   else return null;
 }
 
+export const setApiUser = (apiUser) => {
+  sessionStorage.setItem('apiUser', JSON.stringify(apiUser));
+}
+
 // return the token from the session storage
 export const getApiToken = () => {
-  console.log("getApiToken");
-  console.log(sessionStorage.getItem('apiToken'))
-  console.log("sessionStorage")
+  // console.log("getApiToken");
+  // console.log(sessionStorage.getItem('apiToken'))
+  // console.log("sessionStorage")
   return sessionStorage.getItem('apiToken') || null;
 }
 

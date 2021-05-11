@@ -9,7 +9,8 @@ import PropTypes from 'prop-types';
 import { MyColCustom } from '../styled/styles';
 
 const MyCol = ({ id, index, bg }) => {
-
+    // console.log("MyCol")
+    // console.log(bg)
     return (
         <MyColCustom
             variant="contained"

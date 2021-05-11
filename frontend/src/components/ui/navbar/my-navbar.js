@@ -1,15 +1,10 @@
-/* global gapi */
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import clsx from "clsx";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
 import { removeUserSession } from "../../../utils/common";
-import UserDataService from '../../../services/user.service';
-import styled from "styled-components";
-
+import UserDataService from "../../../services/user.service";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import Button from "@material-ui/core/Button";
 import MuiAccordion from "@material-ui/core/Accordion";
 import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
 import MuiAccordionDetails from "@material-ui/core/AccordionDetails";
@@ -25,8 +20,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
 import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -35,8 +28,8 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import LocalParkingIcon from "@material-ui/icons/LocalParking";
 import CreditCardIcon from "@material-ui/icons/CreditCard";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
-import { ListItemAvatar } from "@material-ui/core";
-import { API_USER } from "../../mapping/availability/constants/constants";
+import { getApiUser } from "../../mapping/availability/constants/constants";
+import { getCurrentUserId } from "../../../utils/common";
 
 /* const MyIcon = styled.img`
   width: 1em;
@@ -47,6 +40,7 @@ const MyNavbarContainer = styled(Navbar)`
 `; */
 
 const useStyles = makeStyles((theme) => ({
+  expanded: {},
   list: {
     width: 250,
   },
@@ -55,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
   },
   root: {
     flexGrow: 1,
-    marginBottom: '10vh'
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -77,31 +70,28 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   appbar: {
-    marginBottom: "10vh"
-  }
+    marginBottom: "10vh",
+    background: "#00569F",
+    },
 }));
 
 export function MyNavbar(props) {
+  const { t  } = useTranslation();
+  const [stateUser, setStateUser] = useState({
+    name: "",
+    email: "",
+  });
 
-  const [stateUser, setStateUser] = useState(
-    {
-      name: "",
-      email: "",
-    }
-  )
+  const getUser = async () => {
+    const newStateUser = await UserDataService.get(getApiUser().id);
 
-  const getUser = useCallback(
-    async () => {
-      const newStateUser = await UserDataService.get(API_USER.id)
-      
-      setStateUser({
-        ...stateUser,
-        name: newStateUser.data.name,
-        email: newStateUser.data.email,
-        loading: false
-      })
-    }, [setStateUser]
-  );
+    setStateUser((s) => ({
+      ...s,
+      name: newStateUser.data.name,
+      email: newStateUser.data.email,
+      loading: false,
+    }));
+  };
 
   /* const getUser = () => {
     UserDataService.get(props.userId)
@@ -124,7 +114,7 @@ export function MyNavbar(props) {
   };
 
   const classes = useStyles();
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     top: false,
     left: false,
     bottom: false,
@@ -133,13 +123,14 @@ export function MyNavbar(props) {
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
-      event && event.type === "keydown" &&
+      event &&
+      event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
     ) {
       return;
     }
 
-    setState({ ...state, [anchor]: open });
+    setState((s) => ({ ...s, [anchor]: open }));
   };
 
   function ListItemLink(props, anchor) {
@@ -162,33 +153,49 @@ export function MyNavbar(props) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List component="nav">
-        <CustomizedAccordions 
-          stateUser={stateUser}
-        />
+        <CustomizedAccordions stateUser={stateUser} />
         <Divider />
         <ListItemLink href="/main">
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
-          <ListItemText primary="Main" />
+          <ListItemText primary={t('Home')} />
         </ListItemLink>
-        <ListItemLink href="/parking">
+        <ListItemLink  
+          onClick={() =>
+            props.history.push({
+              pathname: "/parking"
+            })
+          }>
           <ListItemIcon>
             <LocalParkingIcon />
           </ListItemIcon>
-          <ListItemText primary="Parking" />
+          <ListItemText primary={t('Parking')} />
         </ListItemLink>
-        <ListItemLink href="/renting">
+        <ListItemLink 
+          onClick={() =>
+            props.history.push({
+              pathname: "/renting",
+              state: {
+                userId: getCurrentUserId(),
+              },
+            })
+          }
+          >
           <ListItemIcon>
             <CreditCardIcon />
           </ListItemIcon>
-          <ListItemText primary="Renting" />
+          <ListItemText primary={t('Renting')} />
         </ListItemLink>
-        <ListItemLink href="/contact">
+        <ListItemLink onClick={() =>
+            props.history.push({
+              pathname: "/contact"
+            })
+          }>
           <ListItemIcon>
             <ContactSupportIcon />
           </ListItemIcon>
-          <ListItemText primary="Contact" />
+          <ListItemText primary={t('Contact')} />
         </ListItemLink>
       </List>
     </div>
@@ -235,7 +242,8 @@ export function MyNavbar(props) {
     },
   }))(MuiAccordionDetails);
 
-  function CustomizedAccordions({stateUser}) {
+  function CustomizedAccordions({ stateUser }) {
+    const { t } = useTranslation();
     const [expanded, setExpanded] = React.useState("panel1");
 
     const handleChange = (panel) => (event, newExpanded) => {
@@ -269,13 +277,13 @@ export function MyNavbar(props) {
                 <ListItemIcon>
                   <AccountBoxIcon />
                 </ListItemIcon>
-                <ListItemText primary="My Account" />
+                <ListItemText primary={t('My Account')} />
               </ListItemLink>
               <ListItem button onClick={handleLogout}>
                 <ListItemIcon>
                   <ExitToAppIcon />
                 </ListItemIcon>
-                <ListItemText primary="Logout" />
+                <ListItemText primary={t('Logout')} />
               </ListItem>
             </Grid>
           </AccordionDetails>
@@ -290,7 +298,7 @@ export function MyNavbar(props) {
     } catch (error) {
       console.error(error);
     }
-  }, [setStateUser]); 
+  }, []);
 
   return (
     <div className={classes.root}>

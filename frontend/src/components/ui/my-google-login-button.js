@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { capitalize } from '@material-ui/core';
+// import { capitalize } from '@material-ui/core';
 
 const MyImg = styled.img`
   width: 20px;
@@ -11,14 +11,14 @@ const MyImg = styled.img`
   margin-right: 5px;
 `;
 
-const MyA = styled.a`
-  width: 100%;
-  background-color: #fff !important;
+// const MyA = styled.a`
+//   width: 100%;
+//   background-color: #fff !important;
   
-  &:hover {
-    box-shadow: 0 0 16px #4285f4;
-  }
-`;
+//   &:hover {
+//     box-shadow: 0 0 16px #4285f4;
+//   }
+// `;
 
 const MySpan = styled.span`
   font-weight: bold;
@@ -26,7 +26,7 @@ const MySpan = styled.span`
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    width: '75vw',
     backgroundColor: '#fff',
     '&:hover': {
       boxShadow: '0, 0, 16px #4285f4',
@@ -36,13 +36,16 @@ const useStyles = makeStyles((theme) => ({
     padding: '.375rem .75rem',
     textTransform: 'capitalize',
   },
+  myButton: {
+    margin: '0 auto',
+  }
 }));
 
 export default function MyGoogleLoginButton() {
 
   const classes = useStyles();
     return (
-      <div className="col-12">
+      <div className={classes.myButton}>
         {/* <MyA className="btn btn-outline-dark" id="login-button" role="button">
           <MyImg
             alt="Google sign-in"

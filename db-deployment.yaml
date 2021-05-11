@@ -1,0 +1,65 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Kompose\kompose-windows-amd64.exe convert -f docker-compose-resolved.yaml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: db
+  name: db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Kompose\kompose-windows-amd64.exe convert -f docker-compose-resolved.yaml
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: db
+    spec:
+      containers:
+      - env:
+        - name: BLUECITY_CLIENT
+          value: https://somosbluecity.es
+        - name: DB_DATABASE
+          value: bluecity_dev
+        - name: DB_DIALECT
+          value: mysql
+        - name: DB_HOST
+          value: db
+        - name: DB_PASSWORD
+          value: SasaSasera1
+        - name: DB_ROOT_PASSWORD
+          value: SasaSasera1
+        - name: DB_USER
+          value: root
+        - name: JWT_SECRET
+          value: V3RY#1MP0RT@NT$3CR3T#
+        - name: MYSQL_DATABASE
+          value: bluecity_dev
+        - name: MYSQL_PASSWORD
+          value: SasaSasera1
+        - name: MYSQL_ROOT_PASSWORD
+          value: SasaSasera1
+        - name: MYSQL_USER
+          value: root
+        - name: NODE_ENV
+          value: development
+        image: mysql
+        name: db
+        ports:
+        - containerPort: 3306
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: my-db
+      restartPolicy: Always
+      volumes:
+      - name: my-db
+        persistentVolumeClaim:
+          claimName: my-db
+status: {}

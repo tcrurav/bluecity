@@ -10,38 +10,39 @@ import { useHistory } from "react-router-dom";
 */
 import { Button } from 'react-bootstrap';
 
-const MyBtnPopup = ({ text, p, type }) => {
+const MyBtnPopup = ({ text, p, type, checkingForRenting }) => {
 
     let history = useHistory();
 
     const redirectToDetailedParking = (p) => {
+        // console.log("checking? " + checkingForRenting);
         history.push({
             pathname: '/availability',
             state: {
                 parking: p,
-                checkingForRenting: false
+                checkingForRenting: checkingForRenting
             }
         })
     };
 
-    const typeOfBtn = (k, t) => {
-        switch (k) {
+    const typeOfBtn = (type, text) => {
+        switch (type) {
             case 'boxes':
                 return (
                     <Button onClick={() => redirectToDetailedParking(p)}>
-                        {t}
+                        {text}
                     </Button>
                 );
             case 'scooter':
                 return (
-                    <Button>
-                        {t}
+                    <Button onClick={() => redirectToDetailedParking(p)}>
+                        {text}
                     </Button>
                 );
             default:
                 break;
         }
-    };
+    }; 
 
     return typeOfBtn(type, text)
 };
@@ -49,7 +50,8 @@ const MyBtnPopup = ({ text, p, type }) => {
 MyBtnPopup.propTypes = {
     text: PropTypes.string.isRequired,
     p: PropTypes.object.isRequired,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
+    checkingForRenting: PropTypes.bool.isRequired
 };
 
 export default MyBtnPopup;

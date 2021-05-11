@@ -106,7 +106,7 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
-
+_
 # yarn v2
 
 .yarn/cache
@@ -116,3 +116,4 @@ dist
 
 #oAuth
 credentials.json
+.cert/
