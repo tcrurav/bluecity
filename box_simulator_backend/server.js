@@ -66,7 +66,7 @@ io.on("connect", (socket) => {
 
   socket.on("welcome", (data) =>{
     console.log("welcome received from simulator backend")
-  })
+  });
   
   /* Renting pulling scooter in */
   socket.on("simulator-open-box-confirmed", (data) => {
@@ -100,14 +100,13 @@ io.on("connect", (socket) => {
   socket.on("simulator-box-closed", (data) => {
     console.log("simulator-box-closed")
     axios.post(`${process.env.BACKEND_URL}/box_closed/${data.parkingId}/${data.boxId}/${data.chargerState}`)
-      .then(res => {
-        console.log("box-closed sent")
-      })
-      .catch(error => {
-        console.error(error)
-      });
+    .then(res => {
+		console.log("box-closed sent")
+    })
+    .catch(error => {
+		console.error(error)
+    });
   });
-
 
   //////////////////////////////////////////////////////////////////////////////
   socket.on("simulator-charger-plugged-in", (data) => {

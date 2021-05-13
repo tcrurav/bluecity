@@ -99,14 +99,6 @@ const Simulator = () => {
       <Container>
         <Row>
           <Col>
-            <h1>Box Id: {SIMULATED_BOX_ID}</h1>
-            <p>Door {stateBox === BOX_CLOSED ? 'closed' : 'opened'}</p>
-            <p>Charger {stateCharger === CHARGER_PLUGGED_OUT ? 'plugged out' : 'plugged in'}</p>
-          </Col>
-          <Col>
-            {stateCharger === CHARGER_PLUGGED_OUT && stateBox === BOX_OPENED ? <Button onClick={plugChargerIn}>Plug the Charger in</Button> : <></>}
-          </Col>
-          <Col>
             {stateBox === BOX_OPENED && stateCharger === CHARGER_PLUGGED_IN ? <Button onClick={closeBox}>Close Door</Button> : <></>}
             <p>(In case you are pulling out the scooter) </p>
             <Button onClick={unplug}>Unplug</Button>
@@ -122,5 +114,14 @@ const Simulator = () => {
     </>
   )
 }
-
+/*
+<Col>
+    <h1>Box Id: {SIMULATED_BOX_ID}</h1>
+    <p>Door {stateBox === BOX_CLOSED ? 'closed' : 'opened'}</p>
+    <p>Charger {stateCharger === CHARGER_PLUGGED_OUT ? 'plugged out' : 'plugged in'}</p>
+    </Col>
+    <Col>
+    {stateCharger === CHARGER_PLUGGED_OUT && stateBox === BOX_OPENED ? <Button onClick={plugChargerIn}>Plug the Charger in</Button> : <></>}
+    </Col>
+*/
 export default Simulator;

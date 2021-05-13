@@ -46,7 +46,6 @@ import {
 const RentingProcessScreen = ({ location, history, valores }) => {
 
   const { state: { parking, boxId, stateParking } } = location;
-  
 
   const socketRef = useRef();
 
@@ -167,7 +166,7 @@ const RentingProcessScreen = ({ location, history, valores }) => {
           </Col>
         </Row>
       </MyContainer>
-      <Footer />
+      
     </>
   )
 };

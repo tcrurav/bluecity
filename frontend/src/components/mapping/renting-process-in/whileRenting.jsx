@@ -67,6 +67,7 @@ const WhileRenting = ({ location, history }) => {
   const [stateParking, setStateParking] = useState(
     {
       reservation_time_left: 0,
+	  lastReservationDate: null,
       boxReservedByThisUser: boxReservedByThisUser,
       lat_parking: lat_parking,
       long_parking: long_parking,
@@ -131,15 +132,29 @@ const WhileRenting = ({ location, history }) => {
   useEffect(() => {
 	// Timer counter  
     if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
-
       reservationInterval.current = setInterval(() => {
         try {
-          const reservation_time_left = ( new Date().getTime() - hora );
-
-          setStateParking(s => ({
-            ...s,
-            reservation_time_left
-          }));
+			BoxDataService.get(boxId)
+			.then((data) => {
+				const lastReservationDate = data.data.lastReservationDate;   
+				setStateParking(s => ({
+					...s,
+					lastReservationDate
+				}));
+			});
+			const reservation_time_left = new Date().getTime() - stateParking.lastReservationDate.getTime();
+			setStateParking(s => ({
+				...s,
+				reservation_time_left
+			}));
+			
+			/*
+			const reservation_time_left = ( new Date().getTime() - hora );
+			setStateParking(s => ({
+				...s,
+				reservation_time_left
+			}));
+			*/
         } catch (e) {
           console.log(e);
         }

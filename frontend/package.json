@@ -16,8 +16,8 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
-    "cupertino-pane": "^1.2.61",
     "chokidar": "^3.5.1",
+    "cupertino-pane": "^1.2.61",
     "express": "^4.17.1",
     "fs": "*",
     "http": "*",
@@ -28,7 +28,7 @@
     "immer": "^8.0.1",
     "leaflet": "^1.6.0",
     "material-ui-image": "^3.3.1",
-
+    "node-sass": "^5.0.0",
     "path": "^0.12.7",
     "react": "^16.13.0",
     "react-bootstrap": "^1.4.3",

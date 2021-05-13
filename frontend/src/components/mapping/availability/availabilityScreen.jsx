@@ -173,29 +173,29 @@ const AvailabilityScreen = ({ location, history }) => {
 		socketRef.current.emit('open-renting-box', data);
         ScooterDataService.getScooterWithUserId(apiUser.id)
         .then(res => {
-		     if(true){  //This information is necessary for whileRenting component.
-          history.push({
-            pathname: '/renting-process-out',
-            state: {
-              parking,
-			  boxId: data.id,
-			  stateParking: stateParking,
-			  boxes: stateParking.boxes,
-			  long_parking: stateParking.long_parking,
-			  lat_parking: stateParking.lat_parking,
-			  boxReservedByThisUser: stateParking.boxReservedByThisUser,
-            }
-          })
-        } else {
-         history.push({
-            pathname: '/parking-process',
-            state: {
-              parking,
-              boxId: data.id 
-            }
-          })
-        }
-      });
+		    if(checkingForRenting){  //This information is necessary for whileRenting component.
+				history.push({
+				pathname: '/renting-process-out',
+				state: {
+					parking,
+					boxId: data.id,
+					stateParking: stateParking,
+					boxes: stateParking.boxes,
+					long_parking: stateParking.long_parking,
+					lat_parking: stateParking.lat_parking,
+					boxReservedByThisUser: stateParking.boxReservedByThisUser,
+				}
+			})
+			} else {
+				history.push({
+					pathname: '/parking-process',
+					state: {
+						parking,
+						boxId: data.id 
+					}
+			})
+			}
+		});
     });
     } catch (e) {
       console.log(e);
@@ -207,7 +207,7 @@ const AvailabilityScreen = ({ location, history }) => {
     return new Promise((resolve, reject) => {
       BoxDataService.getAllBoxesInAParking(parking.id).then(res => {
         let occupied = 0, free = 0, reserved = 0,
-          boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
+        boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
         for (let i = 0; i < res.data.length; i++) {
           switch (findOutGreenRedOrOrange(res.data[i])) {
             case OCCUPIED:

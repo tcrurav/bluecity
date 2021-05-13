@@ -5,6 +5,7 @@ import { MyNavbar } from "./ui/navbar/my-navbar";
 import {Footer} from './ui/footer'
 import { getCurrentUserId } from "../utils/common";
 import ScooterDataService from "../services/scooter.service";
+import BoxDataService from "../services/box.service";
 
 /*-----------------------------------
         Material-UI Imports
@@ -60,11 +61,11 @@ export function Main(props) {
   const checkUserRenting = () => {
     ScooterDataService.getScooterWithUserId(getCurrentUserId()).then((res) => {
       /* console.log("Res data:")
-    console.log(res); */
+		console.log(res); */
       if (res.data !== "") {
         setUserState(res.data);
       }
-      setLoadingState(false);
+      setLoadingState(false	);
     });
   };
 
@@ -76,14 +77,44 @@ export function Main(props) {
       },
     });
   };
-
+  
+  const checkIfUserHasRented = () => {
+	ScooterDataService.getScooterWithUserId(getCurrentUserId())
+	.then((data) => {
+		if(data.data == ""){
+			console.log("Vacío")
+		}
+		else if(data.data !== ""){
+			console.log(data.data.id);
+			//Mándalo a whileRenting
+		}
+		else{
+			console.log("This will never take place, unless it shoudn't")
+		}
+	});
+  }
+  const checkIfUserHasParkedHisScooter = () =>{
+	BoxDataService.getAll().then((data) => {
+		for(let i = 0;i<data.data.length;i++){
+			if(data.data[i].userId == getCurrentUserId()){
+				console.log("The user has a scooter parked");
+				//Llevarlo a whileRenting para parking
+			}
+			else{
+				console.log("Noup")
+			}
+		}
+	})
+  }
   useEffect(() => {
     checkUserRenting();
+	checkIfUserHasRented();
+	checkIfUserHasParkedHisScooter();
   }, []);
 
   return (
     <>
-      {loadingState ? (
+      {loadingState ? (  //Simplemente cargando -- Borrar el comentario
         <>
           <MyContainer>
             <Row className="justify-content-md-center h-50">
@@ -93,7 +124,7 @@ export function Main(props) {
             </Row>
           </MyContainer>
         </>
-      ) : userState ? (
+      ) : userState ? ( //En caso de haber usado el renting -- Borrar el comentario
         <>
           <MyNavbar history={props.history}/>
           <Paper elevation={0} className={classes.root}>
