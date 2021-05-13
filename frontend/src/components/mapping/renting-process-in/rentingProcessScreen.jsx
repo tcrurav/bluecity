@@ -158,7 +158,6 @@ const RentingProcessScreen = ({ location, history }) => {
           </Col>
         </Row>
       </MyContainer>
-      <Footer />
     </>
   )
 };

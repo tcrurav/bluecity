@@ -197,7 +197,6 @@ const WhileRenting = ({ location, history }) => {
 			</Col>
 		</Row>
       </MyContainer>
-      <Footer />
     </>
   )
 };

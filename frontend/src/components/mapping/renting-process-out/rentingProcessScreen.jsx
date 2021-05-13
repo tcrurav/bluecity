@@ -166,7 +166,6 @@ const RentingProcessScreen = ({ location, history, valores }) => {
           </Col>
         </Row>
       </MyContainer>
-      
     </>
   )
 };

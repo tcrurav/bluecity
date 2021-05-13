@@ -11,6 +11,8 @@ const BOX_CLOSED = 0;
 const BOX_OPENED = 1;
 const PLUGGED_IN = 2;
 const UNPLUGGED = 3;
+const CHARGER_PLUGGED_IN = 4; //Ni caso
+
 
 const SIMULATED_BOX_ID = 2 // Box nº2 in Telde
 const SIMULATED_PARKING_ID = 1 // Parking in Telde
@@ -98,6 +100,10 @@ const Simulator = () => {
     <>
       <Container>
         <Row>
+		<Col>
+			<h1>Box Id: {SIMULATED_BOX_ID}</h1>
+			<p>Door {stateBox === BOX_CLOSED ? 'closed' : 'opened'}</p>
+		</Col>
           <Col>
             {stateBox === BOX_OPENED && stateCharger === CHARGER_PLUGGED_IN ? <Button onClick={closeBox}>Close Door</Button> : <></>}
             <p>(In case you are pulling out the scooter) </p>
