@@ -78,19 +78,28 @@ export function Main(props) {
     });
   };
   
-  const checkIfUserHasRented = () => {
+  const checkIfUserHasRented = () => { //Here
 	ScooterDataService.getScooterWithUserId(getCurrentUserId())
 	.then((data) => {
 		if(data.data == ""){
-			console.log("Vacío")
+			console.log("Vacío");
 		}
 		else if(data.data !== ""){
-			console.log(data.data.id);
+			var boxId = data.data.boxId;
+			BoxDataService.get(boxId)
+			.then((data) => {
+				var userId = data.data.userId
+			}).catch(err => {
+				console.log("Reventó" + err.message)
+			});
 			//Mándalo a whileRenting
 		}
 		else{
 			console.log("This will never take place, unless it shoudn't")
 		}
+	})
+	.catch(err => {
+		console.log("Reventó" + err.message)
 	});
   }
   const checkIfUserHasParkedHisScooter = () =>{

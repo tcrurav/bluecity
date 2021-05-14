@@ -79,7 +79,7 @@ const RentingProcessScreen = ({ location, history }) => {
       console.log('connected to backend');
     });
 
-    socketRef.current.emit("open-box", {id: boxId});
+    socketRef.current.emit("open-box-renting-in", {id: boxId});
 
     socketRef.current.on('box-opened', () => {
       console.log('The box is opened');

@@ -162,6 +162,7 @@ const AvailabilityScreen = ({ location, history }) => {
     try {
       let index = stateParking.boxReservedByThisUser;  
       let data = stateParking.boxes[index];  
+	  data.userId = apiUser.id;
 	  if(checkingForRenting) {
         data.state = RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
       }
@@ -171,24 +172,20 @@ const AvailabilityScreen = ({ location, history }) => {
       data.lastReservationDate = BEGIN_OF_TIMES;
       BoxDataService.update(data.id, data).then(() => {
 		socketRef.current.emit('open-renting-box', data);
-        ScooterDataService.getScooterWithUserId(apiUser.id)
+        ScooterDataService.getScooterWithUserId(apiUser.id) //renting-process-out
         .then(res => {
 		    if(checkingForRenting){  //This information is necessary for whileRenting component.
 				history.push({
-				pathname: '/renting-process-out',
-				state: {
+				pathname: '/renting-process-out',  
+				state: { 
 					parking,
 					boxId: data.id,
 					stateParking: stateParking,
-					boxes: stateParking.boxes,
-					long_parking: stateParking.long_parking,
-					lat_parking: stateParking.lat_parking,
-					boxReservedByThisUser: stateParking.boxReservedByThisUser,
 				}
 			})
 			} else {
 				history.push({
-					pathname: '/parking-process',
+					pathname: '/parking-process-in',
 					state: {
 						parking,
 						boxId: data.id 

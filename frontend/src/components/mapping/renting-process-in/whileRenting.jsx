@@ -27,6 +27,7 @@ import { Row, Col, Card } from 'react-bootstrap';
 |--------------------------------------------------
 */
 import BoxDataService from '../../../services/box.service';
+import ParkingDataService from '../../../services/parking.service';
 import { useGeolocation } from '../../geolocation/geolocation';
 import { getDistanceFromLatLonInKm } from '../../../utils/common';
 import { formatTimeLeft } from '../availability/utils/util';
@@ -50,7 +51,7 @@ import {
 
 const WhileRenting = ({ location, history }) => {
 
-  const { state: { parking, boxId, boxes, boxReservedByThisUser, lat_parking, long_parking } } = location;
+  const { state: { parking, boxId } } = location;
 
   const socketRef = useRef();
   
@@ -62,16 +63,15 @@ const WhileRenting = ({ location, history }) => {
   let [geolocation, geolocationAvailability] = useGeolocation();
   const [distanceToParking, setDistanceToParking] = useState(0);
   const [stateOpenBoxPossible, setStateOpenBoxPossible] = useState(false);
-  const hora = new Date().getTime();
   
   const [stateParking, setStateParking] = useState(
     {
       reservation_time_left: 0,
 	  lastReservationDate: null,
-      boxReservedByThisUser: boxReservedByThisUser,
-      lat_parking: lat_parking,
-      long_parking: long_parking,
-	  boxes: boxes,
+      boxReservedByThisUser: 0,
+      lat_parking: 0,
+      long_parking: 0,
+	  boxes: [],
     }
   );
   
@@ -92,12 +92,44 @@ const WhileRenting = ({ location, history }) => {
     });
   }
   
+  const getNecessaryData = () =>{
+	ParkingDataService.get(id).then((data) => {
+        setStateParking(s => ({
+          ...s,
+          lat_parking: data.data.lat,
+          long_parking: data.data.long,
+        })); 
+	});
+	
+	BoxDataService.getAllBoxesInAParking(id).then((data) => {
+        setStateParking(s => ({
+          ...s,
+          boxes: data.data
+        })); 
+	});
+	console.log(stateParking.boxReservedByThisUser)
+	
+	for(let i=0;i<stateParking.boxes.length;i++){
+		if(stateParking.boxes[i].id == boxId){
+			setStateParking(s => ({
+				...s,
+				boxReservedByThisUser: i 
+			})); 
+			console.log("ahora")
+			console.log(stateParking.boxes[i])
+		}
+	}  
+  }
+
   useEffect(() => {
     console.log("useEffect socket");
     socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL);
 
     socketRef.current.on('welcome', () => {
       console.log('connected to backend');
+	  
+	  //After connecting to backend, in order to avoid issues
+	  getNecessaryData()
     });
 
     return () => {
@@ -136,25 +168,18 @@ const WhileRenting = ({ location, history }) => {
         try {
 			BoxDataService.get(boxId)
 			.then((data) => {
-				const lastReservationDate = data.data.lastReservationDate;   
+				const lastReservationDate = new Date(data.data.lastReservationDate).getTime();  
 				setStateParking(s => ({
 					...s,
 					lastReservationDate
 				}));
 			});
-			const reservation_time_left = new Date().getTime() - stateParking.lastReservationDate.getTime();
+			const reservation_time_left = new Date().getTime() - stateParking.lastReservationDate;
+			//console.log(reservation_time_left)
 			setStateParking(s => ({
 				...s,
 				reservation_time_left
 			}));
-			
-			/*
-			const reservation_time_left = ( new Date().getTime() - hora );
-			setStateParking(s => ({
-				...s,
-				reservation_time_left
-			}));
-			*/
         } catch (e) {
           console.log(e);
         }

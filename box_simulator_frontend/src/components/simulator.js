@@ -14,7 +14,7 @@ const UNPLUGGED = 3;
 const CHARGER_PLUGGED_IN = 4; //Ni caso
 
 
-const SIMULATED_BOX_ID = 2 // Box nº2 in Telde
+const SIMULATED_BOX_ID = 3 // Box nº2 in Telde
 const SIMULATED_PARKING_ID = 1 // Parking in Telde
 
 const Simulator = () => {

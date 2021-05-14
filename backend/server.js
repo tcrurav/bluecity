@@ -128,7 +128,7 @@ app.use(function (req, res, next) {
       });
     } else {
       req.user = user; //set the user to req so other routes can use it
-      req.token = token;
+      req.token = token; //AQUÍ
       next();
     }
   });
@@ -185,7 +185,7 @@ app.post("/open_renting_box_confirmed/:parking_id/:box_id", (req, res) => {
    where: { id: data.boxId }
    }).then(num => {
     if (num == 1) {
-      // refresh information in mobile phones
+      io.sockets.emit("renting-box-opened", { connection_confirmed: true });
       io.sockets.emit('refresh-box-state', data);
     } else {
       // Cannot update Box with id. Maybe Box was not found
@@ -232,6 +232,20 @@ app.post("/renting_box_closed/:parking_id/:box_id/:charger_state", (req, res) =>
     // Error updating Box. It should be controlled in the future.
   });
   
+  /*
+  Scooter.update({userId: getCleanUser.id}, {where: { BoxId: data.boxId, userId: null }
+  }).then(num => {
+    if (num == 1) {
+	  console.log("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA Scooter actualizado");
+	  // Raro?
+    } else {
+		console.log("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+		// Cannot update Box with id. Maybe Box was not found
+    }
+  }).catch(err => {
+	  console.log("Something went wrong " + err.message)
+  });
+  */
   return res.send({ response: "renting-box-closed received" }).status(200); 
 });
 
@@ -282,7 +296,7 @@ app.post("/charger_connected/:parking_id/:box_id", (req, res) => {
 app.post("/box_closed/:parking_id/:box_id/:charger_state", (req, res) => {
   const data = { boxId: parseInt(req.params.box_id) };
 
-  Box.update({ state: RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, occupied: false }, {
+  Box.update({ state: RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, occupied: true, userId: null }, {
     where: { id: data.boxId }
     }).then(num => {
     if (num == 1) {
@@ -295,9 +309,24 @@ app.post("/box_closed/:parking_id/:box_id/:charger_state", (req, res) => {
     }).catch(err => {
     // Error updating Box. It should be controlled in the future.
     });
-
+	
+	/*
+	Scooter.update({userId: null}, {where: { BoxId: data.boxId, userId: getCleanUser.id }
+	}).then(num => {
+    if (num == 1) {
+	  console.log("Scooter actualizado");
+	  // Raro?
+    } else {
+      // Cannot update Box with id. Maybe Box was not found
+    }
+	}).catch(err => {
+	  console.log("Something went wrong " + err.message)
+	});
+	*/
+  
   return res.send({ response: "box-closed received" }).status(200);
 });
+
 /* Parking Sonia antiguo          -- PARKING, PULLING IN and OUT -- */
 /*   
 /////////////////app.post de charger plugged//////////////////////////////////////////////
@@ -346,6 +375,7 @@ if(process.env.HTTPS == "true"){
 
 
 const Box = db.box;
+const Scooter = db.scooter;
 // Parking pulling scooter in constants
 const PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED = 12;
 const PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED = 13;
@@ -378,7 +408,7 @@ io.on("connect", (socket) => {
   
   
   /* Renting pulling scooter in     -- RENTING, PULLING IN -- */
-  socket.on("open-box", (data) => {
+  socket.on("open-box-renting-in", (data) => {
     console.log("open-box")
     console.log(data);
 
@@ -416,7 +446,6 @@ io.on("connect", (socket) => {
     axios.post(`${parking_url}/open_renting_box/${data.id}`)
     .then(res => {
         console.log("open-renting-box sent from backend to box backend");
-        socket.emit("renting-box-opened", { connection_confirmed: true });
     })
 	.catch(error => {
 		console.error(error)

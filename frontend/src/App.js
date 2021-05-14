@@ -21,7 +21,8 @@ import AvailabilityScreen from "./components/mapping/availability/availabilitySc
 //import ParkingProcessScreen from "./components/mapping/parking-process/ParkingProcessScreen";
 // import MySite from './components/my-site/mySiteScreen';
 import Site from './components/site/site';
-import ParkingProcessScreen from "./components/mapping/parking-process/parkingProcessScreen";
+import ParkingProcessScreenIn from "./components/mapping/parking-process-in/parkingProcessScreen";
+import ParkingProcessScreenOut from "./components/mapping/parking-process-out/parkingProcessScreen";
 import RentingProcessInScreen from "./components/mapping/renting-process-in/rentingProcessScreen";
 import RentingProcessOutScreen from "./components/mapping/renting-process-out/rentingProcessScreen";
 import WhileRenting from "./components/mapping/renting-process-in/whileRenting";
@@ -52,7 +53,8 @@ function App() {
           <RoutePrivate path='/renting' component={RentingScreen} />
           {/* <RoutePrivate path='/renting' component={(props) => <Renting userId={getCurrentUserId()} history={props.history} />}/> */}
           <RoutePrivate path='/availability' component={AvailabilityScreen} />
-          <RoutePrivate path='/parking-process' component={ParkingProcessScreen} />
+          <RoutePrivate path='/parking-process-in' component={ParkingProcessScreenIn} />
+		  <RoutePrivate path='/parking-process-out' component={ParkingProcessScreenOut} />
           <RoutePrivate path='/renting-process-in' component={RentingProcessInScreen} />
 		  <RoutePrivate path='/renting-process-out' component={RentingProcessOutScreen} />
 		  <RoutePrivate path='/while-renting' component={WhileRenting} />
