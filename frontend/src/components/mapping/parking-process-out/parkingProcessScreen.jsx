@@ -37,9 +37,9 @@ import BoxDataService from '../../../services/box.service';
 |--------------------------------------------------
 */
 import { 
-  PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
-  PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
-  PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
+  PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED,
+  PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
+  PARKING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
   NEITHER_PARKING_NOT_RENTING } from './constants/constants';
 
 const ParkingProcessScreen = ({ location, history }) => {
@@ -104,7 +104,7 @@ const ParkingProcessScreen = ({ location, history }) => {
         <Row className='pt-3'>
           <Col>
             {
-              stateParkingProcess === PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT
+              stateParkingProcess === PARKING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT
                 ?
                 <MyMarker
                   color='blue'
@@ -112,18 +112,18 @@ const ParkingProcessScreen = ({ location, history }) => {
                   text='Waiting for the door to get open...'
                   icon={faInfoCircle}
                 />
-                : stateParkingProcess === PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ?
+                : stateParkingProcess === PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ?
                   <MyMarker
                     color='blue'
                     state={null}
-                    text='The door is open. Please, introduce your scooter and plug the charger in.'
+                    text='The door is open. Please, pull out your scooter and unplug the charger.'
                     icon={faInfoCircle}
                   />
-                  :stateParkingProcess === PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ?
+                  :stateParkingProcess === PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ?
                   <MyMarker
                     color='blue'
                     state={null}
-                    text='The charger is plugged in. Please, close the door.'
+                    text='The charger is unplugged. Please, close the door.'
                     icon={faInfoCircle}
                   />
                   :
@@ -137,7 +137,6 @@ const ParkingProcessScreen = ({ location, history }) => {
           </Col>
         </Row>
       </MyContainer>
-      {/* <Footer /> */}
     </>
   )
 };

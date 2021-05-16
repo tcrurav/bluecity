@@ -14,7 +14,7 @@ const UNPLUGGED = 3;
 const CHARGER_PLUGGED_IN = 4; //Ni caso
 
 
-const SIMULATED_BOX_ID = 3 // Box nº2 in Telde
+const SIMULATED_BOX_ID = 2 // Box nº2 in Telde
 const SIMULATED_PARKING_ID = 1 // Parking in Telde
 
 const Simulator = () => {
@@ -120,14 +120,5 @@ const Simulator = () => {
     </>
   )
 }
-/*
-<Col>
-    <h1>Box Id: {SIMULATED_BOX_ID}</h1>
-    <p>Door {stateBox === BOX_CLOSED ? 'closed' : 'opened'}</p>
-    <p>Charger {stateCharger === CHARGER_PLUGGED_OUT ? 'plugged out' : 'plugged in'}</p>
-    </Col>
-    <Col>
-    {stateCharger === CHARGER_PLUGGED_OUT && stateBox === BOX_OPENED ? <Button onClick={plugChargerIn}>Plug the Charger in</Button> : <></>}
-    </Col>
-*/
+
 export default Simulator;

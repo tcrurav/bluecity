@@ -81,7 +81,7 @@ const WhileRenting = ({ location, history }) => {
 	let index = stateParking.boxReservedByThisUser;  
     let data = stateParking.boxes[index];  
 	data.state = RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT; //Always
-	data.lastReservationDate = BEGIN_OF_TIMES; //Duda here, hmmm...
+	data.lastReservationDate = BEGIN_OF_TIMES; //Duda here, hmmm... Parking case
 	socketRef.current.emit('open-box', data);
 	history.push({
         pathname: '/renting-process-in',
@@ -92,7 +92,7 @@ const WhileRenting = ({ location, history }) => {
     });
   }
   
-  const getNecessaryData = () =>{
+  const getNecessaryData = () => {
 	ParkingDataService.get(id).then((data) => {
         setStateParking(s => ({
           ...s,
@@ -115,10 +115,16 @@ const WhileRenting = ({ location, history }) => {
 				...s,
 				boxReservedByThisUser: i 
 			})); 
-			console.log("ahora")
-			console.log(stateParking.boxes[i])
 		}
-	}  
+	} 
+	
+	BoxDataService.get(boxId).then((data) => {
+		const lastReservationDate = new Date(data.data.lastReservationDate).getTime();  
+		setStateParking(s => ({
+			...s,
+			lastReservationDate
+		}));
+	});
   }
 
   useEffect(() => {
@@ -128,7 +134,7 @@ const WhileRenting = ({ location, history }) => {
     socketRef.current.on('welcome', () => {
       console.log('connected to backend');
 	  
-	  //After connecting to backend, in order to avoid issues
+	  //After connecting to backend, in order to avoid issues and repeated actions
 	  getNecessaryData()
     });
 
@@ -166,16 +172,7 @@ const WhileRenting = ({ location, history }) => {
     if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
       reservationInterval.current = setInterval(() => {
         try {
-			BoxDataService.get(boxId)
-			.then((data) => {
-				const lastReservationDate = new Date(data.data.lastReservationDate).getTime();  
-				setStateParking(s => ({
-					...s,
-					lastReservationDate
-				}));
-			});
 			const reservation_time_left = new Date().getTime() - stateParking.lastReservationDate;
-			//console.log(reservation_time_left)
 			setStateParking(s => ({
 				...s,
 				reservation_time_left
@@ -189,7 +186,7 @@ const WhileRenting = ({ location, history }) => {
     return () => {
       cancelCountdown();
     }
-  }, [stateParking.boxReservedByThisUser]);
+  }, [stateParking.boxReservedByThisUser, stateParking.reservation_time_left]); //Necessary change
 
   return (
     <>

@@ -6,6 +6,7 @@ import {Footer} from './ui/footer'
 import { getCurrentUserId } from "../utils/common";
 import ScooterDataService from "../services/scooter.service";
 import BoxDataService from "../services/box.service";
+import ParkingDataService from "../services/parking.service";
 
 /*-----------------------------------
         Material-UI Imports
@@ -56,6 +57,12 @@ export function Main(props) {
   const classes = useStyles();
   const [loadingState, setLoadingState] = useState(true);
   const [userState, setUserState] = useState(null);
+  const [stateParking, setStateParking] = useState({
+	  parkingId: null,
+	  parkingAddress: '',
+	  parkingName: '',
+	  boxId: null,
+  });
 
   //Lo dejamos aquí
   const checkUserRenting = () => {
@@ -79,22 +86,44 @@ export function Main(props) {
   };
   
   const checkIfUserHasRented = () => { //Here
+    // Perhaps it can be easier...
 	ScooterDataService.getScooterWithUserId(getCurrentUserId())
 	.then((data) => {
 		if(data.data == ""){
 			console.log("Vacío");
 		}
 		else if(data.data !== ""){
-			var boxId = data.data.boxId;
-			BoxDataService.get(boxId)
-			.then((data) => {
-				var userId = data.data.userId
-			}).catch(err => {
+			setStateParking(s => ({
+				...s,
+				boxId: data.data.boxId
+			}));
+			
+			BoxDataService.get(data.data.boxId)
+			.then((dato) => {
+				setStateParking(s => ({
+				...s,
+				parkingId: dato.data.parkingId
+				}));
+			})
+			.catch(err => {
 				console.log("Reventó" + err.message)
 			});
-			//Mándalo a whileRenting
+			
+			ParkingDataService.get(stateParking.parkingId)
+			.then((dato) => {
+				setStateParking(s => ({
+					...s,
+					parkingAddress: dato.data.address,
+					parkingName: dato.data.name
+				}));
+			})
+			.catch(err => {
+				console.log("Reventó" + err.message)
+			});
+			//Mándalo a whileRenting, pero primero pasarle los datos necesarios
+			setUserState(true);
 		}
-		else{
+		else {
 			console.log("This will never take place, unless it shoudn't")
 		}
 	})
@@ -102,10 +131,27 @@ export function Main(props) {
 		console.log("Reventó" + err.message)
 	});
   }
+  
+  const goToRenting = () => {
+	const parking = {
+		id: stateParking.parkingId,
+		address: stateParking.parkingAddress,
+		name: stateParking.parkingName
+	}
+	
+	props.history.push({
+      pathname: "/while-renting",
+      state: {
+        parking: parking,
+		boxId: stateParking.boxId
+      },
+    });
+  }
+  
   const checkIfUserHasParkedHisScooter = () =>{
 	BoxDataService.getAll().then((data) => {
 		for(let i = 0;i<data.data.length;i++){
-			if(data.data[i].userId == getCurrentUserId()){
+			if(data.data[i].userId === getCurrentUserId()){
 				console.log("The user has a scooter parked");
 				//Llevarlo a whileRenting para parking
 			}
@@ -133,13 +179,18 @@ export function Main(props) {
             </Row>
           </MyContainer>
         </>
-      ) : userState ? ( //En caso de haber usado el renting -- Borrar el comentario
+      ) : userState ? ( //En caso de haber usado el renting -- Borrar el comentario //redirectToParking
         <>
           <MyNavbar history={props.history}/>
           <Paper elevation={0} className={classes.root}>
             <Container className={classes.image}>
-              <Typography>Hello, world</Typography>
-              <Button onClick={redirectToParking}>Accept</Button>
+				<Image src="img/bluecity.png" aspectRatio={16 / 9} />
+				<Col xs={{span: 10, offset: 2}}>
+					<Typography>Hi! You have a scooter parked</Typography>
+					<Button variant="contained" className={classes.buttons} onClick={goToRenting}>
+						Go to the parking
+					</Button>
+				</Col> 
             </Container>
           </Paper>
           <Footer />

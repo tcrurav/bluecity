@@ -64,6 +64,7 @@ const AvailabilityScreen = ({ location, history }) => {
   let [geolocation, geolocationAvailability] = useGeolocation();
 
   const { state: { parking, checkingForRenting } } = location;
+  console.log(location)
 
   const socketRef = useRef();
 
@@ -171,10 +172,10 @@ const AvailabilityScreen = ({ location, history }) => {
       }
       data.lastReservationDate = BEGIN_OF_TIMES;
       BoxDataService.update(data.id, data).then(() => {
-		socketRef.current.emit('open-renting-box', data);
         ScooterDataService.getScooterWithUserId(apiUser.id) //renting-process-out
         .then(res => {
 		    if(checkingForRenting){  //This information is necessary for whileRenting component.
+				socketRef.current.emit('open-renting-box', data);
 				history.push({
 				pathname: '/renting-process-out',  
 				state: { 
@@ -184,6 +185,7 @@ const AvailabilityScreen = ({ location, history }) => {
 				}
 			})
 			} else {
+				socketRef.current.emit('open-box-parking-in', data);
 				history.push({
 					pathname: '/parking-process-in',
 					state: {
