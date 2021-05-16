@@ -42,6 +42,13 @@ import {
   PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
   NEITHER_PARKING_NOT_RENTING } from './constants/constants';
 
+/**
+|--------------------------------------------------
+| Just for testing - It should be deleted
+|--------------------------------------------------
+*/
+import Button from '@material-ui/core/Button';
+
 const ParkingProcessScreen = ({ location, history }) => {
 
   const { state: { parking, boxId } } = location;
@@ -61,6 +68,18 @@ const ParkingProcessScreen = ({ location, history }) => {
       setStateParkingProcess(
         data.data.state
       );
+    });
+  }
+
+  const reset = () => {
+    console.log("reset")
+
+    const resetData = { state: 0, occupied: 0, userId: null };
+
+    BoxDataService.update(boxId, resetData).then((data) => {
+      history.push({
+        pathname: '/main'
+      })
     });
   }
 
@@ -127,12 +146,15 @@ const ParkingProcessScreen = ({ location, history }) => {
                     icon={faInfoCircle}
                   />
                   :
+                  <>
                   <MyMarker
                     color='blue'
                     state={null}
                     text='The door is closed. The parking process is complete.'
                     icon={faInfoCircle}
                   />
+                  <Button onClick={reset}>Reset Box - Just for testing</Button>
+                  </>
             }
           </Col>
         </Row>

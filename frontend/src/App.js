@@ -18,7 +18,7 @@ import MyAccount from "./components/auth/my-account";
 // import {ParkingsWithFreeScooters} from './components/parkingsWithFreeScooters';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AvailabilityScreen from "./components/mapping/availability/availabilityScreen";
-import ParkingProcessScreen from "./components/mapping/parking-process/ParkingProcessScreen";
+import ParkingProcessScreen from "./components/mapping/parking-process/parkingProcessScreen";
 // import MySite from './components/my-site/mySiteScreen';
 import Site from './components/site/site';
 

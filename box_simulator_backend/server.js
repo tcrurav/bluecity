@@ -2,10 +2,16 @@ require('dotenv').config();
 
 const express = require('express');
 const http = require("http");
+
+// NOT USING_WEBSOCKETS to connect to backend, but using to box_simulator_frontend
 const socketIo = require("socket.io");
+const axios = require('axios');
+
+// USING_WEBSOCKETS to connect to backend
+const ioClient = require("socket.io-client");
+const nodeOpcua = require('node-opcua');
+
 const cors = require('cors');
-// const bodyParser = require('body-parser');
-const axios = require('axios')
 
 const app = express();
 const port = process.env.PORT || 9000;
@@ -28,154 +34,246 @@ app.use(express.urlencoded({ extended: true }));
 //   next();
 // });
 
-var socketWithBox = null;
-
 const server = http.createServer(app);
-
-const io = socketIo(server, {
-  cors: {
-    // origin: process.env.BLUECITY_CLIENT,
-    origin: '*',
-    methods: ["GET", "POST"],
-    credentials: true
-  },
-  transports: ['polling', 'websocket']
-});
 
 app.get("/hello", (req, res) => {
   return res.send({ response: "I am alive" }).status(200);
 });
 
-app.post("/open_box/:box_id", (req, res) => {
-  //desde el backend
-  console.log("/open_box in box backend");
-  console.log(req.params.box_id);
+let parkingId = null;
+let boxId = null;
+let session = null;
+let client = null;
 
-  let data = { boxId: parseInt(req.params.box_id) };
-  io.sockets.emit('simulator-open-box', data);
+async function closePLC() {
+  // close session with PL
+  await session.close();
 
-  return res.send({ response: "open-box sent" }).status(200);
-});
+  // disconnecting from PLC
+  await client.disconnect();
+}
 
-// function PostCode(codestring) {
-//   // Build the post string from an object
-//   var post_data = querystring.stringify({
-//     'compilation_level': 'ADVANCED_OPTIMIZATIONS',
-//     'output_format': 'json',
-//     'output_info': 'compiled_code',
-//     'warning_level': 'QUIET',
-//     'js_code': codestring
-//   });
+async function openPlc() {
+  // Using OPCUA to connect to PLC
 
-//   // An object of options to indicate where to post to
-//   var post_options = {
-//     host: process.env.BACKEND_HOST,
-//     port: process.env.BACKEND_PORT,
-//     path: '/open_box_confirmed',
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/x-www-form-urlencoded',
-//       'Content-Length': Buffer.byteLength(post_data)
-//     }
-//   };
+  const maxAge = 0;
 
-//   // Set up the request
-//   var post_req = http.request(post_options, function (res) {
-//     res.setEncoding('utf8');
-//     res.on('data', function (chunk) {
-//       console.log('Response: ' + chunk);
-//     });
-//   });
+  const connectionStrategy = {
+    initialDelay: 1000,
+    maxRetry: 1
+  }
+  const options = {
+    applicationName: "MyClient",
+    connectionStrategy: connectionStrategy,
+    securityMode: nodeOpcua.MessageSecurityMode.None,
+    securityPolicy: nodeOpcua.SecurityPolicy.None,
+    endpoint_must_exist: false,
+  };
+  client = nodeOpcua.OPCUAClient.create(options);
+  const endpointUrl = process.env.PLC_OPCUA_URL;
 
-//   // post the data
-//   post_req.write(post_data);
-//   post_req.end();
+  // step 1 : connect to
+  await client.connect(endpointUrl);
+  console.log("connected !");
 
-// }
+  // step 2 : createSession
+  session = await client.createSession();
+  console.log("session created !");
 
-io.on("connect", (socket) => {
-  console.log("New simulator_frontend connected");
+  let nodeToRead = {
+    nodeId: `ns=3;s="${process.env.PLC_BOX_ID_VARIABLE}"`,
+    attributeId: nodeOpcua.AttributeIds.Value
+  };
+  dataValue = await session.read(nodeToRead, maxAge);
+  // console.log(" value ", dataValue.toString());
+  boxId = dataValue.value.value;
 
-  socketWithBox = socket;
+  nodeToRead = {
+    nodeId: `ns=3;s="${process.env.PLC_PARKING_ID_VARIABLE}"`,
+    attributeId: nodeOpcua.AttributeIds.Value
+  };
+  dataValue = await session.read(nodeToRead, maxAge);
+  // console.log(" value ", dataValue.toString());
+  parkingId = dataValue.value.value;
 
-  socket.emit("simulator-welcome", { connection_confirmed: true });
+  let door_variable = null;
+  let charger_variable = null;
 
-  // socket.on("open-box", (data) => {
-  //   // from mobile phone
-  //   console.log("open-box")
-  //   console.log(data);
+  let socketClient = ioClient(process.env.BACKEND_URL);
 
-  //   // to box device
-  //   io.sockets.emit('open-box', { boxId: data.id });
-  // });
+  socketClient.on("open-box", async (data) => {
+    // from backend
 
-  socket.on("simulator-box-closed", (data) => {
-    // from box device
-    console.log("simulator-box-closed")
-    console.log(data);
-
-    axios.post(`${process.env.BACKEND_URL}/box_closed/${data.parkingId}/${data.boxId}/${data.chargerState}`)
-      .then(res => {
-        console.log("box-closed sent")
-        // console.log(`statusCode: ${res.statusCode}`)
-        // console.log(res)
-      })
-      .catch(error => {
-        console.error(error)
-      });
-
+    // to PLC 
+    var nodesToWrite = [{
+      nodeId: `ns=3;s="${process.env.PLC_DOOR_VARIABLE}"`,
+      attributeId: nodeOpcua.AttributeIds.Value,
+      indexRange: null,
+      value: {
+        value: {
+          dataType: nodeOpcua.DataType.Boolean,
+          value: true
+        }
+      }
+    },
+      // ATTENTION: THERE SHOULD BE AN ARRAY OF BOXES TO IDENTIFY THE BOX Nº WITH data.boxId
+    ];
+    await session.write(nodesToWrite);
   });
 
+  setInterval(async function () {
+    // console.log(`ns=3;s=${process.env.PLC_DOOR_VARIABLE}`);
+    let nodeToRead = {
+      nodeId: `ns=3;s="${process.env.PLC_DOOR_VARIABLE}"`,
+      attributeId: nodeOpcua.AttributeIds.Value
+    };
+    let dataValue = await session.read(nodeToRead, maxAge);
+    // console.log(" value ", dataValue.toString());
+    // console.log(door_variable)
 
-  //////////////////////////////////////////////////////////////////////////////
-  socket.on("simulator-charger-plugged-in", (data) => {
-    // from box device
-    console.log("simulator-charger-plugged-in")
-    console.log(data);
+    if (door_variable != dataValue.value.value) {
+      if (door_variable != null) {
+        if (dataValue.value.value == true) {
+          // console.log("se emite")
+          socketClient.emit("open-box-confirmed", { boxId, parkingId });
+        } else {
+          // console.log("se emite")
+          socketClient.emit("box-closed", { boxId, parkingId });
+        }
+      }
+      door_variable = dataValue.value.value;
+    }
 
-    axios.post(`${process.env.BACKEND_URL}/charger_plugged_in/${data.parkingId}/${data.boxId}/${data.chargerState}`)
-      .then(res => {
-        console.log("charger_plugged_in sent")
-        // console.log(`statusCode: ${res.statusCode}`)
-        // console.log(res)
-      })
-      .catch(error => {
-        console.error(error)
-      });
+    nodeToRead = {
+      nodeId: `ns=3;s="${process.env.PLC_CHARGER_VARIABLE}"`,
+      attributeId: nodeOpcua.AttributeIds.Value
+    };
+    dataValue = await session.read(nodeToRead, maxAge);
+    // console.log(" value ", dataValue.toString());
+    // console.log(door_variable)
 
+    if (charger_variable != dataValue.value.value) {
+      if (charger_variable != null) {
+        if (dataValue.value.value == true) {
+          // console.log("se emite")
+          socketClient.emit("charger-plugged-in", { boxId, parkingId });
+        } else {
+          // console.log("se emite")
+          socketClient.emit("charger-unplugged", { boxId, parkingId });
+        }
+      }
+      charger_variable = dataValue.value.value;
+    }
+
+  }, process.env.PLC_POOLING_TIME);
+
+  server.on('close', function () {
+    console.log(' Stopping ...');
+  
+    if (process.env.USING_WEBSOCKETS == "true") {
+      closePLC();
+    }
+  });
+}
+
+if (process.env.USING_WEBSOCKETS == "true") {
+  openPlc();
+}
+
+let io = null;
+if (process.env.USING_WEBSOCKETS == "false") {
+  io = socketIo(server, {
+    cors: {
+      // origin: process.env.BLUECITY_CLIENT,
+      origin: '*',
+      methods: ["GET", "POST"],
+      credentials: true
+    },
+    transports: ['polling', 'websocket']
   });
 
-  ////////////////////////////////////////////////////////////////////////7
+  app.post("/open_box/:box_id", (req, res) => {
+    //desde el backend
 
-  socket.on("simulator-open-box-confirmed", (data) => {
-    // from box device
-    console.log("simulator-open-box-confirmed")
-    console.log(data);
+    let data = { boxId: parseInt(req.params.box_id) };
+    io.sockets.emit('simulator-open-box', data);
 
-    axios.post(`${process.env.BACKEND_URL}/open_box_confirmed/${data.parkingId}/${data.boxId}`)
-      .then(res => {
-        console.log("open-box-confirmed sent")
-        //console.log(`statusCode: ${res.statusCode}`)
-        //console.log(res)
-      })
-      .catch(error => {
-        console.error(error)
-      });
-
+    return res.send({ response: "open-box sent" }).status(200);
   });
 
-  // socket.on("something-changed", (data) => {
-  //   console.log("something changed: " + data.toString());
-  //   // socket.emit("refresh", data);      // send to only the client who emited
+  io.on("connect", (socket) => {
 
-  //   io.sockets.emit('refresh', data);     // send to all
-  // })
+    socket.emit("simulator-welcome", { connection_confirmed: true });
 
-  socket.on("disconnect", () => {
-    console.log("simulator_frontend disconnected");
+    socket.on("simulator-box-closed", (data) => {
+      // from box device
+      console.log("simulator-box-closed")
+      console.log(data);
+
+      axios.post(`${process.env.BACKEND_URL}/box_closed/${data.parkingId}/${data.boxId}/${data.chargerState}`)
+        .then(res => {
+          console.log("box-closed sent")
+          // console.log(`statusCode: ${res.statusCode}`)
+          // console.log(res)
+        })
+        .catch(error => {
+          console.error(error)
+        });
+
+    });
+
+    socket.on("simulator-charger-plugged-in", (data) => {
+      // from box device
+      console.log("simulator-charger-plugged-in")
+      console.log(data);
+
+      axios.post(`${process.env.BACKEND_URL}/charger_plugged_in/${data.parkingId}/${data.boxId}/${data.chargerState}`)
+        .then(res => {
+          console.log("charger_plugged_in sent")
+          // console.log(`statusCode: ${res.statusCode}`)
+          // console.log(res)
+        })
+        .catch(error => {
+          console.error(error)
+        });
+
+    });
+
+    socket.on("simulator-open-box-confirmed", (data) => {
+      // from box device
+      console.log("simulator-open-box-confirmed")
+      console.log(data);
+
+      axios.post(`${process.env.BACKEND_URL}/open_box_confirmed/${data.parkingId}/${data.boxId}`)
+        .then(res => {
+          console.log("open-box-confirmed sent")
+          //console.log(`statusCode: ${res.statusCode}`)
+          //console.log(res)
+        })
+        .catch(error => {
+          console.error(error)
+        });
+
+    });
+
+    // socket.on("something-changed", (data) => {
+    //   console.log("something changed: " + data.toString());
+    //   // socket.emit("refresh", data);      // send to only the client who emited
+
+    //   io.sockets.emit('refresh', data);     // send to all
+    // })
+
+    socket.on("disconnect", () => {
+      console.log("simulator_frontend disconnected");
+    });
   });
-});
+
+}
 
 server.listen(port, () => {
   console.log('Server started on: ' + port);
 });
+
+
+
+
