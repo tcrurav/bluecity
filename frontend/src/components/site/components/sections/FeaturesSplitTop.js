@@ -101,13 +101,13 @@ const FeaturesSplitTop = ({
             <div className="split-item">
               <div className="split-item-content center-content-mobile reveal-from-left" data-reveal-container=".split-item">
                 <div className="text-xxs text-color-primary fw-600 tt-u mb-8">
-                  Aparcamiento y alquiler de patinetas
+                  Aparcamiento y alquiler de patinetes
                   </div>
                 <h3 className="mt-0 mb-12">
                   Somos Bluecity
                   </h3>
                 <p className="m-0">
-                 Disponemos de una red de tres estaciones de recarga y aparcamiento de patinetes eléctricos. Desde nuestra App puedes reservar un aparcamiento para tu propia patineta y o alquilar alguna disponible en nuestra red.
+                 Disponemos de una red de tres estaciones de recarga y aparcamiento de patinetes eléctricos. Desde nuestra App puedes reservar un aparcamiento para tu propio patinete y o alquilar alguna disponible en nuestra red.
                   </p>
               </div>
               <div className={

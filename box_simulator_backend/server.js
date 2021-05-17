@@ -1,7 +1,28 @@
 require('dotenv').config();
 
+const fs = require("fs");
+
 const express = require('express');
-const http = require("http");
+
+//Using http
+let http = null;
+// if (process.env.HTTPS == "false") {
+http = require("http");
+// }
+
+//Using https
+// let https = null;
+// let fs = null;
+// let options = null;
+
+// if (process.env.HTTPS == "true") {
+//   https = require('https');
+//   fs = require('fs');
+//   options = {
+//     key: fs.readFileSync('.cert/certificate.key'),
+//     cert: fs.readFileSync('.cert/certificate.crt')
+//   };
+// }
 
 // NOT USING_WEBSOCKETS to connect to backend, but using to box_simulator_frontend
 const socketIo = require("socket.io");
@@ -34,7 +55,16 @@ app.use(express.urlencoded({ extended: true }));
 //   next();
 // });
 
-const server = http.createServer(app);
+//Using http
+let server = null;
+// if (process.env.HTTPS == "false") {
+server = http.createServer(app);
+// }
+
+//Using https
+// if (process.env.HTTPS == "true") {
+//   server = https.createServer(options, app);
+// }
 
 app.get("/hello", (req, res) => {
   return res.send({ response: "I am alive" }).status(200);
@@ -62,14 +92,14 @@ async function openPlc() {
     initialDelay: 1000,
     maxRetry: 1
   }
-  const options = {
+  const opcuaOptions = {
     applicationName: "MyClient",
     connectionStrategy: connectionStrategy,
     securityMode: nodeOpcua.MessageSecurityMode.None,
     securityPolicy: nodeOpcua.SecurityPolicy.None,
     endpoint_must_exist: false,
   };
-  client = nodeOpcua.OPCUAClient.create(options);
+  client = nodeOpcua.OPCUAClient.create(opcuaOptions);
   const endpointUrl = process.env.PLC_OPCUA_URL;
 
   // step 1 : connect to
@@ -99,26 +129,35 @@ async function openPlc() {
   let door_variable = null;
   let charger_variable = null;
 
-  let socketClient = ioClient(process.env.BACKEND_URL);
+  let socketClient = ioClient(process.env.BACKEND_URL, {
+    withCredentials: true,
+    transports: ['polling', 'websocket'],
+    ca: fs.readFileSync(".cert/certificate.ca.crt")
+  });
+
+  socketClient.on("welcome", async (data) => {
+    console.log("welcome received from backend")
+  });
 
   socketClient.on("open-box", async (data) => {
     // from backend
+    console.log(`open-box received for Box nº ${data.boxId}`)
 
-    // to PLC 
-    var nodesToWrite = [{
-      nodeId: `ns=3;s="${process.env.PLC_DOOR_VARIABLE}"`,
-      attributeId: nodeOpcua.AttributeIds.Value,
-      indexRange: null,
-      value: {
+    if (boxId == data.boxId) {
+      // to PLC 
+      var nodesToWrite = [{
+        nodeId: `ns=3;s="${process.env.PLC_DOOR_VARIABLE}"`,
+        attributeId: nodeOpcua.AttributeIds.Value,
+        indexRange: null,
         value: {
-          dataType: nodeOpcua.DataType.Boolean,
-          value: true
+          value: {
+            dataType: nodeOpcua.DataType.Boolean,
+            value: true
+          }
         }
-      }
-    },
-      // ATTENTION: THERE SHOULD BE AN ARRAY OF BOXES TO IDENTIFY THE BOX Nº WITH data.boxId
-    ];
-    await session.write(nodesToWrite);
+      }];
+      await session.write(nodesToWrite);
+    }
   });
 
   setInterval(async function () {
@@ -134,10 +173,10 @@ async function openPlc() {
     if (door_variable != dataValue.value.value) {
       if (door_variable != null) {
         if (dataValue.value.value == true) {
-          // console.log("se emite")
+          console.log("se emite open-box-confirmed")
           socketClient.emit("open-box-confirmed", { boxId, parkingId });
         } else {
-          // console.log("se emite")
+          console.log("se emite box-closed")
           socketClient.emit("box-closed", { boxId, parkingId });
         }
       }
@@ -169,7 +208,7 @@ async function openPlc() {
 
   server.on('close', function () {
     console.log(' Stopping ...');
-  
+
     if (process.env.USING_WEBSOCKETS == "true") {
       closePLC();
     }
