@@ -25,15 +25,15 @@ import Home from './views/Home';
 
 const Site = () => {
 
-  const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
+  // const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
-  let history = useHistory();
+  // let history = useHistory();
 
-  useEffect(() => {
-    if(isMobile){
-      history.push("/login");
-    }
-  });
+  // useEffect(() => {
+  //   if(isMobile){
+  //     history.push("/login");
+  //   }
+  // });
 
   const childRef = useRef();
   let location = useLocation();

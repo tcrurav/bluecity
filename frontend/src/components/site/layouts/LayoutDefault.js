@@ -13,6 +13,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 
+import { useMediaQuery } from 'react-responsive';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: "10vh",
@@ -26,9 +28,17 @@ const useStyles = makeStyles((theme) => ({
 
 const LayoutDefault = ({ children }) => {
   const myClasses = useStyles();
+  const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
+
   return (
     <>
-      {/* <Header navPosition="right" className="reveal-from-bottom" /> */}
+      {
+        isMobile ? 
+        <Header navPosition="right" className="reveal-from-bottom" /> 
+        : 
+        <></>
+      }
+
       <main className="site-content">
         {children}
       </main>

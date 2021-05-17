@@ -11,6 +11,7 @@ import Container from "@material-ui/core/Container";
 import step0Short from '../../assets/images/step-0-short.png';
 import step1Short from '../../assets/images/step-1-short.png';
 import step2Short from '../../assets/images/step-2-short.png';
+import step3Short from '../../assets/images/step-3-short.png';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -166,7 +167,7 @@ const FeaturesSplit = ({
                 )}
                 data-reveal-container=".split-item">
                 <Container className={myClasses.image}>
-                  <Image src={step2Short} aspectRatio={5 / 9} />
+                  <Image src={step3Short} aspectRatio={5 / 9} />
                 </Container>
               </div>
             </div>
