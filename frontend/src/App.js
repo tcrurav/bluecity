@@ -21,6 +21,7 @@ import AvailabilityScreen from "./components/mapping/availability/availabilitySc
 import ParkingProcessScreen from "./components/mapping/parking-process/parkingProcessScreen";
 // import MySite from './components/my-site/mySiteScreen';
 import Site from './components/site/site';
+import Rincon from './components/site/views/Rincon';
 
 // import 'jquery/dist/jquery.min.js';
 // import 'bootstrap/dist/js/bootstrap.min.js';
@@ -55,6 +56,7 @@ function App() {
           <Route path='/contact' component={Contact} />
           {/* <Route path="/my-site" component={MySite}/> */}
           <Route path="/" component={Site}/>
+          <Route path="/rincon" component={Rincon}/>
           {/* <Route path="/" component={MyLogo}/> */}
           <Route component={MyError} />
         </Switch>
