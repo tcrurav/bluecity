@@ -39,10 +39,10 @@ import BoxDataService from '../../../services/box.service';
 import { 
   RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
   RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
-  RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
+  RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
   RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
   NEITHER_PARKING_NOT_RENTING 
-  } from './constants/constants';
+  } from '../constants/constants';
 
 const RentingProcessScreen = ({ location, history }) => {
 
@@ -94,7 +94,7 @@ const RentingProcessScreen = ({ location, history }) => {
     });
 
     socketRef.current.on('simulator-charger-connected', () => {
-      setStateRentingProcess(RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED)
+      setStateRentingProcess(RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED)
 
       console.log('Charger connected');
     });
@@ -140,7 +140,7 @@ const RentingProcessScreen = ({ location, history }) => {
                     text='The door is open. Introduce your scooter and close the door.'
                     icon={faInfoCircle}
                   />
-                  : stateRentingProcess === RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ?
+                  : stateRentingProcess === RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ?
 				  <MyMarker
                     color='blue'
                     state={null}

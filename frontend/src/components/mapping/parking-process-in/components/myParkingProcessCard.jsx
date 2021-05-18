@@ -26,13 +26,12 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { 
   PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
   PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
-  PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED } from '../constants/constants';
+  PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED } from '../../constants/constants';
 
 const MyParkingProcessCard = ({ parking, stateParkingProcess }) => {
 
   const { id, address, name } = parking;
-
-  // console.log("MyParkingProcessCard")
+  console.log(PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED)
 
   return (
     <>

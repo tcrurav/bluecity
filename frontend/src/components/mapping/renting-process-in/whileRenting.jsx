@@ -43,22 +43,23 @@ import {
   RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
   RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
   RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
+  PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
+  PARKING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
   NEITHER_PARKING_NOT_RENTING 
-  } from './constants/constants';
+  } from '../constants/constants';
 /**
 |--------------------------------------------------
 */
 
 const WhileRenting = ({ location, history }) => {
 
-  const { state: { parking, boxId } } = location;
-
+  const { state: { parking, boxId, checkingForRenting } } = location;
+  
   const socketRef = useRef();
   
   const reservationInterval = useRef(null);
   
   const { id, address, name } = parking; 
-  
   
   let [geolocation, geolocationAvailability] = useGeolocation();
   const [distanceToParking, setDistanceToParking] = useState(0);
@@ -77,21 +78,6 @@ const WhileRenting = ({ location, history }) => {
   
   const cancelCountdown = () => (reservationInterval.current !== null) && clearInterval(reservationInterval.current);
   
-  const returnScooter = () => {
-	let index = stateParking.boxReservedByThisUser;  
-    let data = stateParking.boxes[index];  
-	data.state = RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT; //Always
-	data.lastReservationDate = BEGIN_OF_TIMES; //Duda here, hmmm... Parking case
-	socketRef.current.emit('open-box', data);
-	history.push({
-        pathname: '/renting-process-in',
-        state: {  
-            parking,
-            boxId: data.id 
-        }
-    });
-  }
-  
   const getNecessaryData = () => {
 	ParkingDataService.get(id).then((data) => {
         setStateParking(s => ({
@@ -107,10 +93,9 @@ const WhileRenting = ({ location, history }) => {
           boxes: data.data
         })); 
 	});
-	console.log(stateParking.boxReservedByThisUser)
 	
 	for(let i=0;i<stateParking.boxes.length;i++){
-		if(stateParking.boxes[i].id == boxId){
+		if(stateParking.boxes[i].id === boxId){
 			setStateParking(s => ({
 				...s,
 				boxReservedByThisUser: i 
@@ -119,31 +104,68 @@ const WhileRenting = ({ location, history }) => {
 	} 
 	
 	BoxDataService.get(boxId).then((data) => {
-		const lastReservationDate = new Date(data.data.lastReservationDate).getTime();  
+		const lastReservation = new Date(data.data.lastReservationDate).getTime();  
 		setStateParking(s => ({
 			...s,
-			lastReservationDate
+			lastReservationDate: lastReservation
 		}));
 	});
   }
-
+  
+  const returnScooterRenting = () => {
+	let index = stateParking.boxReservedByThisUser;  
+    let data = stateParking.boxes[index];  
+	data.lastReservationDate = new Date();     //Duda here, hmmm... Parking case
+	history.push({
+		pathname: '/availability',
+		state: {  
+			parking,
+			checkingForRenting: false,  
+			//It has to be false as the user is going to park the scooter
+			boxId: data.id
+		}
+	});
+	}
+  
+  const getMyScooterParking = () => {
+	socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL);
+	
+	let index = stateParking.boxReservedByThisUser;  
+    let data = stateParking.boxes[index];  
+	data.state = PARKING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+	data.lastReservationDate = new Date(); 
+	
+	socketRef.current.emit('open-box-parking-out', data);  //Hecho?
+	console.log(data)
+	history.push({
+		  pathname: "/parking-process-out",
+		  state: {
+			parking: parking,
+			boxId: boxId
+		  },
+	});  
+  }
+  
   useEffect(() => {
     console.log("useEffect socket");
     socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL);
 
     socketRef.current.on('welcome', () => {
-      console.log('connected to backend');
-	  
-	  //After connecting to backend, in order to avoid issues and repeated actions
-	  getNecessaryData()
+		console.log('connected to backend');
+		  
+		//After connecting to backend, in order to avoid issues and repeated actions
+		//Cuando vas a devolver el scooter pasa algo raro si abres la caja y no haces nada
+		 //Necesita hacerlo dos veces, los estados van lento
+		 getNecessaryData()
     });
-
+	
     return () => {
       socketRef.current.disconnect();
     }
   }, []);
   
   useEffect(() => {
+	getNecessaryData()  
     if (geolocation.latitude === 0 && geolocation.longitude === 0) {
       return;
     }
@@ -173,6 +195,7 @@ const WhileRenting = ({ location, history }) => {
       reservationInterval.current = setInterval(() => {
         try {
 			const reservation_time_left = new Date().getTime() - stateParking.lastReservationDate;
+			//console.log(stateParking)
 			setStateParking(s => ({
 				...s,
 				reservation_time_left
@@ -187,7 +210,7 @@ const WhileRenting = ({ location, history }) => {
       cancelCountdown();
     }
   }, [stateParking.boxReservedByThisUser, stateParking.reservation_time_left]); //Necessary change
-
+  
   return (
     <>
       <MyNavbar history={history} />
@@ -203,18 +226,37 @@ const WhileRenting = ({ location, history }) => {
 		<Row>
 			<Col xs={{span: 12, offset: 0}}>
 				<ul>
-					<li> You have rented a scooter in {address} called {name}</li>
-					<li> You rented it {formatTimeLeft(stateParking.reservation_time_left.valueOf())} minutes ago </li>
+					{
+						checkingForRenting 
+						?
+							<li> You have rented a scooter in {address} called {name}</li>
+						:
+							<li> You have parked your scooter in {address} called {name}</li>
+					}
+					
+					<li> You rented it {formatTimeLeft(stateParking.reservation_time_left.valueOf())} minutes ago. </li>
 					<li> Distance to parking: {distanceToParking.toFixed(2)} km </li>
 				</ul>
 				{
-					distanceToParking <= CLOSE_DISTANCE_TO_PARKING ?
+					!checkingForRenting && distanceToParking <= CLOSE_DISTANCE_TO_PARKING ?
+					
 						<Col xs={12}>
-							<p> Would you like to return it back? </p>
-							<button onClick={returnScooter}> Open Box </button>
+							<p> Would you like to get your scooter back? </p>
+							<button onClick={getMyScooterParking}> Open Box </button>
+						</Col>
+						
+					: !checkingForRenting && distanceToParking > CLOSE_DISTANCE_TO_PARKING ?
+					
+						<p> You are too far from the parking </p>
+						
+					: checkingForRenting ?
+					
+						<Col xs={12}>
+							<p> Would you like return the scooter? </p>
+							<button onClick={returnScooterRenting}> Open Box </button>
 						</Col>
 					:
-						<p> You are too far from the parking </p>
+						<> This case should never take place </>	
 				}
 			</Col>
 		</Row>

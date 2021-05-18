@@ -26,13 +26,14 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { 
   PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
   PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED,
-  PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED } from '../constants/constants';
+  PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
+  NEITHER_PARKING_NOT_RENTING  } from '../../constants/constants';
 
 const MyParkingProcessCard = ({ parking, stateParkingProcess }) => {
 
   const { id, address, name } = parking;
-
-  // console.log("MyParkingProcessCard")
+  
+  console.log(stateParkingProcess)
 
   return (
     <>
@@ -50,16 +51,6 @@ const MyParkingProcessCard = ({ parking, stateParkingProcess }) => {
               state={null}
               text='Open box door'
               icon={ stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
-            />
-          </Col>
-        </Row>
-        <Row className='pt-2'>
-          <Col>
-            <MyMarker
-              color={ stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? 'green' : 'red'}
-              state={null}
-              text='Introduce scooter in box'
-              icon={ stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>
         </Row>

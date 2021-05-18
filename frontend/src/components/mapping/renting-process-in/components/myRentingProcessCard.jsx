@@ -24,11 +24,11 @@ import { Card, Col, Row } from 'react-bootstrap';
 |--------------------------------------------------
 */
 import { 
-  RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,  // 26
-  RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED, //27
-  RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, // 28
+  RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,  
+  RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
+  RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, 
 } 
-from '../constants/constants';
+from '../../constants/constants';
 
 const MyRentingProcessCard = ({ parking, stateRentingProcess }) => {
 
@@ -56,20 +56,20 @@ const MyRentingProcessCard = ({ parking, stateRentingProcess }) => {
         <Row className='pt-2'>
           <Col>
             <MyMarker
-              color={ stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? 'green' : 'red'}
+              color={ stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
               text='Introduce scooter in box'
-              icon={ stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
+              icon={ stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>
         </Row>
         <Row className='pt-2'>
           <Col>
             <MyMarker
-              color={ stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED  ? 'green' : 'red'}
+              color={ stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED  ? 'green' : 'red'}
               state={null}
-              text='Plug the wires'
-              icon={ stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
+              text='Plug the charger in'
+              icon={ stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>
         </Row>
@@ -79,16 +79,6 @@ const MyRentingProcessCard = ({ parking, stateRentingProcess }) => {
               color={ stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
               text='Close box door'
-              icon={ stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
-            />
-          </Col>
-        </Row>
-        <Row className='pt-2'>
-          <Col>
-            <MyMarker
-              color={ stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? 'green' : 'red'}
-              state={null}
-              text='Smile'
               icon={ stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>

@@ -27,7 +27,7 @@ import {
   RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
   RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED,
   RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
-} from '../constants/constants';
+} from '../../constants/constants';
 
 const MyRentingProcessCard = ({ parking, stateRentingProcess }) => {
 

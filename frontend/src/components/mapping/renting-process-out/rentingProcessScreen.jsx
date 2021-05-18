@@ -41,7 +41,7 @@ import {
   RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
   RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED,
   RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
-  NEITHER_PARKING_NOT_RENTING } from './constants/constants';
+  NEITHER_PARKING_NOT_RENTING } from '../constants/constants';
 
 const RentingProcessScreen = ({ location, history }) => {
 
@@ -85,9 +85,10 @@ const RentingProcessScreen = ({ location, history }) => {
 	  
 	  history.push({
             pathname: '/while-renting',
-            state: {  //Necessary information for while-renting
+            state: {  
               parking,
               boxId: boxId, 
+			  checkingForRenting: true,
             }
         });
     });

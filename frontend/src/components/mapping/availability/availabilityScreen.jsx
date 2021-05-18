@@ -53,7 +53,8 @@ import { OCCUPIED, FREE, RESERVED, FIVE_MINUTES, THIS_USER_HAS_NO_RESERVATION, g
 import { 
 	PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
 	RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
- } from '../renting-process-in/constants/constants';
+	RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
+ } from '../constants/constants';
 
 const AvailabilityScreen = ({ location, history }) => {
 
@@ -64,7 +65,6 @@ const AvailabilityScreen = ({ location, history }) => {
   let [geolocation, geolocationAvailability] = useGeolocation();
 
   const { state: { parking, checkingForRenting } } = location;
-  console.log(location)
 
   const socketRef = useRef();
 
@@ -164,27 +164,37 @@ const AvailabilityScreen = ({ location, history }) => {
       let index = stateParking.boxReservedByThisUser;  
       let data = stateParking.boxes[index];  
 	  data.userId = apiUser.id;
-	  if(checkingForRenting) {
-        data.state = RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
-      }
-      else {
-        data.state = PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
-      }
-      data.lastReservationDate = BEGIN_OF_TIMES;
+      data.lastReservationDate = new Date(); // No?
       BoxDataService.update(data.id, data).then(() => {
-        ScooterDataService.getScooterWithUserId(apiUser.id) //renting-process-out
+        ScooterDataService.getScooterWithUserId(apiUser.id) 
         .then(res => {
-		    if(checkingForRenting){  //This information is necessary for whileRenting component.
+			if(!checkingForRenting && res.data.userId === apiUser.id){
+				// The second condition is just to proof that the user has rented a scooter
+				// checkingForRenting is false as the user is going to park the scooter
+				data.state = RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+				socketRef.current.emit('open-box-renting-in', data);
+				history.push({
+					pathname: '/renting-process-in',  
+					state: { 
+						parking,
+						boxId: data.id,
+						stateParking: stateParking,
+					}
+				})
+			}
+		    else if(checkingForRenting){ 
+				data.state = RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
 				socketRef.current.emit('open-renting-box', data);
 				history.push({
-				pathname: '/renting-process-out',  
-				state: { 
-					parking,
-					boxId: data.id,
-					stateParking: stateParking,
-				}
-			})
+					pathname: '/renting-process-out',  
+					state: { 
+						parking,
+						boxId: data.id,
+						stateParking: stateParking,
+					}
+				})
 			} else {
+				data.state = PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
 				socketRef.current.emit('open-box-parking-in', data);
 				history.push({
 					pathname: '/parking-process-in',
@@ -192,7 +202,7 @@ const AvailabilityScreen = ({ location, history }) => {
 						parking,
 						boxId: data.id 
 					}
-			})
+				})
 			}
 		});
     });

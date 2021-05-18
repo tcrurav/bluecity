@@ -37,10 +37,11 @@ import BoxDataService from '../../../services/box.service';
 |--------------------------------------------------
 */
 import { 
+  PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
   PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED,
   PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
   PARKING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
-  NEITHER_PARKING_NOT_RENTING } from './constants/constants';
+  NEITHER_PARKING_NOT_RENTING } from '../constants/constants';
 
 const ParkingProcessScreen = ({ location, history }) => {
 
@@ -48,7 +49,9 @@ const ParkingProcessScreen = ({ location, history }) => {
 
   const socketRef = useRef();
 
-  const [stateParkingProcess, setStateParkingProcess] = useState( NEITHER_PARKING_NOT_RENTING );
+  const [stateParkingProcess, setStateParkingProcess] = useState(NEITHER_PARKING_NOT_RENTING);
+  
+  console.log(stateParkingProcess)
 
   const refreshBoxState = () => {
     console.log("refreshBoxState")
@@ -56,7 +59,6 @@ const ParkingProcessScreen = ({ location, history }) => {
     BoxDataService.get(boxId).then((data) => {
       console.log("refreshBoxState after call to boxdataservice")
       console.log(boxId);
-      console.log(data);
       console.log(data.data.state);
       setStateParkingProcess(
         data.data.state
