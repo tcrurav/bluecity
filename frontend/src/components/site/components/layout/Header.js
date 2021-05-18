@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import Logo from './partials/Logo';
+import { useHistory } from "react-router-dom";
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 
 const propTypes = {
   navPosition: PropTypes.string,
@@ -74,6 +77,22 @@ const Header = ({
     className
   );
 
+  const useStyles = makeStyles((theme) => ({
+    buttonLogin: {
+      height: "3em",
+      borderRadius: "30px",
+      backgroundColor: "#01579B",
+    },
+  }));
+
+  let history = useHistory();
+
+  // useEffect(() => {
+  //   if(isMobile){
+  //     history.push("/login");
+  //   }
+  // });
+  const classesRoot = useStyles();
   return (
     <header
       {...props}
@@ -88,7 +107,7 @@ const Header = ({
           <Logo />
           {!hideNav &&
             <>
-              <button
+              {/* <button
                 ref={hamburger}
                 className="header-nav-toggle"
                 onClick={isActive ? closeMenu : openMenu}
@@ -124,7 +143,8 @@ const Header = ({
                       </li>
                     </ul>}
                 </div>
-              </nav>
+              </nav> */}
+              <Button className={classesRoot.buttonLogin} variant="contained" color="primary" onClick={()=> {history.push("/login")}}>Acceso para móvil</Button>
             </>}
         </div>
       </div>

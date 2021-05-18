@@ -11,6 +11,7 @@ import Container from "@material-ui/core/Container";
 import step0Short from '../../assets/images/step-0-short.png';
 import step1Short from '../../assets/images/step-1-short.png';
 import step2Short from '../../assets/images/step-2-short.png';
+import step3Short from '../../assets/images/step-3-short.png';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,7 +87,7 @@ const FeaturesSplit = ({
 
   const sectionHeader = {
     title: 'Tres pasos sencillos de uso de nuestro servicio',
-    paragraph: 'El uso de nuestro servicio es sencillo. Con estos 3 pasos puedes aparcar tu patineta o alquilar alguna de las disponibles en nuestra red de estaciones una vez te has registrado en nuestra App.'
+    paragraph: 'El uso de nuestro servicio es sencillo. Con estos 3 pasos puedes aparcar tu patinete o alquilar alguna de las disponibles en nuestra red de estaciones una vez te has registrado en nuestra App.'
   };
 
   return (
@@ -105,10 +106,10 @@ const FeaturesSplit = ({
                   Dos posibilidades de uso
                 </div>
                 <h3 className="mt-0 mb-12">
-                  Aparcar o alquilar una patineta
+                  Aparcar o alquilar un patinete
                 </h3>
                 <p className="m-0">
-                  Haciendo click en una de estas dos opciones podrás buscar la estación mas cercana. Aparcar tu propia patineta o acceder a una de nuestras patinetas de alquiler.
+                  Haciendo click en una de estas dos opciones podrás buscar la estación mas cercana. Aparcar tu propia patinete o acceder a una de nuestras patinetes de alquiler.
                 </p>
               </div>
               <div className={
@@ -132,7 +133,7 @@ const FeaturesSplit = ({
                   Busca la estación para aparcar/alquilar
                   </h3>
                 <p className="m-0">
-                  A través del mapa puedes localizar, si activas la geolocalización en tu móvil, la estación más cercana dónde aparcar tu patineta o alquilar una patineta de nuestra red.
+                  A través del mapa puedes localizar, si activas la geolocalización en tu móvil, la estación más cercana dónde aparcar tu patinete o alquilar una patinete de nuestra red.
                   </p>
               </div>
               <div className={
@@ -166,7 +167,7 @@ const FeaturesSplit = ({
                 )}
                 data-reveal-container=".split-item">
                 <Container className={myClasses.image}>
-                  <Image src={step2Short} aspectRatio={5 / 9} />
+                  <Image src={step3Short} aspectRatio={5 / 9} />
                 </Container>
               </div>
             </div>

@@ -116,3 +116,4 @@ dist
 
 #oAuth
 credentials.json
+.cert/

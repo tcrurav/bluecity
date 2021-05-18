@@ -18,13 +18,13 @@ import MyAccount from "./components/auth/my-account";
 // import {ParkingsWithFreeScooters} from './components/parkingsWithFreeScooters';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AvailabilityScreen from "./components/mapping/availability/availabilityScreen";
-//import ParkingProcessScreen from "./components/mapping/parking-process/ParkingProcessScreen";
 // import MySite from './components/my-site/mySiteScreen';
 import Site from './components/site/site';
 import ParkingProcessScreen from "./components/mapping/parking-process/parkingProcessScreen";
 import RentingProcessInScreen from "./components/mapping/renting-process-in/rentingProcessScreen";
 import RentingProcessOutScreen from "./components/mapping/renting-process-out/rentingProcessScreen";
 import WhileRenting from "./components/mapping/renting-process-in/whileRenting";
+import Rincon from './components/site/views/Rincon';
 
 // import 'jquery/dist/jquery.min.js';
 // import 'bootstrap/dist/js/bootstrap.min.js';
@@ -62,6 +62,7 @@ function App() {
           <Route path='/contact' component={Contact} />
           {/* <Route path="/my-site" component={MySite}/> */}
           <Route path="/" component={Site}/>
+          <Route path="/rincon" component={Rincon}/>
           {/* <Route path="/" component={MyLogo}/> */}
           <Route component={MyError} />
         </Switch>
