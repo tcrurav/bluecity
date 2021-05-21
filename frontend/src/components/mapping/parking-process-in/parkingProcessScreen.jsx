@@ -37,10 +37,11 @@ import BoxDataService from '../../../services/box.service';
 |--------------------------------------------------
 */
 import { 
-  PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
-  PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
   PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
-  NEITHER_PARKING_NOT_RENTING } from './constants/constants';
+  PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
+  PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
+  PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
+  NEITHER_PARKING_NOT_RENTING } from '../constants/constants';
 
 /**
 |--------------------------------------------------
@@ -61,25 +62,12 @@ const ParkingProcessScreen = ({ location, history }) => {
     console.log("refreshBoxState")
 
     BoxDataService.get(boxId).then((data) => {
-      console.log("refreshBoxState after call to boxdataservice")
-      console.log(boxId);
-      console.log(data);
-      console.log(data.data.state);
-      setStateParkingProcess(
-        data.data.state
-      );
-    });
-  }
-
-  const reset = () => {
-    console.log("reset")
-
-    const resetData = { state: 0, occupied: 0, userId: null };
-
-    BoxDataService.update(boxId, resetData).then((data) => {
-      history.push({
-        pathname: '/main'
-      })
+		console.log("refreshBoxState after call to boxdataservice")
+		console.log(boxId);
+		console.log(data.data.state);
+		setStateParkingProcess(
+			data.data.state
+		);
     });
   }
 
@@ -87,6 +75,19 @@ const ParkingProcessScreen = ({ location, history }) => {
     console.log("useEffect primero");
     refreshBoxState();
   }, []);
+  
+  useEffect(() => {
+	if(stateParkingProcess === PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED){
+		history.push({
+			pathname: "/while-renting",
+			state: {
+				parking,
+				boxId: boxId,
+				checkingForRenting: false,
+			},
+		});
+	}
+  }, [stateParkingProcess]);
 
   useEffect(() => {
     console.log("useEffect socket");
@@ -135,7 +136,7 @@ const ParkingProcessScreen = ({ location, history }) => {
                   <MyMarker
                     color='blue'
                     state={null}
-                    text='The door is open. Please, introduce your scooter and plug the charger in.'
+                    text='The door is opened. Please, introduce your scooter and plug the charger in.'
                     icon={faInfoCircle}
                   />
                   :stateParkingProcess === PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ?
@@ -153,13 +154,11 @@ const ParkingProcessScreen = ({ location, history }) => {
                     text='The door is closed. The parking process is complete.'
                     icon={faInfoCircle}
                   />
-                  <Button onClick={reset}>Reset Box - Just for testing</Button>
-                  </>
+    </>
             }
           </Col>
         </Row>
       </MyContainer>
-      {/* <Footer /> */}
     </>
   )
 };

@@ -18,8 +18,11 @@ import MyCarImg from '../availability/components/myCarImg';
 | Libraries
 |--------------------------------------------------
 */
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { makeStyles } from "@material-ui/core/styles";
 import { Row, Col, Card } from 'react-bootstrap';
+import Button from "@material-ui/core/Button";
 
 /**
 |--------------------------------------------------
@@ -27,6 +30,7 @@ import { Row, Col, Card } from 'react-bootstrap';
 |--------------------------------------------------
 */
 import BoxDataService from '../../../services/box.service';
+import ParkingDataService from '../../../services/parking.service';
 import { useGeolocation } from '../../geolocation/geolocation';
 import { getDistanceFromLatLonInKm } from '../../../utils/common';
 import { formatTimeLeft } from '../availability/utils/util';
@@ -42,53 +46,122 @@ import {
   RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
   RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
   RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
-  NEITHER_PARKING_NOT_RENTING 
-  } from './constants/constants';
+  PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
+  PARKING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
+  NEITHER_PARKING_NOT_RENTING,
+  } from '../constants/constants';
 /**
 |--------------------------------------------------
 */
-
 const WhileRenting = ({ location, history }) => {
 
-  const { state: { parking, boxId, boxes, boxReservedByThisUser, lat_parking, long_parking } } = location;
-
+  const { state: { parking, boxId, checkingForRenting } } = location;
+  
   const socketRef = useRef();
   
   const reservationInterval = useRef(null);
   
   const { id, address, name } = parking; 
   
-  
   let [geolocation, geolocationAvailability] = useGeolocation();
   const [distanceToParking, setDistanceToParking] = useState(0);
   const [stateOpenBoxPossible, setStateOpenBoxPossible] = useState(false);
-  const hora = new Date().getTime();
   
   const [stateParking, setStateParking] = useState(
     {
       reservation_time_left: 0,
-      boxReservedByThisUser: boxReservedByThisUser,
-      lat_parking: lat_parking,
-      long_parking: long_parking,
-	  boxes: boxes,
+	  lastReservationDate: null,
+      boxReservedByThisUser: 0,
+      lat_parking: 0,
+      long_parking: 0,
+	  boxes: [],
     }
   );
   
+  const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: "10vh",
+  },
+  image: {
+    maxWidth: "512px",
+  },
+  buttonContainer: {
+    justify: "center",
+    alignItems: "center",
+  },
+  buttons: {
+    marginTop: "1vh",
+    backgroundColor: "#00a9f4",
+    "&:hover": {
+      backgroundColor: "#007ac1",
+      color: "white",
+    },
+  },
+  footer: {
+    top: 0,
+  },
+  }));
+
+  const classes = useStyles();
+  
   const cancelCountdown = () => (reservationInterval.current !== null) && clearInterval(reservationInterval.current);
   
-  const returnScooter = () => {
-	let index = stateParking.boxReservedByThisUser;  
-    let data = stateParking.boxes[index];  
-	data.state = RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT; //Always
-	data.lastReservationDate = BEGIN_OF_TIMES; //Duda here, hmmm...
-	socketRef.current.emit('open-box', data);
+  const getNecessaryData = () => {
+	ParkingDataService.get(id).then((data) => {
+        setStateParking(s => ({
+          ...s,
+          lat_parking: data.data.lat,
+          long_parking: data.data.long,
+        })); 
+	});
+	
+	BoxDataService.getAllBoxesInAParking(id).then((data) => {
+        setStateParking(s => ({
+          ...s,
+          boxes: data.data
+        })); 
+		for(let i=0;i<data.data.length;i++){
+			if(data.data[i].id === boxId){
+				setStateParking(s => ({
+					...s,
+					boxReservedByThisUser: i 
+				})); 
+				console.log(data.data[i].id)
+				return;
+			}
+		} 
+	});
+	
+	BoxDataService.get(boxId).then((data) => {
+		const lastReservation = new Date(data.data.lastReservationDate).getTime();  
+		setStateParking(s => ({
+			...s,
+			lastReservationDate: lastReservation
+		}));
+	});
+  }
+  
+  const goToRenting = () => {
 	history.push({
-        pathname: '/renting-process-in',
-        state: {  
-            parking,
-            boxId: data.id 
-        }
-    });
+		pathname: '/renting',
+		state: {  
+			userId: getApiUser().id
+		}
+	});
+  }
+  
+  const goToParkingProcessOut = () => {
+	let index = stateParking.boxReservedByThisUser;  
+    let data = stateParking.boxes[index]; 
+	console.log(data)	
+	socketRef.current.emit('open-box-parking-out', data);  
+	history.push({
+		  pathname: "/parking-process-out",
+		  state: {
+			parking: parking,
+			boxId: boxId
+		  },
+	});  
   }
   
   useEffect(() => {
@@ -96,15 +169,18 @@ const WhileRenting = ({ location, history }) => {
     socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL);
 
     socketRef.current.on('welcome', () => {
-      console.log('connected to backend');
+		console.log('connected to backend');
+		
     });
-
+	
     return () => {
       socketRef.current.disconnect();
     }
   }, []);
   
   useEffect(() => {
+	getNecessaryData(); //Necessary
+	
     if (geolocation.latitude === 0 && geolocation.longitude === 0) {
       return;
     }
@@ -128,18 +204,15 @@ const WhileRenting = ({ location, history }) => {
     }
   }, [distanceToParking, stateParking.boxReservedByThisUser]);
   
-  useEffect(() => {
-	// Timer counter  
+  useEffect(() => {  
     if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
-
       reservationInterval.current = setInterval(() => {
         try {
-          const reservation_time_left = ( new Date().getTime() - hora );
-
-          setStateParking(s => ({
-            ...s,
-            reservation_time_left
-          }));
+			const reservation_time_left = new Date().getTime() - stateParking.lastReservationDate;
+			setStateParking(s => ({
+				...s,
+				reservation_time_left
+			}));
         } catch (e) {
           console.log(e);
         }
@@ -149,8 +222,8 @@ const WhileRenting = ({ location, history }) => {
     return () => {
       cancelCountdown();
     }
-  }, [stateParking.boxReservedByThisUser]);
-
+  }, [stateParking.boxReservedByThisUser, stateParking.reservation_time_left]); //Necessary change
+  
   return (
     <>
       <MyNavbar history={history} />
@@ -161,28 +234,74 @@ const WhileRenting = ({ location, history }) => {
 				<MyCarImg id={parking.id} />
 		    </Col>
 		</Row>
-		<br/>
-		<br/>
 		<Row>
 			<Col xs={{span: 12, offset: 0}}>
-				<ul>
-					<li> You have rented a scooter in {address} called {name}</li>
-					<li> You rented it {formatTimeLeft(stateParking.reservation_time_left.valueOf())} minutes ago </li>
-					<li> Distance to parking: {distanceToParking.toFixed(2)} km </li>
-				</ul>
 				{
-					distanceToParking <= CLOSE_DISTANCE_TO_PARKING ?
-						<Col xs={12}>
-							<p> Would you like to return it back? </p>
-							<button onClick={returnScooter}> Open Box </button>
-						</Col>
+					checkingForRenting 
+					?
+						<span>
+							<FontAwesomeIcon icon={faInfoCircle} color="blue" />
+							&nbsp; You have rented a scooter in {name}
+						</span>
 					:
-						<p> You are too far from the parking </p>
+						<span> 
+							<FontAwesomeIcon icon={faInfoCircle} color="blue" />
+							&nbsp; You have parked your scooter in  {name}
+						</span>
+				}
+				<br/>	
+				<FontAwesomeIcon icon={faInfoCircle} color="blue" />
+					&nbsp; You rented it {formatTimeLeft(stateParking.reservation_time_left.valueOf())} minutes ago. 
+				<br/>
+				<FontAwesomeIcon icon={faInfoCircle} color="blue" />
+					&nbsp; Distance to parking: {distanceToParking.toFixed(2)} km 
+				
+				{
+					!checkingForRenting && stateOpenBoxPossible ?
+					
+						<div>
+							<span>
+								<FontAwesomeIcon icon={faInfoCircle} color="blue" />
+								&nbsp; You can take your scooter back
+							</span>
+							<Col xs={{span: 9, offset: 3}}>
+								<br/>
+								<Button 
+									variant="contained" 
+									className={classes.buttons} 
+									onClick={goToParkingProcessOut}> Open Box </Button>
+							</Col>
+						</div>
+					
+					: checkingForRenting ?
+
+						<div>
+							<span>
+								<FontAwesomeIcon icon={faInfoCircle} color="blue" />
+								&nbsp; You can return the scooter whenever you want
+							</span>
+							<Col xs={{span: 9, offset: 3}}>
+								<br/>
+								<Button 
+									variant="contained" 
+									className={classes.buttons} 
+									onClick={goToRenting}> Go to renting </Button>
+							</Col>
+						</div>
+						
+					: !checkingForRenting && !stateOpenBoxPossible ?
+						
+						<span>
+						<br/>
+							<FontAwesomeIcon icon={faInfoCircle} color="blue" />
+							&nbsp;You are too far from the parking 
+						</span>
+					:
+						<> This case should never take place </>	
 				}
 			</Col>
 		</Row>
       </MyContainer>
-      <Footer />
     </>
   )
 };

@@ -25,7 +25,6 @@ import MyMarker from './components/myMarker';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { Row, Col, Card } from 'react-bootstrap';
 import { makeStyles } from "@material-ui/core/styles";
-//import { Button, Row } from 'react-bootstrap';
 
 /**
 |--------------------------------------------------
@@ -53,7 +52,8 @@ import { OCCUPIED, FREE, RESERVED, FIVE_MINUTES, THIS_USER_HAS_NO_RESERVATION, g
 import { 
 	PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
 	RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
- } from '../renting-process-in/constants/constants';
+	RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
+ } from '../constants/constants';
 
 const AvailabilityScreen = ({ location, history }) => {
 
@@ -79,33 +79,6 @@ const AvailabilityScreen = ({ location, history }) => {
       long_parking: 0
     }
   );
-
-  const [hasBoxOccupied, setBoxOccupied] = useState(
-    {
-      hasOne: false,
-      numberOfBox: -1,
-    } 
-  );
-  const useStyles = makeStyles((theme) => ({
-    root: {},
-    image: {
-      maxWidth: "512px",
-    },
-    buttonContainer: {
-      justify: "center",
-      alignItems: "center",
-      //justifyContent: "center",
-    },
-    buttons: {
-      marginTop: "1vh",
-      backgroundColor: '#00a9f4',
-      '&:hover': {
-        backgroundColor: '#007ac1',
-        color: 'white'
-      }
-    }
-  }));
-  const classes = useStyles();
 
   const [stateOpenBoxPossible, setStateOpenBoxPossible] = useState(false);
 
@@ -162,40 +135,48 @@ const AvailabilityScreen = ({ location, history }) => {
     try {
       let index = stateParking.boxReservedByThisUser;  
       let data = stateParking.boxes[index];  
-	  if(checkingForRenting) {
-        data.state = RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
-      }
-      else {
-        data.state = PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
-      }
-      data.lastReservationDate = BEGIN_OF_TIMES;
+	  data.userId = apiUser.id;
+      data.lastReservationDate = new Date(); // No?
       BoxDataService.update(data.id, data).then(() => {
-		socketRef.current.emit('open-renting-box', data);
-        ScooterDataService.getScooterWithUserId(apiUser.id)
+        ScooterDataService.getScooterWithUserId(apiUser.id) 
         .then(res => {
-		     if(true){  //This information is necessary for whileRenting component.
-          history.push({
-            pathname: '/renting-process-out',
-            state: {
-              parking,
-			  boxId: data.id,
-			  stateParking: stateParking,
-			  boxes: stateParking.boxes,
-			  long_parking: stateParking.long_parking,
-			  lat_parking: stateParking.lat_parking,
-			  boxReservedByThisUser: stateParking.boxReservedByThisUser,
-            }
-          })
-        } else {
-         history.push({
-            pathname: '/parking-process',
-            state: {
-              parking,
-              boxId: data.id 
-            }
-          })
-        }
-      });
+			if(!checkingForRenting && res.data.userId === apiUser.id){
+				/* The second condition is just to proof that the user has rented a scooter */
+				/* checkingForRenting is false as the user is going to park the scooter */
+				data.state = RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+				socketRef.current.emit('open-box-renting-in', data);
+				history.push({
+					pathname: '/renting-process-in',  
+					state: { 
+						parking,
+						boxId: data.id,
+						stateParking: stateParking,
+					}
+				})
+			}
+		    else if(checkingForRenting){ 
+				data.state = RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+				socketRef.current.emit('open-box-renting-out', data);
+				history.push({
+					pathname: '/renting-process-out',  
+					state: { 
+						parking,
+						boxId: data.id,
+						stateParking: stateParking,
+					}
+				})
+			} else {
+				data.state = PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+				socketRef.current.emit('open-box-parking-in', data);
+				history.push({
+					pathname: '/parking-process-in',
+					state: {
+						parking,
+						boxId: data.id 
+					}
+				})
+			}
+		});
     });
     } catch (e) {
       console.log(e);
@@ -207,7 +188,7 @@ const AvailabilityScreen = ({ location, history }) => {
     return new Promise((resolve, reject) => {
       BoxDataService.getAllBoxesInAParking(parking.id).then(res => {
         let occupied = 0, free = 0, reserved = 0,
-          boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
+        boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
         for (let i = 0; i < res.data.length; i++) {
           switch (findOutGreenRedOrOrange(res.data[i])) {
             case OCCUPIED:
@@ -292,7 +273,6 @@ const AvailabilityScreen = ({ location, history }) => {
 
   useEffect(() => {
     // console.log("useEffect primero")
-    // console.log(checkingForRenting)
     findAllBoxesInAParking().then((newState) => {
       ParkingDataService.get(parking.id).then(res => {
         setStateParking(s => ({

@@ -24,15 +24,15 @@ import { Card, Col, Row } from 'react-bootstrap';
 |--------------------------------------------------
 */
 import { 
-  RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
-  RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED,
-  RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
-} from '../../constants/constants';
+  PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
+  PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED,
+  PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
+  NEITHER_PARKING_NOT_RENTING  } from '../../constants/constants';
 
-const MyRentingProcessCard = ({ parking, stateRentingProcess }) => {
+const MyParkingProcessCard = ({ parking, stateParkingProcess }) => {
 
   const { id, address, name } = parking;
-
+  
   return (
     <>
       <MyCarHeader
@@ -41,45 +41,47 @@ const MyRentingProcessCard = ({ parking, stateRentingProcess }) => {
       />
       <MyCarImg id={id} />
       <Card.Body>
-        <Card.Title>Renting process steps...</Card.Title>
+        <Card.Title>Parking process steps...</Card.Title>
         <Row className='pt-2'>
           <Col>
             <MyMarker
-              color={ stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? 'green' : 'red'}
+              color={ stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
               text='Open box door'
-              icon={ stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
+              icon={ stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>
         </Row>
         <Row className='pt-2'>
           <Col>
             <MyMarker
-              color={ stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? 'green' : 'red'}
+              color={ stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
-              text='Pull out scooter charger'
-              icon={ stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
+              text='Plug the charger out'
+              icon={ stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>
         </Row>
+        <Row></Row>
         <Row className='pt-2'>
           <Col>
             <MyMarker
-              color={ stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? 'green' : 'red'}
+              color={ stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
-              text='Closed box door'
-              icon={ stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
+              text='Close box door'
+              icon={ stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
-          </Col>      
+          </Col>
         </Row>
       </Card.Body>
     </>
+
   )
 };
 
-MyRentingProcessCard.propTypes = {
+MyParkingProcessCard.propTypes = {
   parking: PropTypes.object.isRequired,
-  stateRentingProcess: PropTypes.number.isRequired,
+  stateParkingProcess: PropTypes.number.isRequired,
 };
 
-export default MyRentingProcessCard;
+export default MyParkingProcessCard;

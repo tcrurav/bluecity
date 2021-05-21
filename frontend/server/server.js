@@ -19,7 +19,7 @@ const fs = require('fs');
 const options = {
    key: fs.readFileSync('server/.cert/certificate.key'),
    cert: fs.readFileSync('server/.cert/certificate.crt')
- };
+};
 
 const path = require('path');
 

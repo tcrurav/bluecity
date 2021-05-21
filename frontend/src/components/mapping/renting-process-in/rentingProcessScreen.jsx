@@ -39,10 +39,10 @@ import BoxDataService from '../../../services/box.service';
 import { 
   RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
   RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
-  RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
+  RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
   RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
   NEITHER_PARKING_NOT_RENTING 
-  } from './constants/constants';
+  } from '../constants/constants';
 
 const RentingProcessScreen = ({ location, history }) => {
 
@@ -57,9 +57,7 @@ const RentingProcessScreen = ({ location, history }) => {
 
     BoxDataService.get(boxId).then((data) => {
       console.log("refreshBoxState after call to boxdataservice")
-      //console.log(boxId);
-      //console.log(data);
-      //console.log(data.data.state);
+
       setStateRentingProcess(
         data.data.state
       );
@@ -79,30 +77,11 @@ const RentingProcessScreen = ({ location, history }) => {
       console.log('connected to backend');
     });
 
-    socketRef.current.emit("open-box", {id: boxId});
-
-    socketRef.current.on('box-opened', () => {
-      console.log('The box is opened');
-      setStateRentingProcess(RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED)
-    });
-
     socketRef.current.on('refresh-box-state', data => {
       if (data.boxId === boxId) {
         console.log("box state refreshed");
         refreshBoxState();
       }
-    });
-
-    socketRef.current.on('simulator-charger-connected', () => {
-      setStateRentingProcess(RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED)
-
-      console.log('Charger connected');
-    });
-	
-	socketRef.current.on('box-closed-confirmed', (data) => {
-      setStateRentingProcess(RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED)
-
-      console.log('The box has been closed');
     });
 
     return () => {
@@ -140,7 +119,7 @@ const RentingProcessScreen = ({ location, history }) => {
                     text='The door is open. Introduce your scooter and close the door.'
                     icon={faInfoCircle}
                   />
-                  : stateRentingProcess === RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ?
+                  : stateRentingProcess === RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ?
 				  <MyMarker
                     color='blue'
                     state={null}
@@ -158,7 +137,6 @@ const RentingProcessScreen = ({ location, history }) => {
           </Col>
         </Row>
       </MyContainer>
-      <Footer />
     </>
   )
 };

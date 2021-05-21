@@ -76,7 +76,6 @@ async function closePLC() {
 
 async function openPlc() {
   // Using OPCUA to connect to PLC
-
   const maxAge = 0;
 
   const connectionStrategy = {
@@ -222,98 +221,60 @@ if (process.env.USING_WEBSOCKETS == "false") {
     transports: ['polling', 'websocket']
   });
 
-  app.post("/open_box/:box_id", (req, res) => {
-    //desde el backend
+  app.post("/open_box_renting_in/:box_id", (req, res) => {
+    console.log("open_box_renting_in in box backend");
+    console.log(req.params.box_id);
 
     let data = { boxId: parseInt(req.params.box_id) };
-    io.sockets.emit('simulator-open-box', data);
+    io.sockets.emit('simulator-open-box-renting-in', data);
 
     return res.send({ response: "open-box sent" }).status(200);
   });
 
-  app.post("/open_box/:box_id", (req, res) => {
-    //desde el backend
-    console.log("/open_box in box backend");
+  app.post("/open_box_renting_out/:box_id", (req, res) => {
+    console.log("/open_box_renting_out in box backend");
     console.log(req.params.box_id);
 
     let data = { boxId: parseInt(req.params.box_id) };
-    io.sockets.emit('simulator-open-box', data);
+    io.sockets.emit('simulator-open-box-renting-out', data);
 
     return res.send({ response: "open-box sent" }).status(200);
   });
 
-  app.post("/open_renting_box/:box_id", (req, res) => {
-    console.log("/open_renting_box in box backend");
+  app.post("/open_box_parking_in/:box_id", (req, res) => {
+    console.log("/open_parking_box in box backend");
     console.log(req.params.box_id);
 
     let data = { boxId: parseInt(req.params.box_id) };
-    io.sockets.emit('simulator-open-renting-box', data);
+    io.sockets.emit('simulator-open-box-parking-in', data);
+
+    return res.send({ response: "open-box sent" }).status(200);
+  });
+
+  app.post("/open_box_parking_out/:box_id", (req, res) => {
+    console.log("/open_parking_box out box backend");
+    console.log(req.params.box_id);
+
+    let data = { boxId: parseInt(req.params.box_id) };
+    io.sockets.emit('simulator-open-box-parking-out', data);
 
     return res.send({ response: "open-box sent" }).status(200);
   });
 
   io.on("connect", (socket) => {
+    console.log("New simulator_frontend connected");
+
+    socketWithBox = socket;
 
     socket.emit("simulator-welcome", { connection_confirmed: true });
 
     socket.on("welcome", (data) => {
       console.log("welcome received from simulator backend")
-    })
-
-    socket.on("simulator-box-closed", (data) => {
-      // from box device
-      console.log("simulator-box-closed")
-      console.log(data);
-
-      axios.post(`${process.env.BACKEND_URL}/box_closed/${data.parkingId}/${data.boxId}/${data.chargerState}`)
-        .then(res => {
-          console.log("box-closed sent")
-          // console.log(`statusCode: ${res.statusCode}`)
-          // console.log(res)
-        })
-        .catch(error => {
-          console.error(error)
-        });
-
-    });
-
-    socket.on("simulator-charger-plugged-in", (data) => {
-      // from box device
-      console.log("simulator-charger-plugged-in")
-      console.log(data);
-
-      axios.post(`${process.env.BACKEND_URL}/charger_plugged_in/${data.parkingId}/${data.boxId}/${data.chargerState}`)
-        .then(res => {
-          console.log("charger_plugged_in sent")
-          // console.log(`statusCode: ${res.statusCode}`)
-          // console.log(res)
-        })
-        .catch(error => {
-          console.error(error)
-        });
-
-    });
-
-    socket.on("simulator-open-box-confirmed", (data) => {
-      // from box device
-      console.log("simulator-open-box-confirmed")
-      console.log(data);
-
-      axios.post(`${process.env.BACKEND_URL}/open_box_confirmed/${data.parkingId}/${data.boxId}`)
-        .then(res => {
-          console.log("open-box-confirmed sent")
-          //console.log(`statusCode: ${res.statusCode}`)
-          //console.log(res)
-        })
-        .catch(error => {
-          console.error(error)
-        });
     });
 
     /* Renting pulling scooter in */
     socket.on("simulator-open-box-confirmed", (data) => {
       console.log("simulator-open-box-confirmed")
-      console.log(`${process.env.BACKEND_URL}/open_box_confirmed/${data.parkingId}/${data.boxId}`);
 
       axios.post(`${process.env.BACKEND_URL}/open_box_confirmed/${data.parkingId}/${data.boxId}`)
         .then(res => {
@@ -324,21 +285,17 @@ if (process.env.USING_WEBSOCKETS == "false") {
         });
     });
 
-    //Scooter plugged
     socket.on("simulator-charger-connected", (data) => {
       console.log("La orden ha sido recibida, simulator-charger-connected")
-      console.log(data);
-
       axios.post(`${process.env.BACKEND_URL}/charger_connected/${data.parkingId}/${data.boxId}`)
         .then(res => {
           console.log("charger_connected sent")
         })
         .catch(error => {
-          console.error("Ha petado amigo mío" + error.message)
+          console.error("Ha fallado amigo mío" + error.message)
         });
     });
 
-    //Close door
     socket.on("simulator-box-closed", (data) => {
       console.log("simulator-box-closed")
       axios.post(`${process.env.BACKEND_URL}/box_closed/${data.parkingId}/${data.boxId}/${data.chargerState}`)
@@ -347,6 +304,31 @@ if (process.env.USING_WEBSOCKETS == "false") {
         })
         .catch(error => {
           console.error(error)
+        });
+    });
+
+
+    /* Renting pulling scooter out */
+    socket.on("simulator-open-renting-box-confirmed", (data) => {
+      console.log("simulator-open-box-confirmed")
+
+      axios.post(`${process.env.BACKEND_URL}/open_renting_box_confirmed/${data.parkingId}/${data.boxId}`)
+        .then(res => {
+          console.log("open-renting-box-confirmed sent")
+        })
+        .catch(error => {
+          console.error("Ha fallado lo de siempre" + error.message)
+        });
+    });
+
+    socket.on("simulator-renting-scooter-charger-unplugged", (data) => {
+      console.log("simulator-scooter-charger-unplugged")
+      axios.post(`${process.env.BACKEND_URL}/renting_charger_unplugged/${data.parkingId}/${data.boxId}/${data.chargerState}`)
+        .then(res => {
+          console.log("charger_unplugged sent")
+        })
+        .catch(error => {
+          console.error("El charger unplugged ha fallado " + error.message)
         });
     });
 
@@ -357,66 +339,86 @@ if (process.env.USING_WEBSOCKETS == "false") {
           console.log("box-closed sent")
         })
         .catch(error => {
-          console.error("Renting box closed ha petado " + error.message)
+          console.error("Renting box closed ha fallado " + error.message)
         });
     });
 
-    socket.on("simulator-renting-scooter-charger-unplugged", (data) => {
-      console.log("simulator-scooter-charger-unplugged")
-      console.log(data);
-      axios.post(`${process.env.BACKEND_URL}/renting_charger_unplugged/${data.parkingId}/${data.boxId}/${data.chargerState}`)
+
+    /* Parking pulling scooter in */
+    socket.on("simulator-open-box-parking-in-confirmed", (data) => {
+      console.log("simulator-open-box-parking-in-confirmed")
+      axios.post(`${process.env.BACKEND_URL}/open_box_parking_in_confirmed/${data.parkingId}/${data.boxId}`)
         .then(res => {
-          console.log("charger_unplugged sent")
+          console.log("open_box_parking_in sent")
         })
         .catch(error => {
-          console.error("El charger unplugged ha petado " + error.message)
+          console.error("Open parking in box ha fallado " + error.message)
         });
-      return res.send({ response: "open-box sent" }).status(200);
     });
 
-    socket.on("simulator-charger-plugged-in", (data) => {
-      // from box device
-      console.log("simulator-charger-plugged-in")
-      console.log(data);
-
-      axios.post(`${process.env.BACKEND_URL}/charger_plugged_in/${data.parkingId}/${data.boxId}/${data.chargerState}`)
+    socket.on("simulator-charger-connected-parking-in", (data) => {
+      console.log("simulator-charger-connected-parking-in-confirmed")
+      axios.post(`${process.env.BACKEND_URL}/charger_connected_parking_in/${data.parkingId}/${data.boxId}/${data.chargerState}`)
         .then(res => {
-          console.log("charger_plugged_in sent")
-          // console.log(`statusCode: ${res.statusCode}`)
-          // console.log(res)
+          console.log("charger_connected_parking_in sent")
         })
         .catch(error => {
-          console.error("Ha petado lo de siempre" + error.message)
+          console.error("Charger connected parking in box ha fallado " + error.message)
         });
     });
 
-    /* Renting pulling scooter out */
-    socket.on("simulator-open-renting-box-confirmed", (data) => {
-      console.log("simulator-open-box-confirmed")
-      console.log(data);
-
-      axios.post(`${process.env.BACKEND_URL}/open_renting_box_confirmed/${data.parkingId}/${data.boxId}`)
+    socket.on("simulator-box-closed-parking-in", (data) => {
+      console.log("simulator-box-closed-parking-in-confirmed")
+      axios.post(`${process.env.BACKEND_URL}/box_closed_parking_in/${data.parkingId}/${data.boxId}/${data.chargerState}`)
         .then(res => {
-          console.log("open-renting-box-confirmed sent")
+          console.log("box_closed_parking_in sent")
         })
         .catch(error => {
-          console.error("Ha petado lo de siempre" + error.message)
+          console.error("Close parking in box ha fallado " + error.message)
         });
     });
 
-    // socket.on("something-changed", (data) => {
-    //   console.log("something changed: " + data.toString());
-    //   // socket.emit("refresh", data);      // send to only the client who emited
 
-    //   io.sockets.emit('refresh', data);     // send to all
-    // })
+    /* Parking pulling scooter out */
+
+    socket.on("simulator-open-box-parking-out-confirmed", (data) => {
+      console.log("simulator-open-box-parking-out-confirmed")
+      axios.post(`${process.env.BACKEND_URL}/open_box_parking_out_confirmed/${data.parkingId}/${data.boxId}`)
+        .then(res => {
+          console.log("open_box_parking_out sent")
+        })
+        .catch(error => {
+          console.error("Open parking out box ha fallado " + error.message)
+        });
+    });
+
+    socket.on("simulator-charger-unplugged-parking-out", (data) => {
+      console.log("simulator-charger-unplugged-parking-out-confirmed")
+      axios.post(`${process.env.BACKEND_URL}/charger_unplugged_parking_out/${data.parkingId}/${data.boxId}/${data.chargerState}`)
+        .then(res => {
+          console.log("charger_unplugged_parking_out sent")
+        })
+        .catch(error => {
+          console.error("Close parking out box ha fallado " + error.message)
+        });
+    });
+
+    socket.on("simulator-box-closed-parking-out", (data) => {
+      console.log("simulator-box-closed-parking-out-confirmed")
+      axios.post(`${process.env.BACKEND_URL}/box_closed_parking_out/${data.parkingId}/${data.boxId}/${data.chargerState}`)
+        .then(res => {
+          console.log("box_closed_parking_out sent")
+        })
+        .catch(error => {
+          console.error("Close parking out box ha fallado " + error.message)
+        });
+    });
 
     socket.on("disconnect", () => {
       console.log("simulator_frontend disconnected");
     });
   });
 }
-
 server.listen(port, () => {
   console.log('Server started on: ' + port);
 });

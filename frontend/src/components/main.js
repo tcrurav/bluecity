@@ -5,6 +5,8 @@ import { MyNavbar } from "./ui/navbar/my-navbar";
 import {Footer} from './ui/footer'
 import { getCurrentUserId } from "../utils/common";
 import ScooterDataService from "../services/scooter.service";
+import BoxDataService from "../services/box.service";
+import ParkingDataService from "../services/parking.service";
 
 /*-----------------------------------
         Material-UI Imports
@@ -55,12 +57,20 @@ export function Main(props) {
   const classes = useStyles();
   const [loadingState, setLoadingState] = useState(true);
   const [userState, setUserState] = useState(null);
+  const [checkingForRenting, setCheckingForRenting] = useState(false);
+  const [stateParking, setStateParking] = useState({
+	  parkingId: 0,
+	  parkingAddress: '',
+	  parkingName: '',
+	  boxId: 0,
+  });
 
-  //Lo dejamos aquí
+  //Lo dejamos aquí -- This method is not used!
+  /*
   const checkUserRenting = () => {
     ScooterDataService.getScooterWithUserId(getCurrentUserId()).then((res) => {
       /* console.log("Res data:")
-    console.log(res); */
+		console.log(res); 
       if (res.data !== "") {
         setUserState(res.data);
       }
@@ -68,7 +78,8 @@ export function Main(props) {
     });
   };
 
-  const redirectToParking = () => {
+  ** Ya este método no es necesario, ha sido sustituido por goToRentingOrParking **
+  const redirectToParking = () => { 
     props.history.push({
       pathname: "/renting",
       state: {
@@ -76,14 +87,123 @@ export function Main(props) {
       },
     });
   };
-
+  */
+  
+  const checkIfRenting = () => { /* Pendiente a modificar para una mayor sencillez */
+    // Perhaps it can be easier... It is needed to get the necessary data 
+	setLoadingState(false);
+	ScooterDataService.getScooterWithUserId(getCurrentUserId())
+	.then((data) => {
+		if(data.data == ""){
+			console.log("Vacío");
+			checkIfParking();
+		}
+		else if(data.data !== ""){
+			setStateParking(s => ({
+				...s,
+				boxId: data.data.boxId
+			}));
+			BoxDataService.get(data.data.boxId)
+			.then((dato) => {
+				setStateParking(s => ({
+					...s,
+					parkingId: dato.data.parkingId
+				}));
+				ParkingDataService.get(dato.data.parkingId)
+				.then((datos) => {
+					setStateParking(s => ({
+						...s,
+						parkingAddress: datos.data.address,
+						parkingName: datos.data.name
+					}));
+				})
+				.catch(err => {
+					console.log("Error " + err.message)
+				});
+			})
+			.catch(err => {
+				console.log("Error " + err.message)
+			});
+			setUserState(true);
+			setCheckingForRenting(true)
+		}
+		else {
+			console.log("This will never take place, unless it shoudn't")
+		}
+	})
+	.catch(err => {
+		console.log("Error " + err.message)
+	});
+  }
+  
+  const checkIfParking = () => { 
+	BoxDataService.getAll().then((data) => {
+		for(let i = 0;i<data.data.length;i++){
+			if(data.data[i].userId === getCurrentUserId() && data.data[i].state === 14){
+				/* The second condition avoids the chance of confusing a renting scooter reservation with a parking scooter parked */
+				console.log("The user has a scooter parked");
+				setUserState(true);
+				setCheckingForRenting(false);
+				
+				setStateParking(s => ({
+					...s,
+					boxId: data.data[i].id,
+					parkingId: data.data[i].parkingId,
+				}));
+				
+				ParkingDataService.get(data.data[i].parkingId)
+				.then((dato) => {
+					setStateParking(s => ({
+						...s,
+						parkingAddress: dato.data.address,
+						parkingName: dato.data.name
+					}));
+				})
+				.catch(err => {
+					console.log("Error " + err.message)
+				});
+				break;
+			}
+			else {
+				continue;
+			}
+		}
+	})
+  }
+  
+  const goToRentingOrParking = () => {
+	const parking = {
+		id: stateParking.parkingId,
+		address: stateParking.parkingAddress,
+		name: stateParking.parkingName
+	}
+	if(checkingForRenting){
+		props.history.push({
+			pathname: "/renting",
+			state: {
+				userId: getCurrentUserId(),
+			},
+		});
+	} else {
+		props.history.push({
+			pathname: "/while-renting",  
+			state: {
+				parking,
+				boxId: stateParking.boxId,
+				checkingForRenting: false,
+			},
+		});
+	}
+	
+  }
+  
   useEffect(() => {
-    checkUserRenting();
+	checkIfRenting();
   }, []);
 
   return (
     <>
-      {loadingState ? (
+      {loadingState ? (  /* Simplemente cargando -- Borrar el comentario */
         <>
           <MyContainer>
             <Row className="justify-content-md-center h-50">
@@ -93,13 +213,25 @@ export function Main(props) {
             </Row>
           </MyContainer>
         </>
-      ) : userState ? (
+      ) : userState ? ( /* En caso de haber usado el renting o el parking, falta inhabilitar el navbar */
         <>
           <MyNavbar history={props.history}/>
           <Paper elevation={0} className={classes.root}>
             <Container className={classes.image}>
-              <Typography>Hello, world</Typography>
-              <Button onClick={redirectToParking}>Accept</Button>
+				<Image src="img/bluecity.png" aspectRatio={16 / 9} /> 
+				<Grid container className={classes.buttonContainer} direction="column">
+					<Grid item xs={12}>
+						<Button variant="contained" className={classes.buttons} onClick={goToRentingOrParking}>
+							{
+								checkingForRenting ?
+									<h6> Go to renting </h6>
+								:
+									<h6> Go to parking </h6>
+							}
+							
+						</Button>
+					</Grid>
+				</Grid>
             </Container>
           </Paper>
           <Footer />
