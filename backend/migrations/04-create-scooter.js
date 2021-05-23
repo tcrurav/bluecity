@@ -18,6 +18,10 @@ module.exports = {
             as: "userId",
           },
         },
+        lastReservationDate: {
+          type: Sequelize.DATE,
+          allowNull: false
+        },
         boxId: {
             type: Sequelize.INTEGER,
             onDelete: "CASCADE",

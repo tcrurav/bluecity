@@ -12,8 +12,7 @@ import socketIOClient from 'socket.io-client';
 */
 import { MyNavbar } from '../../ui/navbar/my-navbar';
 import { MyContainer } from '../../ui/my-container';
-import { Footer } from '../../ui/footer';
-import MyRentingProcessCard from './components/myRentingProcessCard';
+import MyRentingProcessInCard from './components/myRentingProcessInCard';
 import MyMarker from '../availability/components/myMarker';
 
 /**
@@ -30,19 +29,19 @@ import { Row, Col, Card } from 'react-bootstrap';
 |--------------------------------------------------
 */
 import BoxDataService from '../../../services/box.service';
+import ScooterDataService from '../../../services/scooter.service';
 
 /**
 |--------------------------------------------------
 | Constants
 |--------------------------------------------------
 */
-import { 
+import {
   RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
   RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
-  RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
-  RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
-  NEITHER_PARKING_NOT_RENTING 
-  } from '../constants/constants';
+  RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED
+} from '../constants/constants';
+import { BEGIN_OF_TIMES, getApiUser, NEITHER_PARKING_NOT_RENTING } from '../availability/constants/constants';
 
 const RentingProcessScreen = ({ location, history }) => {
 
@@ -50,7 +49,7 @@ const RentingProcessScreen = ({ location, history }) => {
 
   const socketRef = useRef();
 
-  const [stateRentingProcess, setStateRentingProcess] = useState( RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT );
+  const [stateRentingProcess, setStateRentingProcess] = useState(RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT);
 
   const refreshBoxState = () => {
     console.log("refreshBoxState")
@@ -64,6 +63,40 @@ const RentingProcessScreen = ({ location, history }) => {
     });
   }
 
+  const continueWithProcess = () => {
+    ScooterDataService.getScooterWithUserId(getApiUser().id).then(data => {
+      const scooterData = {
+        userId: null,
+        lastReservationDate: BEGIN_OF_TIMES,
+        boxId
+      }
+      ScooterDataService.update(data.data.id, scooterData).then(data => {
+        const boxData = {
+          userId: null,
+          lastReservationDate: BEGIN_OF_TIMES,
+          state: NEITHER_PARKING_NOT_RENTING,
+          occupied: true
+        };
+        BoxDataService.update(boxId, boxData).then(data => {
+          history.push({
+            pathname: '/main',
+          });
+        })
+      })
+    });
+
+    const data = {
+      state: 0,
+      lastReservationDate: BEGIN_OF_TIMES,
+      occupied: true,
+      userId: null
+    }
+    BoxDataService.update(boxId, data).then((res) => {
+
+      history.push("/main")
+    }).catch((error) => console.log(error));
+  }
+
   useEffect(() => {
     console.log("useEffect primero");
     refreshBoxState();
@@ -71,7 +104,7 @@ const RentingProcessScreen = ({ location, history }) => {
 
   useEffect(() => {
     console.log("useEffect socket");
-    socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL); 
+    socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL);
 
     socketRef.current.on('welcome', () => {
       console.log('connected to backend');
@@ -95,9 +128,10 @@ const RentingProcessScreen = ({ location, history }) => {
       <MyContainer>
         <Row>
           <Card className='m-2'>
-            <MyRentingProcessCard
+            <MyRentingProcessInCard
               parking={parking}
               stateRentingProcess={stateRentingProcess}
+              continueWithProcess={continueWithProcess}
             />
           </Card>
         </Row>
@@ -116,23 +150,23 @@ const RentingProcessScreen = ({ location, history }) => {
                   <MyMarker
                     color='blue'
                     state={null}
-                    text='The door is open. Introduce your scooter and close the door.'
+                    text='The door is open. Introduce your scooter, plug it in and close the door.'
                     icon={faInfoCircle}
                   />
                   : stateRentingProcess === RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ?
-				  <MyMarker
-                    color='blue'
-                    state={null}
-                    text='The door is open and the scooter is plugged. Close the door.'
-                    icon={faInfoCircle}
-                  />
-				  :
-                  <MyMarker
-                    color='blue'
-                    state={null}
-                    text='The door is closed. The parking process is complete.'
-                    icon={faInfoCircle}
-                  />
+                    <MyMarker
+                      color='blue'
+                      state={null}
+                      text='The door is open and the scooter is plugged. Close the door.'
+                      icon={faInfoCircle}
+                    />
+                    :
+                    <MyMarker
+                      color='blue'
+                      state={null}
+                      text='The door is closed. The parking process of your rented scooter is complete.'
+                      icon={faInfoCircle}
+                    />
             }
           </Col>
         </Row>

@@ -150,14 +150,24 @@ NODE_ENV=development
 # false --> NOT using websockets to communicate to Backend
 USING_WEBSOCKETS=false
 
-PLC_DOOR_VARIABLE="Bloque de datos_1"."puerta"
-PLC_CHARGER_VARIABLE="Bloque de datos_1"."cargador"
-PLC_BOX_ID_VARIABLE="Bloque de datos_1"."box_id"
-PLC_PARKING_ID_VARIABLE="Bloque de datos_1"."parking_id"
+//Reading from PLC
+PLC_OPEN_BOX_CONFIRMED_1="Bloque de datos_2"."datos_enviar"."openboxconfirmed_1"
+PLC_OPEN_BOX_CONFIRMED_2="Bloque de datos_2"."datos_enviar"."openboxconfirmed_2"
+PLC_OPEN_BOX_CONFIRMED_3="Bloque de datos_2"."datos_enviar"."openboxconfirmed_3"
+PLC_DETECTOR_1="Bloque de datos_2"."datos_enviar"."detector_pateineta_1"
+PLC_DETECTOR_2="Bloque de datos_2"."datos_enviar"."detector_pateineta_2"
+PLC_DETECTOR_3="Bloque de datos_2"."datos_enviar"."detector_pateineta_3"
+
+//Writting to PLC
+PLC_BOX_ID="Bloque de datos_2"."datos_recibir"."box_id"
+PLC_OPEN_BOX="Bloque de datos_2"."datos_recibir"."open_box"
+PLC_CLOSE_BOX="Bloque de datos_2"."datos_recibir"."closed_box"
+
+PLC_PARKING_ID=3
 
 PLC_POOLING_TIME=5000
 
-PLC_OPCUA_URL=opc.tcp://192.168.0.209:4000
+PLC_OPCUA_URL=opc.tcp://192.168.0.40:4000
 ```
 
 Finally to start enjoying this project.
