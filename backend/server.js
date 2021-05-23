@@ -1,5 +1,7 @@
 require('dotenv').config();
 
+const constants = require("./constants");
+
 const jwt = require('jsonwebtoken');
 const express = require('express');
 
@@ -42,6 +44,7 @@ app.use(express.static('data/img'));
 
 // database conection
 const db = require("./models");
+const { fdatasync } = require('fs');
 
 // For explotation. Database is not dropped.
 db.sequelize.sync();
@@ -99,7 +102,7 @@ if (process.env.USING_WEBSOCKETS == "false") {
 
     const data = { boxId: parseInt(req.params.box_id) };
 
-    Box.update({ state: RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED }, {
+    Box.update({ state: constants.RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED }, {
       where: { id: data.boxId }
     }).then(num => {
       if (num == 1) {
@@ -116,7 +119,7 @@ if (process.env.USING_WEBSOCKETS == "false") {
   app.post("/renting_charger_unplugged/:parking_id/:box_id/:charger_state", (req, res) => {
     const data = { boxId: parseInt(req.params.box_id) };
 
-    Box.update({ state: RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED, occupied: false }, {
+    Box.update({ state: constants.RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED, occupied: false }, {
       where: { id: data.boxId }                                                                         //false, se saca el patinete
     }).then(num => {
       if (num == 1) {
@@ -133,7 +136,7 @@ if (process.env.USING_WEBSOCKETS == "false") {
   app.post("/renting_box_closed/:parking_id/:box_id/:charger_state", (req, res) => {
     const data = { boxId: parseInt(req.params.box_id) };
     const dateOfReservation = new Date();
-    Box.update({ state: RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, lastReservationDate: dateOfReservation, userId: null }, {
+    Box.update({ state: constants.RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, lastReservationDate: dateOfReservation, userId: null }, {
       where: { id: data.boxId }
     }).then(num => {
       if (num == 1) {
@@ -168,7 +171,7 @@ if (process.env.USING_WEBSOCKETS == "false") {
 
     const data = { boxId: parseInt(req.params.box_id) };
 
-    Box.update({ state: RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED }, {
+    Box.update({ state: constants.RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED }, {
       where: { id: data.boxId }
     }).then(num => {
       if (num == 1) {
@@ -187,7 +190,7 @@ if (process.env.USING_WEBSOCKETS == "false") {
 
     const data = { boxId: parseInt(req.params.box_id) };
 
-    Box.update({ state: RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED, occupied: true }, {
+    Box.update({ state: constants.RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED, occupied: true }, {
       where: { id: data.boxId }
     }).then(num => {
       if (num == 1) {
@@ -206,7 +209,7 @@ if (process.env.USING_WEBSOCKETS == "false") {
   app.post("/box_closed/:parking_id/:box_id/:charger_state", (req, res) => {
     const data = { boxId: parseInt(req.params.box_id) };
 
-    Box.update({ state: RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, userId: null, occupied: true }, {
+    Box.update({ state: constants.RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, userId: null, occupied: true }, {
       where: { id: data.boxId }
     }).then(num => {
       if (num == 1) {
@@ -238,9 +241,9 @@ if (process.env.USING_WEBSOCKETS == "false") {
   /* Parking         -- PARKING, PULLING IN -- */
   app.post("/open_box_parking_in_confirmed/:parking_id/:box_id", (req, res) => {
     console.log("box opened for parking-in process")
-	const dateOfReservation = new Date();
+    const dateOfReservation = new Date();
     const data = { boxId: parseInt(req.params.box_id) };
-    Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED, lastReservationDate: dateOfReservation }, {
+    Box.update({ state: constants.PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED, lastReservationDate: dateOfReservation }, {
       where: { id: data.boxId }
     }).then(num => {
       if (num == 1) {
@@ -258,7 +261,7 @@ if (process.env.USING_WEBSOCKETS == "false") {
   app.post("/charger_connected_parking_in/:parking_id/:box_id/:charger_state", (req, res) => {
     console.log("charger_connected_parking_in in backend")
     const data = { boxId: parseInt(req.params.box_id) };
-    Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED, occupied: true, userId: userId }, {
+    Box.update({ state: constants.PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED, occupied: true, userId: userId }, {
       where: { id: data.boxId }
     }).then(num => {
       if (num == 1) {
@@ -276,7 +279,7 @@ if (process.env.USING_WEBSOCKETS == "false") {
   app.post("/box_closed_parking_in/:parking_id/:box_id/:charger_state", (req, res) => {
     console.log("box_closed_parking_in in backend")
     const data = { boxId: parseInt(req.params.box_id) };
-    Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, userId: userId }, {
+    Box.update({ state: constants.PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, userId: userId }, {
       where: { id: data.boxId }
     }).then(num => {
       if (num == 1) {
@@ -291,11 +294,11 @@ if (process.env.USING_WEBSOCKETS == "false") {
     return res.send({ response: "charger_plugged_in sent" }).status(200);
   });
 
-  /* Parking         -- PARKING, PULLING OUT -- */ 
+  /* Parking         -- PARKING, PULLING OUT -- */
   app.post("/open_box_parking_out_confirmed/:parking_id/:box_id", (req, res) => {
     console.log("box opened for parking-out process")
     const data = { boxId: parseInt(req.params.box_id) };
-    Box.update({ state: PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED }, {
+    Box.update({ state: constants.PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED }, {
       where: { id: data.boxId }
     }).then(num => {
       if (num == 1) {
@@ -304,7 +307,7 @@ if (process.env.USING_WEBSOCKETS == "false") {
         //
       }
     }).catch(err => {
-		console.log("Error: " + err.message)
+      console.log("Error: " + err.message)
     });
     return res.send({ response: "open-box-parking-in sent" }).status(200);
   });
@@ -312,7 +315,7 @@ if (process.env.USING_WEBSOCKETS == "false") {
   app.post("/charger_unplugged_parking_out/:parking_id/:box_id/:charger_state", (req, res) => {
     console.log("charger_unplugged_parking_out in backend")
     const data = { boxId: parseInt(req.params.box_id) };
-    Box.update({ state: PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED }, {
+    Box.update({ state: constants.PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED }, {
       where: { id: data.boxId }
     }).then(num => {
       if (num == 1) {
@@ -330,7 +333,7 @@ if (process.env.USING_WEBSOCKETS == "false") {
   app.post("/box_closed_parking_out/:parking_id/:box_id/:charger_state", (req, res) => {
     console.log("box_closed_parking_out in backend")
     const data = { boxId: parseInt(req.params.box_id) };
-    Box.update({ state: PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, occupied: false, userId: null }, {
+    Box.update({ state: constants.PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, occupied: false, userId: null }, {
       where: { id: data.boxId }
     }).then(num => {
       if (num == 1) {
@@ -364,23 +367,6 @@ if (process.env.HTTPS == "true") {
 
 const Box = db.box;
 const Scooter = db.scooter;
-// Parking pulling scooter in constants
-const PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED = 12;
-const PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED = 13;
-const PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED = 14;
-//Parking pulling scooter out constants
-const PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED = 16;
-const PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED = 17;
-const PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED = 18;
-// Renting pulling scooter out constants
-const RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED = 22;
-const RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED = 23;
-const RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED = 24;
-// Renting pulling scooter in constants
-const RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED = 26;
-const RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED = 27;
-const RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED = 28;
-
 
 const io = socketIo(server, {
   cors: {
@@ -399,9 +385,30 @@ io.on("connect", (socket) => {
 
   socket.emit("welcome", { connection_confirmed: true });
 
-  if (process.env.USING_WEBSOCKETS == "true") { /* ¡Quizás le falte un socket.on de open-box! */
-    // to box device
-    io.sockets.emit('open-box', { boxId: data.id });
+  if (process.env.USING_WEBSOCKETS == "true") {
+
+    socket.on("open-box-parking-in", (data) => {
+      // to box device
+      console.log("open-box-parking-in")
+      console.log(data);
+      io.sockets.emit('open-box', { boxId: data.id, parkingId: data.parkingId });
+    });
+
+    socket.on("open-box-parking-out", (data) => {
+      // to box device
+      io.sockets.emit('open-box', { boxId: data.id, parkingId: data.parkingId });
+    });
+
+    socket.on("open-box-renting-in", (data) => {
+      // to box device
+      io.sockets.emit('open-box', { boxId: data.id, parkingId: data.parkingId });
+    });
+
+    socket.on("open-box-renting-out", (data) => {
+      // to box device
+      io.sockets.emit('open-box', { boxId: data.id, parkingId: data.parkingId });
+    });
+
   }
 
   if (process.env.USING_WEBSOCKETS == "false") {
@@ -419,17 +426,6 @@ io.on("connect", (socket) => {
         .catch(error => {
           console.error(error)
         });
-
-      socket.on("something-changed", (data) => {
-        console.log("something changed: " + data.toString());
-
-        io.sockets.emit('refresh', data);     
-      });
-
-      socket.on("disconnect", () => {
-        console.log("Client disconnected");
-      });
-
     });
 
     /* Renting pulling scooter out     -- RENTING, PULLING OUT -- */
@@ -445,16 +441,6 @@ io.on("connect", (socket) => {
         .catch(error => {
           console.error(error)
         });
-
-      socket.on("something-changed", (data) => {
-        console.log("something changed: " + data.toString());
-
-        io.sockets.emit('refresh', data);  
-      });
-
-      socket.on("disconnect", () => {
-        console.log("Client disconnected");
-      });
     });
 
     /* Parking pulling scooter in     -- PARKING, PULLING IN -- */
@@ -470,21 +456,11 @@ io.on("connect", (socket) => {
         .catch(error => {
           console.error(error)
         });
-
-      socket.on("something-changed", (data) => {
-        console.log("something changed: " + data.toString());
-
-        io.sockets.emit('refresh', data);     
-      });
-
-      socket.on("disconnect", () => {
-        console.log("Client disconnected");
-      });
     });
 
     /* Parking pulling scooter out     -- PARKING, PULLING OUT -- */
     socket.on("open-box-parking-out", (data) => {
-      console.log("open-box-parking-out")	
+      console.log("open-box-parking-out")
 
       let parking_url = "http://localhost:9000";
 
@@ -495,16 +471,6 @@ io.on("connect", (socket) => {
         .catch(error => {
           console.error(error)
         });
-
-      socket.on("something-changed", (data) => {
-        console.log("something changed: " + data.toString());
-
-        io.sockets.emit('refresh', data);
-      });
-
-      socket.on("disconnect", () => {
-        console.log("Client disconnected");
-      });
     });
 
   }
@@ -512,59 +478,136 @@ io.on("connect", (socket) => {
   if (process.env.USING_WEBSOCKETS == "true") {
 
     socket.on("open-box-confirmed", (data) => {
-      // from box device
-
-      console.log("open-box-confirmed")
-      console.log(data)
-
-      Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED }, {
-        where: { id: data.boxId }
-      }).then(num => {
-        if (num == 1) {
-          // refresh information in mobile phones
-          io.sockets.emit('refresh-box-state', data);
-        } else {
-          // Cannot update Box with id. Maybe Box was not found
-        }
-      }).catch(err => {
-        // Error updating Box. It should be controlled in the future.
-      });
+      // from Box
+      // console.log("open-box-confirmed");
+      // console.log(data);
+      Box.findByPk(data.boxId)
+        .then((data) => {
+          // console.log("entra 1")
+          // console.log(data);
+          if (data.dataValues.state == constants.PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT ||
+            data.dataValues.state == constants.PARKING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT ||
+            data.dataValues.state == constants.RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT ||
+            data.dataValues.state == constants.RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT) {
+            // console.log("entra 2")
+            // console.log(data.dataValues.state)
+            Box.update({ state: data.dataValues.state + 1 }, {
+              where: { id: data.dataValues.id }
+            }).then(num => {
+              if (num == 1) {
+                // refresh information in mobile phones
+                // console.log(data);
+                io.sockets.emit('refresh-box-state', { boxId: data.dataValues.id });
+              } else {
+                // Cannot update Box with id. Maybe Box was not found
+              }
+            }).catch(err => {
+              // Error updating Box. It should be controlled in the future.
+            });
+          }
+        })
+        .catch((err) => {
+          // Error
+        });
     });
 
     socket.on("charger-plugged-in", (data) => {
       // From Box
 
-      Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED, occupied: true }, {
-        where: { id: data.boxId }
-      }).then(num => {
-        if (num == 1) {
-          // refresh information in mobile phones
-          io.sockets.emit('refresh-box-state', data);
-        } else {
-          // Cannot update Box with id. Maybe Box was not found
-        }
-      }).catch(err => {
-        // Error updating Box. It should be controlled in the future.
-      });
+      Box.findByPk(data.boxId)
+        .then((data) => {
+          if (data.dataValues.state == constants.PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ||
+            data.dataValues.state == constants.RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED) {
+            Box.update({ state: data.dataValues.state + 1 }, {
+              where: { id: data.dataValues.id }
+            }).then(num => {
+              if (num == 1) {
+                // refresh information in mobile phones
+                io.sockets.emit('refresh-box-state', { boxId: data.dataValues.id });
+              } else {
+                // Cannot update Box with id. Maybe Box was not found
+              }
+            }).catch(err => {
+              // Error updating Box. It should be controlled in the future.
+            });
+          }
+        })
+        .catch((err) => {
+          // Error
+        });
+    });
+
+    socket.on("charger-unplugged", (data) => {
+      // From Box
+
+      console.log("charger-unplugged");
+      Box.findByPk(data.boxId)
+        .then((data) => {
+          console.log(data);
+          if (data.dataValues.state == constants.PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ||
+            data.dataValues.state == constants.RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED) {
+            Box.update({ state: data.dataValues.state + 1 }, {
+              where: { id: data.dataValues.id }
+            }).then(num => {
+              if (num == 1) {
+                // refresh information in mobile phones
+                io.sockets.emit('refresh-box-state', { boxId: data.dataValues.id });
+              } else {
+                // Cannot update Box with id. Maybe Box was not found
+              }
+            }).catch(err => {
+              // Error updating Box. It should be controlled in the future.
+            });
+          }
+        })
+        .catch((err) => {
+          // Error
+        });
     });
 
     socket.on("box-closed", (data) => {
-      // from box device
+      // From Box
 
-      Box.update({ state: PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED, occupied: true }, {
-        where: { id: data.boxId }
-      }).then(num => {
-        if (num == 1) {
-          // refresh information in mobile phones
-          io.sockets.emit('refresh-box-state', data);
-        } else {
-          // Cannot update Box with id. Maybe Box was not found
-        }
-      }).catch(err => {
-        // Error updating Box. It should be controlled in the future.
-      });
+      Box.findByPk(data.boxId)
+        .then((data) => {
+          if (data.dataValues.state == constants.PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ||
+            data.dataValues.state == constants.PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ||
+            data.dataValues.state == constants.RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ||
+            data.dataValues.state == constants.RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED) {
+            Box.update({
+              state: data.dataValues.state + 1, occupied: true,
+              lastReservationDate:
+                (data.dataValues.state == constants.PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ||
+                  data.dataValues.state == constants.RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED) ?
+                  new Date() : constants.BEGIN_OF_TIMES
+            }, {
+              where: { id: data.dataValues.id }
+            }).then(num => {
+              if (num == 1) {
+                // refresh information in mobile phones
+                io.sockets.emit('refresh-box-state', { boxId: data.dataValues.id });
+              } else {
+                // Cannot update Box with id. Maybe Box was not found
+              }
+            }).catch(err => {
+              // Error updating Box. It should be controlled in the future.
+            });
+          }
+        })
+        .catch((err) => {
+          // Error
+        });
     });
   }
+  socket.on("something-changed", (data) => {
+    console.log("something changed: " + data.toString());
+
+    io.sockets.emit('refresh', data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
 
 });
 

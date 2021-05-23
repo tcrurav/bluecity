@@ -15,40 +15,39 @@ import MyPopup from './myPopup';
 */
 import { Marker } from 'react-leaflet';
 
-const MyMarkerMap = ({ parkings, type, checkingForRenting }) => {
+const MyMarkerMap = ({ parkings, type, checkingForRenting, returningScooter }) => {
 
-    // console.log("still in free parkings");
-    // console.log(checkingForRenting);
+  return (
+    parkings.map(p => {
 
-    return (
-        parkings.map(p => {
+      const { lat, long, id, name, address } = p;
 
-            const { lat, long, id, name, address } = p;
+      let pos = [lat, long];
 
-            let pos = [lat, long];
-
-            return (
-                <Marker
-                    key={id}
-                    position={pos}>
-                    <MyPopup
-                        id={id}
-                        name={name}
-                        address={address}
-                        p={p}
-                        type={type}
-                        checkingForRenting={checkingForRenting}
-                    />
-                </Marker>
-            );
-        })
-    )
+      return (
+        <Marker
+          key={id}
+          position={pos}>
+          <MyPopup
+            id={id}
+            name={name}
+            address={address}
+            p={p}
+            type={type}
+            checkingForRenting={checkingForRenting}
+            returningScooter={returningScooter}
+          />
+        </Marker>
+      );
+    })
+  )
 };
 
 MyMarkerMap.propTypes = {
-    parkings: PropTypes.array.isRequired,
-    type: PropTypes.string.isRequired,
-    checkingForRenting: PropTypes.bool.isRequired
+  parkings: PropTypes.array.isRequired,
+  type: PropTypes.string.isRequired,
+  checkingForRenting: PropTypes.bool.isRequired,
+  returningScooter: PropTypes.bool.isRequired
 };
 
 export default MyMarkerMap;

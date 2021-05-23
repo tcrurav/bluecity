@@ -44,16 +44,11 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
   const { t } = useTranslation();
   const { id, address, name } = parking;
 
-  // console.log("myCard")
-  // console.log(stateParking)
-
   return (
     <>
       <MyCarImg id={id} />
       <MyImgOverlay
       className="">
-        
-        {/* <Col> */}
           <Card.Title className="">{stateParking.boxes.length} {t('boxes in total')}</Card.Title>
           <Card.Text>
             <MyMarker
@@ -75,35 +70,13 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
               icon={faMapMarkerAlt}
             />
           </Card.Text>
-        {/* </Col> */}
       </MyImgOverlay>
       <MyCarHeader
         address={address}
         name={name}
       />
       <Card.Body>
-        {/* <Card.Title>{stateParking.boxes.length} {t('boxes in total')}</Card.Title> */}
         <Row>
-          {/* <Col>
-            <MyMarker
-              color='red'
-              state={stateParking.occupied}
-              text={t('unavailable')}
-              icon={faMapMarkerAlt}
-            />
-            <MyMarker
-              color='green'
-              state={stateParking.free}
-              text={t('available')}
-              icon={faMapMarkerAlt}
-            />
-            <MyMarker
-              color='orange'
-              state={stateParking.reserved}
-              text={t('reserved')}
-              icon={faMapMarkerAlt}
-            />
-          </Col> */}
           <Col >
             <Row className="mx-auto">
               <MyColBoxes
@@ -115,9 +88,6 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
           </Col>
         </Row>
         <Row className='mt-1'>
-          {/* <Col></Col> 
-          <Col>
-             <Row>*/}
           <Col>
             {
               stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION
@@ -132,8 +102,6 @@ const MyCard = ({ parking, stateParking, findOutGreenRedOrOrange,
                 : <></>
             }
           </Col>
-          {/* </Row>
-            <Row className='mt-1'> */}
           <Col>
             {
               stateOpenBoxPossible

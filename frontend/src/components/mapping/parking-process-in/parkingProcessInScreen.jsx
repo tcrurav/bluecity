@@ -12,8 +12,7 @@ import socketIOClient from 'socket.io-client';
 */
 import { MyNavbar } from '../../ui/navbar/my-navbar';
 import { MyContainer } from '../../ui/my-container';
-import { Footer } from '../../ui/footer';
-import MyParkingProcessCard from './components/myParkingProcessCard';
+import MyParkingProcessInCard from './components/myParkingProcessInCard';
 import MyMarker from '../availability/components/myMarker';
 
 /**
@@ -36,61 +35,54 @@ import BoxDataService from '../../../services/box.service';
 | Constants
 |--------------------------------------------------
 */
-import { 
+import {
   PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
   PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED,
   PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED,
   PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED,
-  NEITHER_PARKING_NOT_RENTING } from '../constants/constants';
+  NEITHER_PARKING_NOT_RENTING
+} from '../constants/constants';
+import { BEGIN_OF_TIMES } from '../availability/constants/constants';
 
-/**
-|--------------------------------------------------
-| Just for testing - It should be deleted
-|--------------------------------------------------
-*/
-import Button from '@material-ui/core/Button';
-
-const ParkingProcessScreen = ({ location, history }) => {
+const ParkingProcessInScreen = ({ location, history }) => {
 
   const { state: { parking, boxId } } = location;
 
   const socketRef = useRef();
 
-  const [stateParkingProcess, setStateParkingProcess] = useState( NEITHER_PARKING_NOT_RENTING );
+  const [stateParkingProcess, setStateParkingProcess] = useState(NEITHER_PARKING_NOT_RENTING);
+
+  const openBoxTimeout = useRef(null);
+
+  const [noResponseFromParkingDevice, setNoResposeFromParkingDevice] = useState(false);
 
   const refreshBoxState = () => {
     console.log("refreshBoxState")
 
     BoxDataService.get(boxId).then((data) => {
-		console.log("refreshBoxState after call to boxdataservice")
-		console.log(boxId);
-		console.log(data.data.state);
-		setStateParkingProcess(
-			data.data.state
-		);
+      setStateParkingProcess(
+        data.data.state
+      );
     });
   }
 
   useEffect(() => {
-    console.log("useEffect primero");
     refreshBoxState();
   }, []);
-  
+
   useEffect(() => {
-	if(stateParkingProcess === PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED){
-		history.push({
-			pathname: "/while-renting",
-			state: {
-				parking,
-				boxId: boxId,
-				checkingForRenting: false,
-			},
-		});
-	}
+    if (stateParkingProcess === PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED) {
+      history.push({
+        pathname: "/while-parking",
+        state: {
+          parking,
+          boxId: boxId
+        },
+      });
+    }
   }, [stateParkingProcess]);
 
   useEffect(() => {
-    console.log("useEffect socket");
     socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL);
 
     socketRef.current.on('welcome', () => {
@@ -109,15 +101,46 @@ const ParkingProcessScreen = ({ location, history }) => {
     }
   }, []);
 
+  const continueWithProcess = () => {
+    const boxData = {
+      state: NEITHER_PARKING_NOT_RENTING,
+      lastReservationDate: BEGIN_OF_TIMES,
+      userId: null
+    };
+    BoxDataService.update(boxId, boxData).then(data => {
+      history.push({
+        pathname: "/main"
+      })
+    });
+  }
+
+  useEffect(() => {
+    openBoxTimeout.current = setTimeout(function () {
+      BoxDataService.get(boxId).then(data => {
+        console.log(data.data.state)
+        if (data.data.state == NEITHER_PARKING_NOT_RENTING ||
+          data.data.state == PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT) {
+          setNoResposeFromParkingDevice(true);
+        }
+      });
+    }, 15000);
+
+    return () => {
+      if (openBoxTimeout.current != null) clearTimeout(openBoxTimeout.current);
+    }
+  }, []);
+
   return (
     <>
       <MyNavbar history={history} />
       <MyContainer>
         <Row>
           <Card className='m-2'>
-            <MyParkingProcessCard
+            <MyParkingProcessInCard
               parking={parking}
               stateParkingProcess={stateParkingProcess}
+              noResponseFromParkingDevice={noResponseFromParkingDevice}
+              continueWithProcess={continueWithProcess}
             />
           </Card>
         </Row>
@@ -139,22 +162,22 @@ const ParkingProcessScreen = ({ location, history }) => {
                     text='The door is opened. Please, introduce your scooter and plug the charger in.'
                     icon={faInfoCircle}
                   />
-                  :stateParkingProcess === PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ?
-                  <MyMarker
-                    color='blue'
-                    state={null}
-                    text='The charger is plugged in. Please, close the door.'
-                    icon={faInfoCircle}
-                  />
-                  :
-                  <>
-                  <MyMarker
-                    color='blue'
-                    state={null}
-                    text='The door is closed. The parking process is complete.'
-                    icon={faInfoCircle}
-                  />
-    </>
+                  : stateParkingProcess === PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ?
+                    <MyMarker
+                      color='blue'
+                      state={null}
+                      text='The charger is plugged in. Please, close the door.'
+                      icon={faInfoCircle}
+                    />
+                    :
+                    <>
+                      <MyMarker
+                        color='blue'
+                        state={null}
+                        text='The door is closed. The parking process is complete.'
+                        icon={faInfoCircle}
+                      />
+                    </>
             }
           </Col>
         </Row>
@@ -163,9 +186,9 @@ const ParkingProcessScreen = ({ location, history }) => {
   )
 };
 
-ParkingProcessScreen.propTypes = {
+ParkingProcessInScreen.propTypes = {
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
 };
 
-export default ParkingProcessScreen;
+export default ParkingProcessInScreen;

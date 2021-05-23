@@ -23,9 +23,7 @@ const RentingScreen = ({ location, history }) => {
 
   const findScooterWithUserId = () => {
     ScooterDataService.getScooterWithUserId(userId).then((res) => {
-      console.log("Res data:")
-      console.log(res);
-      if (res.data  === "") {
+      if (res.data === "") {
         setUserState(null)
       } else {
         setUserState({
@@ -39,10 +37,9 @@ const RentingScreen = ({ location, history }) => {
     <>
       <MyNavbar history={history} />
       {!userState ? (
-        // <MyParkingsWithFreeScooters history={history} />
         <MyParkingsWithFreeScooters />
       ) : (
-        <MyParkingsWithFreeBoxes />
+        <MyParkingsWithFreeBoxes returningScooter={true} />
       )}
       <Footer />
     </>

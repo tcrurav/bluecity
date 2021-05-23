@@ -18,13 +18,13 @@ import MyAccount from "./components/auth/my-account";
 // import {ParkingsWithFreeScooters} from './components/parkingsWithFreeScooters';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AvailabilityScreen from "./components/mapping/availability/availabilityScreen";
-// import MySite from './components/my-site/mySiteScreen';
 import Site from './components/site/site';
-import ParkingProcessScreenIn from "./components/mapping/parking-process-in/parkingProcessScreen";
-import ParkingProcessScreenOut from "./components/mapping/parking-process-out/parkingProcessScreen";
-import RentingProcessInScreen from "./components/mapping/renting-process-in/rentingProcessScreen";
-import RentingProcessOutScreen from "./components/mapping/renting-process-out/rentingProcessScreen";
+import ParkingProcessInScreen from "./components/mapping/parking-process-in/parkingProcessInScreen";
+import ParkingProcessOutScreen from "./components/mapping/parking-process-out/parkingProcessOutScreen";
+import RentingProcessInScreen from "./components/mapping/renting-process-in/rentingProcessInScreen";
+import RentingProcessOutScreen from "./components/mapping/renting-process-out/rentingProcessOutScreen";
 import WhileRenting from "./components/mapping/renting-process-in/whileRenting";
+import WhileParking from "./components/mapping/parking-process-in/whileParking";
 import Rincon from './components/site/views/Rincon';
 
 // import 'jquery/dist/jquery.min.js';
@@ -53,18 +53,18 @@ function App() {
           <RoutePrivate path='/renting' component={RentingScreen} />
           {/* <RoutePrivate path='/renting' component={(props) => <Renting userId={getCurrentUserId()} history={props.history} />}/> */}
           <RoutePrivate path='/availability' component={AvailabilityScreen} />
-          <RoutePrivate path='/parking-process-in' component={ParkingProcessScreenIn} />
-		  <RoutePrivate path='/parking-process-out' component={ParkingProcessScreenOut} />
+          <RoutePrivate path='/parking-process-in' component={ParkingProcessInScreen} />
+          <RoutePrivate path='/parking-process-out' component={ParkingProcessOutScreen} />
           <RoutePrivate path='/renting-process-in' component={RentingProcessInScreen} />
-		  <RoutePrivate path='/renting-process-out' component={RentingProcessOutScreen} />
-		  <RoutePrivate path='/while-renting' component={WhileRenting} />
+          <RoutePrivate path='/renting-process-out' component={RentingProcessOutScreen} />
+          <RoutePrivate path='/while-renting' component={WhileRenting} />
+          <RoutePrivate path='/while-parking' component={WhileParking} />
           {/* <RoutePrivate path='/renting' component={() => <Renting userId={getCurrentUserId()}/>}/> */}
           <RoutePrivate path='/scooter-renting' component={Scooter} />
           <RoutePublic path='/login' component={Login} />
           <Route path='/contact' component={Contact} />
-          {/* <Route path="/my-site" component={MySite}/> */}
-          <Route path="/" component={Site}/>
-          <Route path="/rincon" component={Rincon}/>
+          <Route path="/" component={Site} />
+          <Route path="/rincon" component={Rincon} />
           {/* <Route path="/" component={MyLogo}/> */}
           <Route component={MyError} />
         </Switch>

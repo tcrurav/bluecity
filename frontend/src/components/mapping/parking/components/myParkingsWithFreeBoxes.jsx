@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
 
 /**
 |--------------------------------------------------
@@ -15,8 +14,7 @@ import { MyContainer } from '../../../ui/my-container';
 | Libraries
 |--------------------------------------------------
 */
-import { TileLayer, Map } from 'react-leaflet';
-// import "leaflet/dist/leaflet.css";
+import { TileLayer } from 'react-leaflet';
 
 /**
 |--------------------------------------------------
@@ -24,13 +22,6 @@ import { TileLayer, Map } from 'react-leaflet';
 |--------------------------------------------------
 */
 import ParkingDataService from '../../../../services/parking.service';
-
-/**
-|--------------------------------------------------
-| Material-ui
-|--------------------------------------------------
-*/
-// import { Grid } from "@material-ui/core";
 
 /**
 |--------------------------------------------------
@@ -44,30 +35,9 @@ import { Row, Col } from 'react-bootstrap';
 | Styled
 |--------------------------------------------------
 */
-// import styled from 'styled-components';
 import { MyMap } from '../styled/styleComponents';
 
-// const MyMap = styled(Map)`
-//   &.leaflet-container {
-//     width: auto;
-//     height: 70vh;
-//     maxHeight: 70vh;
-//   }
-// `;
-
-// import { makeStyles } from "@material-ui/core/styles";
-
-// const useStyles = makeStyles((theme) => ({
-//   map: {
-//     '&.leaflet-container': {
-//       width: "auto",
-//       height: "80vh"
-//     }
-//   }
-// }));
-
-const MyParkingsWithFreeBoxes = () => {
-  // const classes = useStyles();
+const MyParkingsWithFreeBoxes = ({ returningScooter }) => {
 
   const zoom = 13;
 
@@ -85,7 +55,6 @@ const MyParkingsWithFreeBoxes = () => {
 
   useEffect(() => {
     try {
-      // console.log("My parking with free boxes");
       allWithAFreeBox();
     } catch (error) {
       console.log(error);
@@ -94,11 +63,6 @@ const MyParkingsWithFreeBoxes = () => {
 
   return (
     <>
-      {/* <Grid container
-        direction="column"
-        justify="flex-start"
-        alignItems="center">
-        <Grid item> */}
       <MyContainer>
         <Row>
           <Col>
@@ -114,14 +78,13 @@ const MyParkingsWithFreeBoxes = () => {
                 parkings={parkings}
                 type='boxes'
                 checkingForRenting={false}
+                returningScooter={returningScooter}
               />
             </MyMap>
           </Col>
         </Row>
         <Row>
           <Col>
-            {/* </Grid>
-        <Grid item> */}
             <MyBtnCurrentPosition
               freeBoxes={freeBoxes}
               setFreeBoxes={setFreeBoxes}
@@ -129,14 +92,8 @@ const MyParkingsWithFreeBoxes = () => {
           </Col>
         </Row>
       </MyContainer>
-      {/* </Grid>
-      </Grid> */}
     </>
   )
 };
-
-// MyParkingsWithFreeBoxes.propTypes = {
-//     geolocation: PropTypes.object.isRequired
-// };
 
 export default MyParkingsWithFreeBoxes;

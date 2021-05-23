@@ -71,6 +71,7 @@ const MyParkingsWithFreeScooters = () => {
               parkings={parkings}
               type='scooter'
               checkingForRenting={true}
+              returningScooter={false}
             />
           </MyMap>
         </Col>
