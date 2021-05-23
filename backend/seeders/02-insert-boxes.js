@@ -33,40 +33,40 @@ module.exports = {
         parkingId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
-      // },{
-      //   id: 4,
-      //   state: Constants.NEITHER_PARKING_NOT_RENTING,
-      //   occupied: false,
-      //   lastReservationDate: BEGIN_OF_TIMES,
-      //   userId: null,
-      //   parkingId: 1,
-      //   createdAt: new Date(),
-      //   updatedAt: new Date()
-      // },{
-      //   id: 5,
-      //   state: Constants.NEITHER_PARKING_NOT_RENTING,
-      //   occupied: false,
-      //   lastReservationDate: BEGIN_OF_TIMES,
-      //   userId: null,
-      //   parkingId: 1,
-      //   createdAt: new Date(),
-      //   updatedAt: new Date()
-      // },{
-      //   id: 6,
-      //   occupied: false,
-      //   state: Constants.NEITHER_PARKING_NOT_RENTING,
-      //   lastReservationDate: BEGIN_OF_TIMES,
-      //   userId: null,
-      //   parkingId: 1,
-      //   createdAt: new Date(),
-      //   updatedAt: new Date()
+      },{
+        id: 4,
+        state: Constants.NEITHER_PARKING_NOT_RENTING,
+        occupied: true,
+        lastReservationDate: BEGIN_OF_TIMES,
+        userId: null,
+        parkingId: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },{
+        id: 5,
+        state: Constants.NEITHER_PARKING_NOT_RENTING,
+        occupied: false,
+        lastReservationDate: BEGIN_OF_TIMES,
+        userId: null,
+        parkingId: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },{
+        id: 6,
+        state: Constants.NEITHER_PARKING_NOT_RENTING,
+        occupied: false,
+        lastReservationDate: BEGIN_OF_TIMES,
+        userId: null,
+        parkingId: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
       },{
         id: 7,
         state: Constants.NEITHER_PARKING_NOT_RENTING,
         occupied: true,
         lastReservationDate: BEGIN_OF_TIMES,
         userId: null,
-        parkingId: 2,
+        parkingId: 3,
         createdAt: new Date(),
         updatedAt: new Date()
       },{
@@ -75,7 +75,7 @@ module.exports = {
         occupied: false,
         lastReservationDate: BEGIN_OF_TIMES,
         userId: null,
-        parkingId: 2,
+        parkingId: 3,
         createdAt: new Date(),
         updatedAt: new Date()
       },{
@@ -84,43 +84,43 @@ module.exports = {
         occupied: false,
         lastReservationDate: BEGIN_OF_TIMES,
         userId: null,
-        parkingId: 2,
+        parkingId: 3,
         createdAt: new Date(),
         updatedAt: new Date()
-      // },{
-      //   id: 10,
-      //   state: Constants.NEITHER_PARKING_NOT_RENTING,
-      //   occupied: false,
-      //   lastReservationDate: BEGIN_OF_TIMES,
-      //   userId: null,
-      //   parkingId: 2,
-      //   createdAt: new Date(),
-      //   updatedAt: new Date()
-      // },{
-      //   id: 11,
-      //   state: Constants.NEITHER_PARKING_NOT_RENTING,
-      //   occupied: false,
-      //   lastReservationDate: BEGIN_OF_TIMES,
-      //   userId: null,
-      //   parkingId: 2,
-      //   createdAt: new Date(),
-      //   updatedAt: new Date()
-      // },{
-      //   id: 12,
-      //   state: Constants.NEITHER_PARKING_NOT_RENTING,
-      //   occupied: false,
-      //   lastReservationDate: BEGIN_OF_TIMES,
-      //   userId: null,
-      //   parkingId: 2,
-      //   createdAt: new Date(),
-      //   updatedAt: new Date()
+      },{
+        id: 10,
+        state: Constants.NEITHER_PARKING_NOT_RENTING,
+        occupied: true,
+        lastReservationDate: BEGIN_OF_TIMES,
+        userId: null,
+        parkingId: 4,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },{
+        id: 11,
+        state: Constants.NEITHER_PARKING_NOT_RENTING,
+        occupied: false,
+        lastReservationDate: BEGIN_OF_TIMES,
+        userId: null,
+        parkingId: 4,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },{
+        id: 12,
+        state: Constants.NEITHER_PARKING_NOT_RENTING,
+        occupied: false,
+        lastReservationDate: BEGIN_OF_TIMES,
+        userId: null,
+        parkingId: 4,
+        createdAt: new Date(),
+        updatedAt: new Date()
       },{
         id: 13,
         state: Constants.NEITHER_PARKING_NOT_RENTING,
         occupied: true,
         lastReservationDate: BEGIN_OF_TIMES,
         userId: null,
-        parkingId: 3,
+        parkingId: 5,
         createdAt: new Date(),
         updatedAt: new Date()
       },{
@@ -129,7 +129,7 @@ module.exports = {
         occupied: false,
         lastReservationDate: BEGIN_OF_TIMES,
         userId: null,
-        parkingId: 3,
+        parkingId: 5,
         createdAt: new Date(),
         updatedAt: new Date()
       },{
@@ -138,7 +138,7 @@ module.exports = {
         occupied: false,
         lastReservationDate: BEGIN_OF_TIMES,
         userId: null,
-        parkingId: 3,
+        parkingId: 5,
         createdAt: new Date(),
         updatedAt: new Date()
       },{
@@ -147,7 +147,7 @@ module.exports = {
         occupied: true,
         lastReservationDate: BEGIN_OF_TIMES,
         userId: null,
-        parkingId: 4,
+        parkingId: 6,
         createdAt: new Date(),
         updatedAt: new Date()
       },{
@@ -156,65 +156,11 @@ module.exports = {
         occupied: false,
         lastReservationDate: BEGIN_OF_TIMES,
         userId: null,
-        parkingId: 4,
+        parkingId: 6,
         createdAt: new Date(),
         updatedAt: new Date()
       },{
         id: 18,
-        state: Constants.NEITHER_PARKING_NOT_RENTING,
-        occupied: false,
-        lastReservationDate: BEGIN_OF_TIMES,
-        userId: null,
-        parkingId: 4,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        id: 19,
-        state: Constants.NEITHER_PARKING_NOT_RENTING,
-        occupied: true,
-        lastReservationDate: BEGIN_OF_TIMES,
-        userId: null,
-        parkingId: 5,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        id: 20,
-        state: Constants.NEITHER_PARKING_NOT_RENTING,
-        occupied: false,
-        lastReservationDate: BEGIN_OF_TIMES,
-        userId: null,
-        parkingId: 5,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        id: 21,
-        state: Constants.NEITHER_PARKING_NOT_RENTING,
-        occupied: false,
-        lastReservationDate: BEGIN_OF_TIMES,
-        userId: null,
-        parkingId: 5,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        id: 22,
-        state: Constants.NEITHER_PARKING_NOT_RENTING,
-        occupied: true,
-        lastReservationDate: BEGIN_OF_TIMES,
-        userId: null,
-        parkingId: 6,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        id: 23,
-        state: Constants.NEITHER_PARKING_NOT_RENTING,
-        occupied: false,
-        lastReservationDate: BEGIN_OF_TIMES,
-        userId: null,
-        parkingId: 6,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        id: 24,
         state: Constants.NEITHER_PARKING_NOT_RENTING,
         occupied: false,
         lastReservationDate: BEGIN_OF_TIMES,

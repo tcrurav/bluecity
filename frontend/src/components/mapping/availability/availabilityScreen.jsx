@@ -13,7 +13,6 @@ import { useGeolocation } from '../../geolocation/geolocation';
 */
 import { MyNavbar } from '../../ui/navbar/my-navbar';
 import { MyContainer } from '../../ui/my-container';
-import { Footer } from '../../ui/footer';
 import MyCard from './components/myCard';
 import MyMarker from './components/myMarker';
 
@@ -24,7 +23,6 @@ import MyMarker from './components/myMarker';
 */
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { Row, Col, Card } from 'react-bootstrap';
-import { makeStyles } from "@material-ui/core/styles";
 
 /**
 |--------------------------------------------------
@@ -33,7 +31,6 @@ import { makeStyles } from "@material-ui/core/styles";
 */
 import BoxDataService from '../../../services/box.service';
 import ParkingDataService from '../../../services/parking.service';
-import ScooterDataService from '../../../services/scooter.service';
 
 /**
 |--------------------------------------------------
@@ -49,11 +46,11 @@ import { formatTimeLeft } from './utils/util';
 |--------------------------------------------------
 */
 import { OCCUPIED, FREE, RESERVED, FIVE_MINUTES, THIS_USER_HAS_NO_RESERVATION, getApiUser, CLOSE_DISTANCE_TO_PARKING, BEGIN_OF_TIMES, MINIMUM_DISTANCE_INCREMENT } from './constants/constants'
-import { 
-	PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
-	RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
-	RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
- } from '../constants/constants';
+import {
+  PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
+  RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
+  RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT
+} from '../constants/constants';
 
 const AvailabilityScreen = ({ location, history }) => {
 
@@ -63,7 +60,7 @@ const AvailabilityScreen = ({ location, history }) => {
 
   let [geolocation, geolocationAvailability] = useGeolocation();
 
-  const { state: { parking, checkingForRenting } } = location;
+  const { state: { parking, checkingForRenting, returningScooter } } = location;
 
   const socketRef = useRef();
 
@@ -88,7 +85,6 @@ const AvailabilityScreen = ({ location, history }) => {
   const apiUser = getApiUser();
 
   const findOutGreenRedOrOrange = (data) => {
-    // console.log("findOutGreenRedOrOrange")
     //To understand this look at the table in the documentation
     const reservationExpired = new Date(data.lastReservationDate) < new Date(new Date() - FIVE_MINUTES + 1000); // five minutes minus 1 second
 
@@ -105,7 +101,6 @@ const AvailabilityScreen = ({ location, history }) => {
   const cancelCountdown = () => (reservationInterval.current !== null) && clearInterval(reservationInterval.current);
 
   const handleReservation = (ind) => {
-    // console.log("handleReservation")
     if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {  //Possible Stale Closure
       console.log('You have already reserved a Box in this parking');
       return;
@@ -131,53 +126,96 @@ const AvailabilityScreen = ({ location, history }) => {
   };
 
   const openBox = () => {
-    // console.log('openBox');
     try {
-      let index = stateParking.boxReservedByThisUser;  
-      let data = stateParking.boxes[index];  
-	  data.userId = apiUser.id;
-      data.lastReservationDate = new Date(); // No?
+      let index = stateParking.boxReservedByThisUser;
+      let data = stateParking.boxes[index];
+      data.userId = apiUser.id;
+      data.lastReservationDate = new Date();
+      if (checkingForRenting) {
+        data.state = RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+      } else {
+        if (returningScooter) {
+          data.state = RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+        } else {
+          // Looking for parking for own scooter
+          data.state = PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+        }
+      }
       BoxDataService.update(data.id, data).then(() => {
-        ScooterDataService.getScooterWithUserId(apiUser.id) 
-        .then(res => {
-			if(!checkingForRenting && res.data.userId === apiUser.id){
-				/* The second condition is just to proof that the user has rented a scooter */
-				/* checkingForRenting is false as the user is going to park the scooter */
-				data.state = RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
-				socketRef.current.emit('open-box-renting-in', data);
-				history.push({
-					pathname: '/renting-process-in',  
-					state: { 
-						parking,
-						boxId: data.id,
-						stateParking: stateParking,
-					}
-				})
-			}
-		    else if(checkingForRenting){ 
-				data.state = RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
-				socketRef.current.emit('open-box-renting-out', data);
-				history.push({
-					pathname: '/renting-process-out',  
-					state: { 
-						parking,
-						boxId: data.id,
-						stateParking: stateParking,
-					}
-				})
-			} else {
-				data.state = PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
-				socketRef.current.emit('open-box-parking-in', data);
-				history.push({
-					pathname: '/parking-process-in',
-					state: {
-						parking,
-						boxId: data.id 
-					}
-				})
-			}
-		});
-    });
+        if (checkingForRenting) {
+          socketRef.current.emit('open-box-renting-out', data);
+          history.push({
+            pathname: '/renting-process-out',
+            state: {
+              parking,
+              boxId: data.id
+            }
+          });
+          return;
+        }
+
+        if (returningScooter) {
+          socketRef.current.emit('open-box-renting-in', data);
+          history.push({
+            pathname: '/renting-process-in',
+            state: {
+              parking,
+              boxId: data.id
+            }
+          });
+          return;
+        }
+
+        // Parking
+        socketRef.current.emit('open-box-parking-in', data);
+        history.push({
+          pathname: '/parking-process-in',
+          state: {
+            parking,
+            boxId: data.id
+          }
+        });
+
+        // ScooterDataService.getScooterWithUserId(apiUser.id)
+        //   .then(res => {
+        // if (!checkingForRenting && res.data.userId === apiUser.id) {
+        //   /* The second condition is just to proof that the user has rented a scooter */
+        //   /* checkingForRenting is false as the user is going to park the scooter */
+        //   data.state = RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+        //   socketRef.current.emit('open-box-renting-in', data);
+        //   history.push({
+        //     pathname: '/renting-process-in',
+        //     state: {
+        //       parking,
+        //       boxId: data.id,
+        //       stateParking: stateParking,
+        //     }
+        //   })
+        // }
+        // else if (checkingForRenting) {
+        //   data.state = RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+        //   socketRef.current.emit('open-box-renting-out', data);
+        //   history.push({
+        //     pathname: '/renting-process-out',
+        //     state: {
+        //       parking,
+        //       boxId: data.id,
+        //       stateParking: stateParking,
+        //     }
+        //   })
+        // } else {
+        //   data.state = PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
+        //   socketRef.current.emit('open-box-parking-in', data);
+        //   history.push({
+        //     pathname: '/parking-process-in',
+        //     state: {
+        //       parking,
+        //       boxId: data.id
+        //     }
+        //   })
+        // }
+        // });
+      });
     } catch (e) {
       console.log(e);
     }
@@ -188,7 +226,7 @@ const AvailabilityScreen = ({ location, history }) => {
     return new Promise((resolve, reject) => {
       BoxDataService.getAllBoxesInAParking(parking.id).then(res => {
         let occupied = 0, free = 0, reserved = 0,
-        boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
+          boxReservedByThisUser = THIS_USER_HAS_NO_RESERVATION;
         for (let i = 0; i < res.data.length; i++) {
           switch (findOutGreenRedOrOrange(res.data[i])) {
             case OCCUPIED:

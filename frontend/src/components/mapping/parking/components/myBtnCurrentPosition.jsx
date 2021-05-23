@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 | Libraries
 |--------------------------------------------------
 */
-import { Col, Button, Image } from 'react-bootstrap';
+import { Button, Image } from 'react-bootstrap';
 
 const BtnCurrentPosition = ({ freeBoxes, setFreeBoxes }) => {
   const { t } = useTranslation();

@@ -16,7 +16,7 @@ const ParkingScreen = ({ history }) => {
         <>
             <MyNavbar history={history} />
             {/* <MyParkingsWithFreeBoxes history={history} /> */}
-            <MyParkingsWithFreeBoxes />
+            <MyParkingsWithFreeBoxes returningScooter={false} />
             <Footer />
         </>
     )

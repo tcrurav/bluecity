@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -29,10 +29,9 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const MyPopup = ({ id, name, address, p, type, checkingForRenting }) => {
+const MyPopup = ({ id, name, address, p, type, checkingForRenting, returningScooter }) => {
     const classes = useStyles();
     const { t } = useTranslation();
-    // console.log(checkingForRenting);
 
     return (
         <Popup>
@@ -44,6 +43,7 @@ const MyPopup = ({ id, name, address, p, type, checkingForRenting }) => {
                 p={p}
                 type={type}
                 checkingForRenting={checkingForRenting}
+                returningScooter={returningScooter}
             />
         </Popup>
     )
@@ -55,7 +55,8 @@ MyPopup.propTypes = {
     address: PropTypes.string.isRequired,
     p: PropTypes.object.isRequired,
     type: PropTypes.string.isRequired,
-    checkingForRenting: PropTypes.bool.isRequired
+    checkingForRenting: PropTypes.bool.isRequired,
+    returningScooter: PropTypes.bool.isRequired
 };
 
 export default MyPopup;
