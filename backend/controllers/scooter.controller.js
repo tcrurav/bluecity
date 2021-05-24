@@ -15,7 +15,8 @@ exports.create = (req, res) => {
   const scooter = {
     id: req.body.id,
     userId: req.body.userId,
-    boxId: req.body.boxId
+    boxId: req.body.boxId,
+    lastReservationDate: req.body.lastReservationDate
   };
 
   // Save Scooter in the database
@@ -60,21 +61,38 @@ exports.findOne = (req, res) => {
     });
 };
 
+// Find a single Scooter with an boxId
+exports.findOneWithBoxId = (req, res) => {
+  const boxId = req.params.boxId;
+
+  Scooter.findOne({
+    where: { boxId: boxId }
+  })
+    .then(data => {
+      return res.send(data);
+    })
+    .catch(err => {
+      return res.status(500).send({
+        message: "Error retrieving Scooter with boxId=" + boxId
+      });
+    });
+};
+
 // Find a single Scooter with an userId
 exports.findOneWithUserId = (req, res) => {
   const userId = req.params.userId;
 
   Scooter.findOne({
-    where: { userId: userId}
+    where: { userId: userId }
   })
-      .then(data => {
-        return res.send(data);
-      })
-      .catch(err => {
-        return res.status(500).send({
-          message: "Error retrieving Scooter with userId=" + userId
-        });
+    .then(data => {
+      return res.send(data);
+    })
+    .catch(err => {
+      return res.status(500).send({
+        message: "Error retrieving Scooter with userId=" + userId
       });
+    });
 };
 
 // Find all free Scooters (where userId is null)
@@ -82,15 +100,15 @@ exports.findFreeScooters = (req, res) => {
   Scooter.findAll({
     where: { userId: null }
   })
-      .then(data => {
-        return res.send(data);
-      })
-      .catch(err => {
-        return res.status(500).send({
-          message:
-              err.message || "Some error occurred while retrieving scooters."
-        });
+    .then(data => {
+      return res.send(data);
+    })
+    .catch(err => {
+      return res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving scooters."
       });
+    });
 };
 
 // Update a Scooter by the id in the request

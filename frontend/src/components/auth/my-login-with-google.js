@@ -52,6 +52,7 @@ export class MyLoginWithGoogle extends React.Component {
       username: profile.getEmail(),
       name: profile.getName(),
       password: profile.getId(),
+      language: 'es', //default language
       isAdmin: false
     };
 
@@ -59,6 +60,7 @@ export class MyLoginWithGoogle extends React.Component {
 
     UserDataService.create(data)
       .then(response => {
+        // console.log(response)
         setUserSession(token, profile, response.data.token, response.data.user);
 
         // setTimeout(() => { //Just to simulate the timeout

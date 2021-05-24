@@ -6,6 +6,10 @@ class BoxDataService {
     return http.get(`/boxes/parking/${id}`);
   }
 
+  getOneWithUserId(id){
+    return http.get(`/boxes/user/${id}`);
+  }
+
   getAll() {
     return http.get("/boxes");
   }

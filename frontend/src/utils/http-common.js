@@ -1,22 +1,43 @@
 import axios from "axios";
 import { getApiToken } from "./common";
 
-const apiToken = getApiToken();
-// console.log("apiToken")
-// console.log(apiToken);
-const objToExport = apiToken ? axios.create({
-  baseURL: process.env.REACT_APP_BASEURL + "/api",
-  headers: {
-    "Content-type": "application/json",
-    "Authorization": `Bearer ${apiToken}`
-  }
-})
-  :
-  axios.create({
+// const objToExport = getApiToken() ? axios.create({
+//   baseURL: process.env.REACT_APP_BASEURL + "/api",
+//   headers: {
+//     "Content-type": "application/json",
+//     "Authorization": `Bearer ${getApiToken()}`
+//   }
+// })
+//   :
+//   axios.create({
+//     baseURL: process.env.REACT_APP_BASEURL + "/api",
+//     headers: {
+//       "Content-type": "application/json"
+//     }
+//   });
+
+// export default objToExport;
+
+const fetchClient = () => {
+  const defaultOptions = {
     baseURL: process.env.REACT_APP_BASEURL + "/api",
+    method: 'get',
     headers: {
-      "Content-type": "application/json"
-    }
+      'Content-Type': 'application/json',
+    },
+  };
+
+  // Create instance
+  let instance = axios.create(defaultOptions);
+
+  // Set the AUTH token for any request
+  instance.interceptors.request.use(function (config) {
+    const token = getApiToken();
+    config.headers.Authorization =  token ? `Bearer ${token}` : '';
+    return config;
   });
 
-export default objToExport;
+  return instance;
+};
+
+export default fetchClient();

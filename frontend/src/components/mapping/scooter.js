@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, Row, Col} from 'react-bootstrap';
-import {MyNavbar} from '../ui/my-navbar'
+import {MyNavbar} from '../ui/navbar/my-navbar'
 import {MyContainer} from "../ui/my-container";
 import {Footer} from "../ui/footer";
 import ScooterDataService from "../../services/scooter.service";

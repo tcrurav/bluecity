@@ -16,9 +16,6 @@ Download links:
 
 From Github: https://github.com/tcrurav/bluecity.git
 
-Also available in elrincon.jetbrains.space of the project:
-* HTTPS clone URL: https://git.jetbrains.space/elrincon/bc/learning.git
-
 ## Prerequisites
 
 You need a working environment with:
@@ -35,9 +32,11 @@ The best option to start with this project is cloning it in your PC:
 git clone https://github.com/tcrurav/bluecity.git
 ```
 
-This project contains 2 different parts:
+This project contains 4 different parts:
 * Frontend
 * Backend
+* Box_simulator_frontend (Just to simulate a parking box)
+* Box_simulator_backend (Just to simulate a parking box)
 
 You need a node.js working environment. The LTS is recommended: https://nodejs.org/es/
 
@@ -48,6 +47,12 @@ cd bluecity/frontend
 npm install
 
 cd bluecity/backend
+npm install
+
+cd bluecity/box_simulator_frontend
+npm install
+
+cd bluecity/box_simulator_backend
 npm install
 ```
 
@@ -78,6 +83,7 @@ Your Google ClientID is used in the file bluecity/frontend/src/components/my-log
 ```
 REACT_APP_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com
 REACT_APP_BASEURL=http://localhost:4000
+HTTPS=false
 ```
 
 Take into account the second line to introduce in the file bluecity/frontend/.env necessary to indicate the base URL of your API.
@@ -98,6 +104,12 @@ BLUECITY_CLIENT=http://localhost:3000
 DB_HOST=127.0.0.1
 
 NODE_ENV=development
+
+HTTPS=false
+
+# true --> using websockets to communicate to PARKING BOX intermediate computer
+# false --> NOT using websockets to communicate to PARKING BOX intermediate computer
+USING_WEBSOCKETS=false
 ```
 
 2. You need a mysql server working.
@@ -118,6 +130,46 @@ cd /bluecity/backend
 npx sequelize-cli db:seed:all
 ```
 
+* For your box_simulator_frontend part, intended only to test a parking box, in the file bluecity/box_simulator_frontend/.env put the following 2 lines: 
+
+```
+REACT_APP_BASEURL=http://localhost:9000
+PORT=8000
+```
+
+* For your box_simulator_backend part, intended only to test a parking box, in the file bluecity/box_simulator_backend/.env put the following 2 lines: 
+
+```
+BACKEND_URL=http://localhost:4000
+
+HTTPS=false
+
+NODE_ENV=development
+
+# true --> using websockets to communicate to Backend
+# false --> NOT using websockets to communicate to Backend
+USING_WEBSOCKETS=false
+
+//Reading from PLC
+PLC_OPEN_BOX_CONFIRMED_1="Bloque de datos_2"."datos_enviar"."openboxconfirmed_1"
+PLC_OPEN_BOX_CONFIRMED_2="Bloque de datos_2"."datos_enviar"."openboxconfirmed_2"
+PLC_OPEN_BOX_CONFIRMED_3="Bloque de datos_2"."datos_enviar"."openboxconfirmed_3"
+PLC_DETECTOR_1="Bloque de datos_2"."datos_enviar"."detector_pateineta_1"
+PLC_DETECTOR_2="Bloque de datos_2"."datos_enviar"."detector_pateineta_2"
+PLC_DETECTOR_3="Bloque de datos_2"."datos_enviar"."detector_pateineta_3"
+
+//Writting to PLC
+PLC_BOX_ID="Bloque de datos_2"."datos_recibir"."box_id"
+PLC_OPEN_BOX="Bloque de datos_2"."datos_recibir"."open_box"
+PLC_CLOSE_BOX="Bloque de datos_2"."datos_recibir"."closed_box"
+
+PLC_PARKING_ID=3
+
+PLC_POOLING_TIME=5000
+
+PLC_OPCUA_URL=opc.tcp://192.168.0.40:4000
+```
+
 Finally to start enjoying this project.
 
 ```
@@ -126,11 +178,24 @@ npm start
 
 cd bluecity/backend
 npm start
+
+cd bluecity/box_simulator_frontend
+npm start
+
+cd bluecity/box_simulator_backend
+npm start
 ```
+
+If you follow the former instructions the 4 different parts of this project will be running on the following urls:
+* Frontend (http://localhost:3000)
+* Backend (http://localhost:4000)
+* Box_simulator_frontend (http://localhost:8000)
+* Box_simulator_backend (http://localhost:9000)
 
 Enjoy!!!
 
-## Installation instructions for Ubuntu 20.04
+## Installation instructions for Ubuntu 20.04 
+### (this documentation feature needs update)
 
 Ensure you have an updated environment with update/upgrade:
 
@@ -261,6 +326,7 @@ $ npm start
 Enjoy!!!
 
 ## Installation instructions if you want to deploy the project with Docker
+### (this documentation feature needs update)
 
 Clone this project in your PC:
 
@@ -310,6 +376,7 @@ $ docker-compose up
 Enjoy!!!
 
 ## Installation instructions if you want to deploy the project with Openshift
+### (this documentation feature needs update)
 
 Basically you have to first follow the instructions of the section "Installation instructions if you want to deploy the project with Docker" of this document.
 
@@ -359,73 +426,6 @@ Alternatively There are many other possibilities with Openshift including the us
 * [Ordinogram](https://github.com/tcrurav/bluecity/blob/master/docs/ordinogram.pdf) - The ordinogram designed by IES STEVE TERRADAS.
 * [ER Diagram](https://github.com/tcrurav/bluecity/blob/master/docs/bluecity_dev_ER_diagram.png) - The Entity-Relationship backend's diagram.
 
-## Repo news
-
-* August 31st:
-    - Tiburcio edit README.md to add the section "Installation instructions if you want to deploy the project with Openshift"
-    - Tiburcio uses wait-for-it.sh script to improve docker-compose.yml file.
-* August 25th:
-    - Tiburcio starts to create tests with jest + enzyme for the project.
-    - Tiburcio fixes some problems with Authentication and adds MyAccount component to test it. 
-    - Tiburcio fixes manifest.json to use a new favicon for the project.
-    - Tiburcio adds a loader (using react-pure-loaders) for the login process. In the future should be added to any API call.
-* July 14th:
-    - Tiburcio dockerizes the project with a basic configuration of 3 containers.
-    - There is a bug to be fixed: The project only works if the "docker-compose up" is executed twice.
-* July 9th:
-    - Carlos Sánchez, Aarón Medina and Tiburcio have worked in a new function to display available parkings and its map.
-    - Now the user can click on a parking to view its detailed information including a picture of the place.
-* June 10th:
-    - Carlos Sánchez has kept on sharing his desktop through Google Meet and Aarón and Tiburcio have worked in a new branch feature/remapping.
-    - Now the ParkingsWithFreeScooters (former name was Mapping) component gets the userId from the logged on user.
-    - After the online session Tiburcio has solved the crash when user signs out from Renting page. It was because the props.history was not passed on to the component.
-* June 3rd:
-    - Carlos Sánchez has kept on sharing his desktop through Google Meet and Aarón and Tiburcio have worked in the branch feature/mapping in order to create a working leaflet map to show all free scooter parkings available. We got it! Today it shows the leaflet map finally getting data from the Backend.
-    - We have added the ER diagram from WebStorm IDE Grip into the README.md.
-    - We also modified the component Renting to decide wether the logged in user has an already rented scooter or not.
-    - The feature is not fully finished but we have decided to merge it to develop branch and then to master branch.
-* May 27th:
-    - Carlos Sánchez has kept on sharing his desktop through Google Meet and we all have worked in the branch feature/mapping in order to create a working leaflet map to show all free scooter parkings available. 
-    - Today Carlos has also created the .env file of the frontend to avoid the burden of copying the Google ClientID for the Authentication any time there was a push/pull to/from the Github remote repo.
-* May 13th and 20th:
-    - Carlos Sánchez has shared his desktop through Google Meet and we all have worked in the branch feature/mapping in order to create a working leaflet map to show all free scooter parkings available. To achieve this goal we have worked on both the backend and frontend sides.
-* May 6th:
-    - Juan Thielmann has mirrored https://github.com/tcrurav/bluecity.git in https://git.jetbrains.space/elrincon/bc/learning.git
-    - Texe has shared his desktop and now he has the project locally working in his computer.
-    - Texe had been working on logos for the project and now he has added it to the project in the development branch locally. He hasn't uploaded it to the remote development branch yet.
-* April 29th:
-    - Carlos Sánchez has shared his desktop and worked on a new component to show how add a new table in the database, and how to show that data in a new component in the frontend.
-    - At the end Carlos Sánchez has merged his feature branch in the development branch, and uploaded to the remote development branch.
-* April 22nd:
-    - We have been learning how to deal with git branches in this project.
-    - We have then created a branch called feature/mytest to add a new component called MyTest. We had a problem at the end. The solution was just to modify the line 11 in backend/routes/user.routes.js, so that it stays: router.get("/", users.findAll);
-    - In this meeting Carlos Sánchez, Néstor Cabanillas and Néstor Batista have already installed successfully Tiburcio's reference project, and were actively adding the new MyTest component. Aaron and Texe were still with the boilerplate actions such as installing MySQL. They plan to have during this week a meeting to finally install it all.
-* April 15th:
-    - We have been learning how to deploy the whole start project Tiburcio had been working on this last Eastern, starting cloning the project from github, and then installing all the stuff for both the frontend and backend, following the instructions in this github project. At least Carlos Sánchez could install it all successfully. Some other students were also successfull too or were near to achieve it.
-* April 1st:
-    - In this online meeting, we worked on the mockups. Carlos Sánchez from his computer made some mockups using Adobe XD.
-    - We also discussed about some other points of the project making clear how to work together.
-* March 25th:
-    - In this online meeting, we have worked the basic concepts of passing data through props.
-    - Besides we have worked on leaflet. Here is the link to the github project we worked during the 2 hours of today: https://github.com/tcrurav/react-leaflet
-* March 18th:
-    - In this online meeting, Tiburcio explained the code of the login and main pages of the project.
-    - We decided to use Leaflet for the Maps and Geolocation (https://leafletjs.com/). Gonzalo y Etienne will work on it.
-    - We studied the diagram made by IES STEVE TERRADAS (https://github.com/tcrurav/bluecity/blob/master/docs/ordinogram.pdf)
-    - We discussed about the tasks each one wants to work with. Check the link for a graphical view of the tasks (https://github.com/tcrurav/bluecity/blob/master/docs/who-does-what.png)
-    - Juan Thielmann will create a Github mirror of (https://git.jetbrains.space/elrincon/BlueCity.git)
-    - Tiburcio will upload the login and main pages to the repo.
-    - Tiburcio will create a video/tutorial explaining the Authentication with Google. 
-    - Carlos and Juan Thielmann will investigate the possibility of creating Mockups with Adobe XD.
-    - Aaron, Texe and Carlos will work on the rent part of the ordinogram.
-    - Isaiah and Néstor Cabanillas will work on the reservation of the parking.
-    - Juan Thielmann will work on the rent at the bottom right part of the ordinogram.
-    - Néstor Batista will work on the parking at the bottom left part of the ordinogram.
-* March 13th, No meeting because of Corona Virus.
-* March 6th, We worked further on React introducing the main concepts.
-* February 28th, We worked on React introducing the main concepts.
-* February 21th, introduction to the server technology with Node.js, Express and the use of Postman to test it.
-
 ## Built With
 
 * [Visual Studio Code](https://code.visualstudio.com/) - The Editor used in this project
@@ -439,6 +439,12 @@ Alternatively There are many other possibilities with Openshift including the us
 * [express](https://expressjs.com/) - Fast, unopinionated, minimalist web framework for Node.js.
 * [MySQL Workbench](https://www.mysql.com/products/workbench/) - MySQL Workbench is a unified visual tool for database architects, developers, and DBAs.
 * [dotenv](https://www.npmjs.com/package/dotenv) - Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env. Storing configuration in the environment separate from code is based on The Twelve-Factor App methodology.
+* [react-i18next](https://react.i18next.com) - react-i18next integrates internationalization i18n in React.
+* [react-flag-icon-css](https://www.npmjs.com/package/react-flag-icon-css) - A simple React SVG country flags component: it works with Css Modules (default) or standard Css.
+* [axios](https://github.com/axios/axios) - Promise based HTTP client for the browser and node.js.
+* [socket.io](https://socket.io/) - Socket.IO enables real-time, bidirectional and event-based communication.
+* [socket.io-client](https://socket.io/) - Socket.IO enables real-time, bidirectional and event-based communication.
+* [node-opcua](https://github.com/node-opcua) - An implementation of a OPC UA stack fully written in javascript and nodejs. OPC UA is used to connect to S7-1500 in this project.
 
 ## Acknowledgments
 
@@ -449,3 +455,5 @@ Alternatively There are many other possibilities with Openshift including the us
 * https://www.theserverside.com/video/Follow-these-git-commit-message-guidelines. Guidelines to write properly git commit messages.
 * https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04. Excellent tutorial to install mysql-server in Ubuntu 20.04.
 * https://github.com/vishnubob/wait-for-it. wait-for-it.sh is a pure bash script that will wait on the availability of a host and TCP port. In our bluecity project makes it possible that the api waits for mysql when the docker-compose.yml file gets launched.
+* https://react.i18next.com/latest/using-with-hooks. Step by step guide using react-i18next.
+* https://www.npmjs.com/package/react-flag-icon-css. A simple React SVG country flags component: it works with Css Modules (default) or standard Css.

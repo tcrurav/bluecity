@@ -1,0 +1,21 @@
+{
+  "name": "box_simulator_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "node-opcua": "^2.41.1",
+    "socket.io": "^4.0.1",
+    "socket.io-client": "^4.1.1"
+  }
+}
