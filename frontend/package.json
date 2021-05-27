@@ -16,7 +16,6 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
-    "cupertino-pane": "^1.2.61",
     "express": "^4.17.1",
     "fs": "*",
     "http": "*",
@@ -27,11 +26,10 @@
     "immer": "^8.0.1",
     "leaflet": "^1.6.0",
     "material-ui-image": "^3.3.1",
-    
+    "node-sass": "^5.0.0",
     "path": "^0.12.7",
     "react": "^16.13.0",
     "react-bootstrap": "^1.4.3",
-    "react-bottom-drawer": "^0.1.0",
     "react-dom": "^16.13.0",
     "react-flag-icon-css": "^1.0.25",
     "react-google-login": "^5.1.2",
@@ -42,12 +40,13 @@
     "react-responsive": "^8.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^4.0.3",
+    "react-truncate": "^2.4.0",
     "socket.io-client": "^3.1.1",
     "styled-components": "^5.0.1"
   },
   "scripts": {
-    "start": "node server/server.js",
-    "start-develop": "react-scripts start",
+    "start-production": "node server/server.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

@@ -1,12 +1,13 @@
 import React from 'react';
 
+import { Image } from 'react-bootstrap';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 
 
@@ -19,16 +20,20 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     [theme.breakpoints.down('sm')]: {
-      margin: "2em",
+      marginLeft: "2em",
+      marginRight: "2em",
+      marginTop: "5em",
     },
     [theme.breakpoints.up('md')]: {
       marginLeft: "2em",
-      marginRight: "2em"
+      marginRight: "2em",
+      marginTop: "5em"
     },
     [theme.breakpoints.up('lg')]: {
       marginLeft: "16em",
       marginRight: "16em",
-      marginBottom: "2em"
+      marginBottom: "2em",
+      marginTop: "5em"
     },
   },
 }));
@@ -38,7 +43,9 @@ const Messages = () => {
 
   return (
     <>
+    
       <div className={classes.container}>
+      <Image fluid width="20%" src="img/centro1.png"></Image>
         <Grid container className={classes.root} spacing={10}>
           <Grid item xs={12} sm={6} md={4}>
             <Card>
@@ -48,7 +55,7 @@ const Messages = () => {
                     C
               </Avatar>
                 }
-                title="Carlos Sánchez Rodríguez"
+                title="Carlos Sánchez"
                 subheader="Estudiante"
               />
               <CardContent>
@@ -67,7 +74,7 @@ const Messages = () => {
                     A
               </Avatar>
                 }
-                title="Aarón Medina Melián"
+                title="Aarón Medina"
                 subheader="Estudiante"
               />
               <CardContent>
@@ -86,8 +93,8 @@ const Messages = () => {
                     T
               </Avatar>
                 }
-                title="Tiburcio Cruz"
-                subheader="Profesor"
+                title="Sebastián Moreno"
+                subheader="Estudiante"
               />
               <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
