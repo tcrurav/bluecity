@@ -1,7 +1,8 @@
 import React from 'react';
-import Images from '../components/sections/Images';
 
+import Images from '../components/sections/Images';
 import Messages from '../components/sections/Messages';
+import Workflow from '../components/sections/Workflow';
 
 const Rincon = () => {
 
@@ -9,6 +10,7 @@ const Rincon = () => {
     <>
       <Messages />
       <Images />
+      <Workflow />
     </>
   );
 }
