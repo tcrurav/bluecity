@@ -157,7 +157,7 @@ const RentingProcessScreen = ({ location, history }) => {
                     <MyMarker
                       color='blue'
                       state={null}
-                      text='The door is open and the scooter is plugged. Close the door.'
+                      text='The scooter is in the box. Close the door.'
                       icon={faInfoCircle}
                     />
                     :

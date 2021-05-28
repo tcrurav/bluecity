@@ -119,7 +119,7 @@ const MyParkingProcessInCard = ({ parking, stateParkingProcess, noResponseFromPa
                   />
                 </Col>
               </Row>
-              <Row className='pt-2'>
+              {/* <Row className='pt-2'>
                 <Col>
                   <MyMarker
                     color={stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? 'green' : 'red'}
@@ -128,7 +128,7 @@ const MyParkingProcessInCard = ({ parking, stateParkingProcess, noResponseFromPa
                     icon={stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
                   />
                 </Col>
-              </Row>
+              </Row> */}
               <Row></Row>
               <Row className='pt-2'>
                 <Col>

@@ -85,7 +85,6 @@ const AvailabilityScreen = ({ location, history }) => {
   const apiUser = getApiUser();
 
   const findOutGreenRedOrOrange = (data) => {
-    //To understand this look at the table in the documentation
     const reservationExpired = new Date(data.lastReservationDate) < new Date(new Date() - FIVE_MINUTES + 1000); // five minutes minus 1 second
 
     if (!reservationExpired) {
@@ -119,7 +118,13 @@ const AvailabilityScreen = ({ location, history }) => {
           free: newState.free,
           boxReservedByThisUser: newState.boxReservedByThisUser
         }));
-        socketRef.current.emit("something-changed", { who_changed_it: apiUser.id, parking_changed: parking.id });
+        console.log(stateParking.boxes[newState.boxReservedByThisUser].id)
+        socketRef.current.emit("something-changed", { 
+          who_changed_it: apiUser.id, 
+          parking_changed: parking.id,
+          box_id: stateParking.boxes[newState.boxReservedByThisUser].id,
+          reservation: true
+        });
 
       });
     }).catch((error) => console.log(error));
@@ -175,46 +180,6 @@ const AvailabilityScreen = ({ location, history }) => {
             boxId: data.id
           }
         });
-
-        // ScooterDataService.getScooterWithUserId(apiUser.id)
-        //   .then(res => {
-        // if (!checkingForRenting && res.data.userId === apiUser.id) {
-        //   /* The second condition is just to proof that the user has rented a scooter */
-        //   /* checkingForRenting is false as the user is going to park the scooter */
-        //   data.state = RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
-        //   socketRef.current.emit('open-box-renting-in', data);
-        //   history.push({
-        //     pathname: '/renting-process-in',
-        //     state: {
-        //       parking,
-        //       boxId: data.id,
-        //       stateParking: stateParking,
-        //     }
-        //   })
-        // }
-        // else if (checkingForRenting) {
-        //   data.state = RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
-        //   socketRef.current.emit('open-box-renting-out', data);
-        //   history.push({
-        //     pathname: '/renting-process-out',
-        //     state: {
-        //       parking,
-        //       boxId: data.id,
-        //       stateParking: stateParking,
-        //     }
-        //   })
-        // } else {
-        //   data.state = PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT;
-        //   socketRef.current.emit('open-box-parking-in', data);
-        //   history.push({
-        //     pathname: '/parking-process-in',
-        //     state: {
-        //       parking,
-        //       boxId: data.id
-        //     }
-        //   })
-        // }
-        // });
       });
     } catch (e) {
       console.log(e);
@@ -222,7 +187,6 @@ const AvailabilityScreen = ({ location, history }) => {
   };
 
   const findAllBoxesInAParking = () => {
-    // console.log("findAllBoxesInAParking")
     return new Promise((resolve, reject) => {
       BoxDataService.getAllBoxesInAParking(parking.id).then(res => {
         let occupied = 0, free = 0, reserved = 0,
@@ -258,7 +222,6 @@ const AvailabilityScreen = ({ location, history }) => {
   }
 
   const cancelReservation = () => {
-    // console.log("cancelReservation")
     let index = stateParking.boxReservedByThisUser;  //Possible Stale Closure
     if (stateParking.boxReservedByThisUser === THIS_USER_HAS_NO_RESERVATION) {  //Possible Stale Closure
       // This condition should never be possible but just in the limit it could be.
@@ -273,6 +236,7 @@ const AvailabilityScreen = ({ location, history }) => {
       cancelCountdown();
       try {
         findAllBoxesInAParking().then((newState) => {
+          const boxId = stateParking.boxes[stateParking.boxReservedByThisUser].id;
           setStateParking(s => ({
             ...s,
             boxes: newState.boxes,
@@ -284,7 +248,9 @@ const AvailabilityScreen = ({ location, history }) => {
           }));
           socketRef.current.emit("something-changed", {
             who_changed_it: apiUser.id,
-            parking_changed: parking.id
+            parking_changed: parking.id,
+            box_id: boxId,
+            reservation: false
           })
         })
       } catch (error) {
@@ -295,8 +261,6 @@ const AvailabilityScreen = ({ location, history }) => {
   };
 
   const refresh = () => {
-    // console.log("refresh")
-
     findAllBoxesInAParking().then((newState) => {
       setStateParking(s => ({
         ...s,
@@ -310,7 +274,6 @@ const AvailabilityScreen = ({ location, history }) => {
   }
 
   useEffect(() => {
-    // console.log("useEffect primero")
     findAllBoxesInAParking().then((newState) => {
       ParkingDataService.get(parking.id).then(res => {
         setStateParking(s => ({
@@ -328,14 +291,12 @@ const AvailabilityScreen = ({ location, history }) => {
     });
 
     return () => {
-      //console.log("return in useEffect")
       cancelCountdown();
     };
 
   }, []);
 
   useEffect(() => {
-    //console.log("useEffect socket");
     socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL);
 
     socketRef.current.on('welcome', () => {
@@ -343,12 +304,7 @@ const AvailabilityScreen = ({ location, history }) => {
     });
 
     socketRef.current.on('refresh', data => {
-      // console.log("refresh on utils");
-      // console.log(data);
-      // console.log(apiUser.id);
-      // console.log(parking.id);
       if (data.who_changed_it !== apiUser.id && data.parking_changed === parking.id) {
-        // console.log("connection refreshed");
         refresh();
       }
     });
@@ -359,10 +315,7 @@ const AvailabilityScreen = ({ location, history }) => {
   }, []);
 
   useEffect(() => {
-    //console.log("useEffect countdown")
     if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
-
-      // if (stateParking.reservation_time_left !== 0) return;  //Possible Stale Closure
 
       reservationInterval.current = setInterval(() => {
 
@@ -371,26 +324,6 @@ const AvailabilityScreen = ({ location, history }) => {
             new Date(stateParking.boxes[stateParking.boxReservedByThisUser].lastReservationDate).getTime()); //Possible Stale Closure
 
           if (reservation_time_left < 1000) {
-            // //five minutes are over
-            // cancelCountdown();
-
-
-            // findAllBoxesInAParking().then((newState) => {
-            //   setStateParking(s => ({
-            //     ...s,
-            //     boxes: newState.boxes,
-            //     occupied: newState.occupied,
-            //     reserved: newState.reserved,
-            //     free: newState.free,
-            //     boxReservedByThisUser: THIS_USER_HAS_NO_RESERVATION,
-            //     reservation_time_left: 0
-            //   }));
-
-            //   socketRef.current.emit("something-changed", {
-            //     who_changed_it: apiUser.id,
-            //     parking_changed: parking.id
-            //   })
-            // });
             cancelReservation();
             return;
           }
@@ -398,7 +331,6 @@ const AvailabilityScreen = ({ location, history }) => {
             ...s,
             reservation_time_left
           }));
-          // setStateReservation_time_left(reservation_time_left);
         } catch (e) {
           console.log(e);
         }
@@ -411,22 +343,12 @@ const AvailabilityScreen = ({ location, history }) => {
   }, [stateParking.boxReservedByThisUser]);
 
   useEffect(() => {
-    //console.log("useEffect de geolocation")
     if (geolocation.latitude === 0 && geolocation.longitude === 0) {
       return;
     }
 
-    // console.log("useEffect de geolocation después")
-
     let distanceToParkingNow = getDistanceFromLatLonInKm(geolocation.latitude, geolocation.longitude,
       stateParking.lat_parking, stateParking.long_parking);
-
-    // console.log(geolocation.latitude)
-    // console.log(geolocation.longitude)
-    // console.log(stateParking.lat_parking)
-    // console.log(stateParking.long_parking)
-    // console.log(distanceToParkingNow)
-    // console.log(distanceToParking)
 
     if ((Math.abs(distanceToParkingNow - distanceToParking)) < MINIMUM_DISTANCE_INCREMENT) return;
 

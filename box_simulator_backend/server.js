@@ -48,7 +48,7 @@ async function closePLC() {
   await client.disconnect();
 }
 
-async function writeToPLC(boxId, openBox) {
+async function writeToPLC(boxId, openBox, closeBox, reserve) {
   // to PLC 
 
   console.log(`ns=3;s="${process.env.PLC_BOX_ID}"`)
@@ -62,27 +62,92 @@ async function writeToPLC(boxId, openBox) {
         value: boxId
       }
     }
-  }, {
-    nodeId: `ns=3;s="${process.env.PLC_OPEN_BOX}"`,
-    attributeId: nodeOpcua.AttributeIds.Value,
-    indexRange: null,
-    value: {
-      value: {
-        dataType: nodeOpcua.DataType.SByte,
-        value: openBox ? 1 : 0
-      }
-    }
-  }, {
-    nodeId: `ns=3;s="${process.env.PLC_CLOSE_BOX}"`,
-    attributeId: nodeOpcua.AttributeIds.Value,
-    indexRange: null,
-    value: {
-      value: {
-        dataType: nodeOpcua.DataType.SByte,
-        value: openBox ? 0 : 1
-      }
-    }
   }];
+
+  if (openBox != null) {
+    nodesToWrite.push({
+      nodeId: `ns=3;s="${process.env.PLC_OPEN_BOX}"`,
+        attributeId: nodeOpcua.AttributeIds.Value,
+          indexRange: null,
+            value: {
+        value: {
+          dataType: nodeOpcua.DataType.SByte,
+            value: openBox ? 1 : 0
+        }
+      }
+    });
+  }
+
+  if (closeBox != null) {
+    nodesToWrite.push({
+      nodeId: `ns=3;s="${process.env.PLC_CLOSE_BOX}"`,
+        attributeId: nodeOpcua.AttributeIds.Value,
+          indexRange: null,
+            value: {
+        value: {
+          dataType: nodeOpcua.DataType.SByte,
+            value: closeBox ? 1 : 0
+        }
+      }
+    });
+  }
+
+  if (closeBox != null) {
+    nodesToWrite.push({
+      nodeId: `ns=3;s="${process.env.PLC_RESERVE}"`,
+        attributeId: nodeOpcua.AttributeIds.Value,
+          indexRange: null,
+            value: {
+        value: {
+          dataType: nodeOpcua.DataType.SByte,
+            value: reserve ? 1 : 0
+        }
+      }
+    });
+  }
+
+  // var nodesToWrite = [{
+  //   nodeId: `ns=3;s="${process.env.PLC_BOX_ID}"`,
+  //   attributeId: nodeOpcua.AttributeIds.Value,
+  //   indexRange: null,
+  //   value: {
+  //     value: {
+  //       dataType: nodeOpcua.DataType.SByte,
+  //       value: boxId
+  //     }
+  //   }
+  // }, {
+  //   nodeId: `ns=3;s="${process.env.PLC_OPEN_BOX}"`,
+  //   attributeId: nodeOpcua.AttributeIds.Value,
+  //   indexRange: null,
+  //   value: {
+  //     value: {
+  //       dataType: nodeOpcua.DataType.SByte,
+  //       value: openBox ? 1 : 0
+  //     }
+  //   }
+  // }, {
+  //   nodeId: `ns=3;s="${process.env.PLC_CLOSE_BOX}"`,
+  //   attributeId: nodeOpcua.AttributeIds.Value,
+  //   indexRange: null,
+  //   value: {
+  //     value: {
+  //       dataType: nodeOpcua.DataType.SByte,
+  //       value: closeBox ? 1 : 0
+  //     }
+  //   }
+  // }, {
+  //   nodeId: `ns=3;s="${process.env.PLC_RESERVE}"`,
+  //   attributeId: nodeOpcua.AttributeIds.Value,
+  //   indexRange: null,
+  //   value: {
+  //     value: {
+  //       dataType: nodeOpcua.DataType.SByte,
+  //       value: reserve ? 1 : 0
+  //     }
+  //   }
+  // }];
+
   await session.write(nodesToWrite);
 }
 
@@ -155,7 +220,7 @@ async function openPlc() {
   let socketClient = ioClient(process.env.BACKEND_URL, {
     withCredentials: true,
     transports: ['polling', 'websocket'],
-    // ca: fs.readFileSync(".cert/certificate.ca.crt")
+    ca: fs.readFileSync(".cert/certificate.ca.crt")
   });
 
   socketClient.on("welcome", async (data) => {
@@ -176,6 +241,39 @@ async function openPlc() {
     }
   });
 
+  socketClient.on("reserve-box", async (data) => {
+    // from backend
+    console.log(`reserve-box received for Box nº ${data.boxId} in Parking nº ${data.parkingId}`)
+
+    if (parkingId == data.parkingId) {
+      // to PLC 
+
+      // BoxId in PLC always start with 1. It's assumed that all parkings have 3 boxes.
+      const boxIdInPLC = parseInt(data.boxId) - (parseInt(data.parkingId) - 1) * 3;
+      const openBox = false;
+      const closeBox = false;
+      const reserveBox = true;
+      await writeToPLC(boxIdInPLC, openBox, closeBox, reserveBox);
+    }
+  });
+
+  socketClient.on("unreserve-box", async (data) => {
+    // from backend
+    console.log(data)
+    console.log(`unreserve-box received for Box nº ${data.boxId} in Parking nº ${data.parkingId}`)
+
+    if (parkingId == data.parkingId) {
+      // to PLC 
+
+      // BoxId in PLC always start with 1. It's assumed that all parkings have 3 boxes.
+      const boxIdInPLC = parseInt(data.boxId) - (parseInt(data.parkingId) - 1) * 3;
+      const openBox = false;
+      const closeBox = false;
+      const reserveBox = false;
+      await writeToPLC(boxIdInPLC, openBox, closeBox, reserveBox);
+    }
+  });
+
   //It shouldn't be an interval for ever. Only when the parking process starts
   setInterval(async function () {
     let newDataFromPLC = await readFromPLC();
@@ -186,11 +284,26 @@ async function openPlc() {
       boxIdInBackend = i + 1 + (parkingId - 1) * 3;
       if (lastDataFromPLC[i].openBoxConfirmed != newDataFromPLC[i].openBoxConfirmed) {
         if (newDataFromPLC[i].openBoxConfirmed == 1) {
+
           console.log("se emite open-box-confirmed")
           socketClient.emit("open-box-confirmed", { boxId: boxIdInBackend, parkingId });
+
+          //Inform PLC that confirmation was received
+          const boxId = i;
+          const openBox = false;
+          const closeBox = null;
+          const reserveBox = null;
+          await writeToPLC(boxId, openBox, closeBox, reserveBox);
         } else {
           console.log("se emite box-closed")
           socketClient.emit("box-closed", { boxId: boxIdInBackend, parkingId });
+
+          //Inform PLC that confirmation was received
+          const boxId = i;
+          const openBox = null;
+          const closeBox = false;
+          const reserveBox = null;
+          await writeToPLC(boxId, openBox, closeBox, reserveBox);
         }
         lastDataFromPLC[i].openBoxConfirmed = newDataFromPLC[i].openBoxConfirmed;
       }

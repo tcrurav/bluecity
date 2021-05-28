@@ -136,7 +136,7 @@ const ParkingProcessOutScreen = ({ location, history }) => {
                       <MyMarker
                         color='blue'
                         state={null}
-                        text='The charger is unplugged. Please, close the door.'
+                        text='You have pulled your scooter out. Please, close the door.'
                         icon={faInfoCircle}
                       />
                       :

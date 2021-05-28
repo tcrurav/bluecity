@@ -389,8 +389,6 @@ io.on("connect", (socket) => {
 
     socket.on("open-box-parking-in", (data) => {
       // to box device
-      console.log("open-box-parking-in")
-      console.log(data);
       io.sockets.emit('open-box', { boxId: data.id, parkingId: data.parkingId });
     });
 
@@ -408,6 +406,16 @@ io.on("connect", (socket) => {
       // to box device
       io.sockets.emit('open-box', { boxId: data.id, parkingId: data.parkingId });
     });
+
+    // socket.on("reserve-box", (data) => {
+    //   // to box device
+    //   io.sockets.emit('reserve-box', { boxId: data.id, parkingId: data.parkingId });
+    // });
+
+    // socket.on("unreserve-box", (data) => {
+    //   // to box device
+    //   io.sockets.emit('unreserve-box', { boxId: data.id, parkingId: data.parkingId });
+    // });
 
   }
 
@@ -479,24 +487,17 @@ io.on("connect", (socket) => {
 
     socket.on("open-box-confirmed", (data) => {
       // from Box
-      // console.log("open-box-confirmed");
-      // console.log(data);
       Box.findByPk(data.boxId)
         .then((data) => {
-          // console.log("entra 1")
-          // console.log(data);
           if (data.dataValues.state == constants.PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT ||
             data.dataValues.state == constants.PARKING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT ||
             data.dataValues.state == constants.RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT ||
             data.dataValues.state == constants.RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT) {
-            // console.log("entra 2")
-            // console.log(data.dataValues.state)
             Box.update({ state: data.dataValues.state + 1 }, {
               where: { id: data.dataValues.id }
             }).then(num => {
               if (num == 1) {
                 // refresh information in mobile phones
-                // console.log(data);
                 io.sockets.emit('refresh-box-state', { boxId: data.dataValues.id });
               } else {
                 // Cannot update Box with id. Maybe Box was not found
@@ -601,6 +602,18 @@ io.on("connect", (socket) => {
   }
   socket.on("something-changed", (data) => {
     console.log("something changed: " + data.toString());
+    console.log(data)
+
+    if(data.reservation != null && data.reservation == true){
+      console.log("reserve-box sent")
+      io.sockets.emit('reserve-box', { boxId: data.box_id, parkingId: data.parking_changed });
+    }
+
+    if(data.reservation != null  && data.reservation == false){
+      console.log("unreserve-box sent")
+      console.log(data)
+      io.sockets.emit('unreserve-box', { boxId: data.box_id, parkingId: data.parking_changed });
+    }
 
     io.sockets.emit('refresh', data);
   });

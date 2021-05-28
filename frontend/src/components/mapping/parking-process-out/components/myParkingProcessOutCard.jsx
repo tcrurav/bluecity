@@ -100,7 +100,7 @@ const MyParkingProcessOutCard = ({ parking, stateParkingProcess, continueWithPro
             <MyMarker
               color={stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
-              text='Unplug the charger'
+              text='Pull your scooter out'
               icon={stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>

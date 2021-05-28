@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import { useHistory } from "react-router-dom";
 
 /**
 |--------------------------------------------------
@@ -10,45 +10,83 @@ import { MyNavbar } from "../../ui/navbar/my-navbar";
 import { Footer } from "../../ui/footer";
 import MyParkingsWithFreeScooters from "../parking/components/myParkingsWithFreeScooters";
 import MyParkingsWithFreeBoxes from "../parking/components/myParkingsWithFreeBoxes";
-import ScooterDataService from "../../../services/scooter.service";
+import { getApiUser } from "../constants/constants";
 
-const RentingScreen = ({ location, history }) => {
+import ScooterDataService from "../../../services/scooter.service";
+import BoxDataService from "../../../services/box.service";
+
+/**
+ *  React-Bootstrap Imports
+ */
+ import { MyContainer } from "../../ui/my-container";
+ import Row from "react-bootstrap/Row";
+ import Col from "react-bootstrap/Col";
+ import { BallBeat } from "react-pure-loaders";
+
+const RentingScreen = () => {
+
+  let history = useHistory();
+
+  const [loadingState, setLoadingState] = useState(true);
   const [userState, setUserState] = useState(null);
-  const { state: { userId } } = location;
 
   useEffect(() => {
-    console.log("renting screen");
-    findScooterWithUserId();
+    console.log("Renting Screen");
+
+    const userId = getApiUser().id;
+    checkUserIdState(userId);
   }, []);
 
-  const findScooterWithUserId = () => {
-    ScooterDataService.getScooterWithUserId(userId).then((res) => {
+  const checkUserIdState = (userId) => {
+    BoxDataService.getOneWithUserId(userId).then((res) => {
       if (res.data === "") {
-        setUserState(null)
-      } else {
-        setUserState({
-          user: res.data
+        ScooterDataService.getScooterWithUserId(userId).then((res) => {
+          if (res.data === "") {
+            setUserState(null)
+          } else {
+            setUserState({
+              user: res.data
+            });
+          }
+          setLoadingState(false);
         });
+        return;
       }
+      goToMain();
     });
   };
 
+  const goToMain = () => {
+    history.push({
+      pathname: "/main"
+    });
+  }
+
   return (
     <>
-      <MyNavbar history={history} />
-      {!userState ? (
-        <MyParkingsWithFreeScooters />
-      ) : (
-        <MyParkingsWithFreeBoxes returningScooter={true} />
-      )}
-      <Footer />
+      {loadingState ? (
+        <>
+          <MyContainer>
+            <Row className="justify-content-md-center h-50">
+              <Col md={6} className="text-center mt-auto pb-5">
+                <BallBeat color={"#123abc"} loading={loadingState} />
+              </Col>
+            </Row>
+          </MyContainer>
+        </>
+      ) :
+        <>
+          <MyNavbar history={history} />
+          {!userState ? (
+            <MyParkingsWithFreeScooters />
+          ) : (
+            <MyParkingsWithFreeBoxes returningScooter={true} />
+          )}
+          <Footer />
+        </>
+      }
     </>
   );
-};
-
-RentingScreen.propTypes = {
-  history: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired
 };
 
 export default RentingScreen;
