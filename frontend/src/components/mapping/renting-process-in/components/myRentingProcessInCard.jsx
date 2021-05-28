@@ -97,7 +97,7 @@ const MyRentingProcessCard = ({ parking, stateRentingProcess, continueWithProces
             />
           </Col>
         </Row>
-        <Row className='pt-2'>
+        {/* <Row className='pt-2'>
           <Col>
             <MyMarker
               color={stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? 'green' : 'red'}
@@ -106,7 +106,7 @@ const MyRentingProcessCard = ({ parking, stateRentingProcess, continueWithProces
               icon={stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>
-        </Row>
+        </Row> */}
         <Row className='pt-2'>
           <Col>
             <MyMarker

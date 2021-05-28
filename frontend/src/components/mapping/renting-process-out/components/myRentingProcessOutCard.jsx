@@ -114,7 +114,7 @@ const MyRentingProcessOutCard = ({ parking, stateRentingProcess, noResponseFromP
                   <MyMarker
                     color={stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? 'green' : 'red'}
                     state={null}
-                    text='Pull out scooter charger'
+                    text='Pull out the scooter'
                     icon={stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
                   />
                 </Col>

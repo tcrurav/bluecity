@@ -166,7 +166,7 @@ const ParkingProcessInScreen = ({ location, history }) => {
                     <MyMarker
                       color='blue'
                       state={null}
-                      text='The charger is plugged in. Please, close the door.'
+                      text='The scooter is in the box. Please, close the door.'
                       icon={faInfoCircle}
                     />
                     :

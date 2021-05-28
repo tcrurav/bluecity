@@ -231,7 +231,8 @@ export function Main(props) {
   const checkUserState = () => {
     const currentUserId = getCurrentUserId();
     BoxDataService.getOneWithUserId(currentUserId).then(data => {
-      if (data != null) {
+      console.log(data)
+      if (data.data != "") {
         switch (data.data.state) {
           case PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT:
           case PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED:
@@ -290,21 +291,41 @@ export function Main(props) {
                   state: "rented out",
                   message: "You are enjoying a rented scooter right now. Click continue to return it."
                 });
+                setLoadingState(false);
+                return;
               }
             }).catch((e) => {
               //Error
             });
-            setLoadingState(false);
-            return;
+
+            //It happens when the user has started a reservation but hasn't finished the process
+            setUserState({
+              state: "reserving for parking",
+              message: "You may have made a reservation. Click continue to go on."
+            });
         }
         setCurrentBox(data.data);
         setLoadingState(false);
+        return;
       }
+      setLoadingState(false);
     })
   }
 
   const continueWithProcess = () => {
     switch (userState.state) {
+      case "reserving for parking":
+        ParkingDataService.get(currentBox.parkingId).then(data => {
+          props.history.push({
+            pathname: "/availability",
+            state: {
+              parking: data.data,
+              checkingForRenting: false,
+              returningScooter: false
+            },
+          });
+        });
+        break;
       case "parking in":
         ParkingDataService.get(currentBox.parkingId).then(data => {
           props.history.push({
@@ -375,7 +396,7 @@ export function Main(props) {
 
   return (
     <>
-      {loadingState ? (  /* Simplemente cargando -- Borrar el comentario */
+      {loadingState ? (
         <>
           <MyContainer>
             <Row className="justify-content-md-center h-50">

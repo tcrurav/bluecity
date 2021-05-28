@@ -83,7 +83,6 @@ Your Google ClientID is used in the file bluecity/frontend/src/components/my-log
 ```
 REACT_APP_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com
 REACT_APP_BASEURL=http://localhost:4000
-HTTPS=false
 ```
 
 Take into account the second line to introduce in the file bluecity/frontend/.env necessary to indicate the base URL of your API.
@@ -142,8 +141,6 @@ PORT=8000
 ```
 BACKEND_URL=http://localhost:4000
 
-HTTPS=false
-
 NODE_ENV=development
 
 # true --> using websockets to communicate to Backend
@@ -162,6 +159,7 @@ PLC_DETECTOR_3="Bloque de datos_2"."datos_enviar"."detector_pateineta_3"
 PLC_BOX_ID="Bloque de datos_2"."datos_recibir"."box_id"
 PLC_OPEN_BOX="Bloque de datos_2"."datos_recibir"."open_box"
 PLC_CLOSE_BOX="Bloque de datos_2"."datos_recibir"."closed_box"
+PLC_RESERVE="Bloque de datos_2"."datos_recibir"."reserva"
 
 PLC_PARKING_ID=3
 
