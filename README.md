@@ -2,12 +2,12 @@
 
 Bluecity App and Server Software repository.
 
-This is a MEC funded project which aims the construction of a prototype for a network of scooter parkings in a city, including the construction of the parkings (IES Steve Terradas), the app and server software (IES El Rincón), the economic study of the project (IES Bernat el Ferrer), and the overall councelling by a company (Furious Koalas).
+This is a MEC funded project which aims the construction of a prototype for a network of scooter parkings in a city, including the construction of the parkings (INS Esteve Terradas i Illa), the app and server software (IES El Rincón), the economic study of the project (INS Bernat el Ferrer), and the overall councelling by a company (Furious Koalas).
 
 These are the collaborating institutions:
 * [IES El Rincón](http://www.ieselrincon.es)
-* [IES Esteve Terradas](http://www.iesesteveterradas.cat)
-* [IES Bernat el Ferrer](https://www.bernatelferrer.cat)
+* [INS Esteve Terradas i Illa](http://www.iesesteveterradas.cat)
+* [INS Bernat el Ferrer](https://www.bernatelferrer.cat)
 * [Furious Koalas Interactive](https://www.furiouskoalas.com/)
 
 ## Getting Started
