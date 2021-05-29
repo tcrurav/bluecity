@@ -108,17 +108,17 @@ const Images = () => {
                         <Typography variant="body" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
-                        <Image roundedCircle className={classes.image} src="img/user_default.png" rounded width={250} height={300} />
+                        <Image roundedCircle className={classes.image} src="img/alejandro.png" rounded width={250} height={300} />
                         <Typography variant="h2" component="h5">Alejandro Pazos</Typography>
                         <Typography variant="body" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
-                        <Image roundedCircle className={classes.image} src="img/user_default.png" rounded width={250} height={300} />
+                        <Image roundedCircle className={classes.image} src="img/gabriel.png" rounded width={250} height={300} />
                         <Typography variant="h2" component="h5">Gabriel Rodríguez</Typography>
                         <Typography variant="body" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
-                        <Image roundedCircle className={classes.image} src="img/user_default.png" rounded width={250} height={300} />
+                        <Image roundedCircle className={classes.image} src="img/juan.png" rounded width={250} height={300} />
                         <Typography variant="h2" component="h5">Juan Thielmann</Typography>
                         <Typography variant="body" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
