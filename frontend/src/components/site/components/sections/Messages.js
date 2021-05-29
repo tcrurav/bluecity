@@ -79,8 +79,7 @@ const Messages = () => {
               />
               <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  Donec tincidunt volutpat felis, efficitur gravida ex volutpat ac. Ut urna est, interdum non imperdiet nec, sagittis ac justo.
-                  Vivamus at mollis lectus. Cras mauris velit, efficitur ac euismod aliquam, placerat et risus.
+                  Tremenda puta mierda es el CSS hijos de puta.
             </Typography>
               </CardContent>
             </Card>
