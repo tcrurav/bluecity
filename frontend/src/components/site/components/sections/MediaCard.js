@@ -7,7 +7,6 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Divider from '@material-ui/core/Divider';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import Truncate from 'react-truncate';
 
@@ -34,9 +33,28 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     content: {
-
+        [theme.breakpoints.down('sm')]: {
+            
+        },
+        [theme.breakpoints.up('md')]: {
+            height: "15em",
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+        },
+        [theme.breakpoints.up('lg')]: {
+            height: "15em",
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+        },
     },
 }));
+
+function truncate(input) {
+    if (input.length > 5) {
+       return input.substring(0, 5) + '...';
+    }
+    return input;
+ };
 
 export default function MediaCard({ changeWebpage }) {
     const classes = useStyles();
@@ -134,8 +152,8 @@ export default function MediaCard({ changeWebpage }) {
                                 </Truncate>
                             </CardContent>
                             <CardActions>
-                                {/* <Button size="small" color="primary" onClick={() => { changeWebpage("rincon") }}> */}
-                                    <Button size="small" color="primary">
+                                <Button size="small" color="primary" onClick={() => { changeWebpage("rincon") }}>
+                                    {/* <Button size="small" color="primary"> */}
                             Ver más <ArrowForwardIcon />
                                 </Button>
                             </CardActions>

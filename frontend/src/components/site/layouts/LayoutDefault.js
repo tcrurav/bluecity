@@ -25,12 +25,16 @@ const useStyles = makeStyles((theme) => ({
   },
   footer: {
     backgroundColor: "#757ce8",
+  },
+  logos: {
+    marginTop: "4em",
+    marginBottom: "1em",
   }
 }));
 
 
 const LayoutDefault = ({ children }) => {
-  const myClasses = useStyles();
+  const classes = useStyles();
   const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
   return (
@@ -66,7 +70,7 @@ const LayoutDefault = ({ children }) => {
           </Col>
           <Col xs={2}></Col>
         </Row> */}
-        <Row className="mt-6 mb-2">
+        <Row className={classes.logos}>
           <Col>
             <Image src="img/mec.png" fluid />
           </Col>
