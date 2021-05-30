@@ -103,7 +103,7 @@ const Images = () => {
                         <Typography variant="body1" color="textSecondary" component="p">Estudiante </Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
-                        <Image roundedCircle className={classes.image} src="img/aaron.png" rounded width={250} height={300} />
+                        <Image roundedCircle className={classes.image} src="img/aaron.jpg" rounded width={250} height={300} />
                         <Typography variant="h2" component="h5">Aarón Medina</Typography>
                         <Typography variant="body1" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
@@ -123,7 +123,7 @@ const Images = () => {
                         <Typography variant="body1" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <Image roundedCircle className={classes.image} src="img/user_default.png" rounded width={250} height={300} />
+                        <Image roundedCircle className={classes.image} src="img/david.jpg" rounded width={250} height={300} />
                         <Typography variant="h2" component="h5">David Freyre</Typography>
                         <Typography variant="body1" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
