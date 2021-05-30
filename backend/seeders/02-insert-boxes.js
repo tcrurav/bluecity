@@ -9,7 +9,7 @@ module.exports = {
       return queryInterface.bulkInsert('boxes', [{
         id: 1,
         state: Constants.NEITHER_PARKING_NOT_RENTING,
-        occupied: true,
+        occupied: false,
         lastReservationDate: BEGIN_OF_TIMES,
         userId: null,
         parkingId: 1,

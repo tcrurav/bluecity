@@ -3,10 +3,10 @@ const express = require('express');
 var http = express();
 
 // set up a route to redirect http to https
-http.get('*', function(req, res) {  
-    res.redirect('https://' + req.headers.host + req.url);
+http.get('*', function (req, res) {
+   res.redirect('https://' + req.headers.host + req.url);
 
-    // Or, if you don't want to automatically detect the domain name from the request header, you can hard code it:
+   // Or, if you don't want to automatically detect the domain name from the request header, you can hard code it:
    //  res.redirect('https://somosbluecity.es' + req.url);
 })
 
@@ -28,9 +28,9 @@ const publicPath = path.join(__dirname, '..', 'build');
 const port = process.env.PORT || 3000;
 app.use(express.static(publicPath));
 
-// app.get("/service-worker.js", (req, res) => {
-//    res.sendFile(path.resolve(publicPath, "service-worker.js"));
-//  });
+app.get("/worker.js", (req, res) => {
+   res.sendFile(path.resolve(publicPath, "worker.js"));
+});
 
 app.get('*', (req, res) => {
    res.sendFile(path.join(publicPath, 'index.html'));
