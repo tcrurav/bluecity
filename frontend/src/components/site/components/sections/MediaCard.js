@@ -49,13 +49,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function truncate(input) {
-    if (input.length > 5) {
-       return input.substring(0, 5) + '...';
-    }
-    return input;
- };
-
 export default function MediaCard({ changeWebpage }) {
     const classes = useStyles();
 
@@ -86,7 +79,8 @@ export default function MediaCard({ changeWebpage }) {
                                 </Truncate>
                             </CardContent>
                             <CardActions>
-                                <Button size="small" color="primary">
+                            <Button size="small" color="primary" onClick={() => { changeWebpage("bernat") }}>
+                                {/* <Button size="small" color="primary"> */}
                                     Ver más <ArrowForwardIcon />
                                 </Button>
                             </CardActions>
@@ -121,7 +115,8 @@ export default function MediaCard({ changeWebpage }) {
                                 </Truncate>
                             </CardContent>
                             <CardActions>
-                                <Button size="small" color="primary">
+                            <Button size="small" color="primary" onClick={() => { changeWebpage("terradas") }}>
+                                {/* <Button size="small" color="primary"> */}
                                     Ver más <ArrowForwardIcon />
                                 </Button>
                             </CardActions>
@@ -189,7 +184,8 @@ export default function MediaCard({ changeWebpage }) {
 
                             </CardContent>
                             <CardActions>
-                                <Button size="small" color="primary">
+                            <Button size="small" color="primary" onClick={() => { changeWebpage("koalas") }}>
+                                {/* <Button size="small" color="primary"> */}
                                     Ver más <ArrowForwardIcon />
                                 </Button>
                             </CardActions>

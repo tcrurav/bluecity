@@ -12,7 +12,6 @@ const Rincon = () => {
 
   return (
     <>
-      {/* <Messages /> */}
       <Images />
       <Workflow />
     </>
