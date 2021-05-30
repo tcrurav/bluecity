@@ -118,7 +118,6 @@ const AvailabilityScreen = ({ location, history }) => {
           free: newState.free,
           boxReservedByThisUser: newState.boxReservedByThisUser
         }));
-        console.log(stateParking.boxes[newState.boxReservedByThisUser].id)
         socketRef.current.emit("something-changed", { 
           who_changed_it: apiUser.id, 
           parking_changed: parking.id,
@@ -357,7 +356,6 @@ const AvailabilityScreen = ({ location, history }) => {
   }, [geolocation.latitude, geolocation.longitude, stateParking.lat_parking, stateParking.long_parking]);
 
   useEffect(() => {
-    // console.log("useEffect de openBoxPossible")
     if (distanceToParking < CLOSE_DISTANCE_TO_PARKING && stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
       setStateOpenBoxPossible(true);
     } else {

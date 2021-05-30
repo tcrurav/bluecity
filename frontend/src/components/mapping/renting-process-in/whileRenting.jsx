@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 /**
 |--------------------------------------------------
@@ -68,6 +69,8 @@ const WhileRenting = ({ history }) => {
 
   const reservationInterval = useRef(null);
 
+  const { t } = useTranslation();
+
   const [lastReservationDate, setLastReservationDate] = useState(new Date());
 
   const [timeElapsedSinceReservation, setTimeElapsedSinceReservation] = useState(0);
@@ -120,13 +123,13 @@ const WhileRenting = ({ history }) => {
               <MyMarker
                 color='blue'
                 state={null}
-                text={`You have rented a scooter ${formatTimeLeft(timeElapsedSinceReservation.valueOf())} minutes ago.`}
+                text={`${t('You have rented a scooter')} ${formatTimeLeft(timeElapsedSinceReservation.valueOf())} ${t('minutes ago')}.`}
                 icon={faInfoCircle}
               />
               <MyMarker
                 color='blue'
                 state={null}
-                text={"You can return it in any parking of our network. Click below to search a parking to return the scooter."}
+                text={t('You can return it in any parking of our network. Click below to search a parking to return the scooter.')}
                 icon={faInfoCircle}
               />
             </Grid>
@@ -134,41 +137,12 @@ const WhileRenting = ({ history }) => {
               <Button
                 variant="contained"
                 className={classes.buttons}
-                onClick={findParkingToReturnScooter}>Search a parking to return the scooter</Button>
+                onClick={findParkingToReturnScooter}>{t('Search a parking to return the scooter')}</Button>
             </Grid>
           </Grid>
         </Container>
       </Paper>
       <Footer />
-      {/* <MyNavbar history={history} />
-      <MyContainer>
-        <Row>
-          <Col sm={8} xs={12}>
-            <MyCarHeader address={address} name={name} />
-            <MyCarImg id={parking.id} />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={{ span: 12, offset: 0 }}>
-            <div className={classes.margins}>
-              <FontAwesomeIcon icon={faInfoCircle} color="blue" />&nbsp; You have rented a scooter in {name}<br />
-              <FontAwesomeIcon icon={faInfoCircle} color="blue" />&nbsp; You rented it {formatTimeLeft(stateScooter.reservation_time_left.valueOf())} minutes ago.<br />
-              <div>
-                <span>
-                  <FontAwesomeIcon icon={faInfoCircle} color="blue" />&nbsp; You can return the scooter in any parking of our wide network. Click below to look for a parking to return the scooter.
-							  </span>
-                <Col xs={{ span: 9, offset: 3 }}>
-                  <br />
-                  <Button
-                    variant="contained"
-                    className={classes.buttons}
-                    onClick={findParkingToReturnScooter}>Find a parking to return the scooter</Button>
-                </Col>
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </MyContainer> */}
     </>
   )
 };

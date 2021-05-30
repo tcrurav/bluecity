@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
+import { useTranslation } from 'react-i18next';
 
 /**
 |--------------------------------------------------
@@ -47,6 +48,8 @@ const ParkingProcessOutScreen = ({ location, history }) => {
 
   const { state: { parking, boxId } } = location;
 
+  const { t } = useTranslation();
+
   const socketRef = useRef();
 
   const [stateParkingProcess, setStateParkingProcess] = useState(NEITHER_PARKING_NOT_RENTING);
@@ -68,8 +71,6 @@ const ParkingProcessOutScreen = ({ location, history }) => {
 
     BoxDataService.get(boxId).then((data) => {
       console.log("refreshBoxState after call to boxdataservice")
-      console.log(boxId);
-      console.log(data.data.state);
       setStateParkingProcess(
         data.data.state
       );
@@ -77,12 +78,10 @@ const ParkingProcessOutScreen = ({ location, history }) => {
   }
 
   useEffect(() => {
-    console.log("useEffect primero");
     refreshBoxState();
   }, []);
 
   useEffect(() => {
-    console.log("useEffect socket");
     socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL);
 
     socketRef.current.on('welcome', () => {
@@ -122,28 +121,28 @@ const ParkingProcessOutScreen = ({ location, history }) => {
                   <MyMarker
                     color='blue'
                     state={null}
-                    text='Waiting for the door to get open...'
+                    text={t('Waiting for the door to get open...')}
                     icon={faInfoCircle}
                   />
                   : stateParkingProcess === PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ?
                     <MyMarker
                       color='blue'
                       state={null}
-                      text='The door is opened. Please, pull out your scooter and unplug the charger.'
+                      text={t('The door is opened. Please, pull out your scooter and unplug the charger.')}
                       icon={faInfoCircle}
                     />
                     : stateParkingProcess === PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ?
                       <MyMarker
                         color='blue'
                         state={null}
-                        text='You have pulled your scooter out. Please, close the door.'
+                        text={t('You have pulled your scooter out. Please, close the door.')}
                         icon={faInfoCircle}
                       />
                       :
                       <MyMarker
                         color='blue'
                         state={null}
-                        text='The door is closed. Thank you for using our service.'
+                        text={t('The door is closed. Thank you for using our service.')}
                         icon={faInfoCircle}
                       />
               }

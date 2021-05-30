@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
+import { useTranslation } from 'react-i18next';
 
 /**
 |--------------------------------------------------
@@ -47,6 +48,8 @@ import { BEGIN_OF_TIMES, getApiUser, NEITHER_PARKING_NOT_RENTING } from '../avai
 const RentingProcessScreen = ({ location, history }) => {
 
   const { state: { parking, boxId } } = location;
+
+  const { t } = useTranslation();
 
   const socketRef = useRef();
 
@@ -95,10 +98,6 @@ const RentingProcessScreen = ({ location, history }) => {
           lastReservationDate: new Date(),
           boxId: null
         }
-        console.log("scooterizando")
-        console.log(data)
-        console.log(data.data)
-        console.log(scooterData)
         ScooterDataService.update(data.data.id, scooterData).then(data => {
           const boxData = {
             userId: null,
@@ -132,7 +131,6 @@ const RentingProcessScreen = ({ location, history }) => {
   useEffect(() => {
     openBoxTimeout.current = setTimeout(function () {
       BoxDataService.get(boxId).then(data => {
-        console.log(data.data.state)
         if (data.data.state == NEITHER_PARKING_NOT_RENTING ||
           data.data.state == RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT) {
           setNoResposeFromParkingDevice(true);
@@ -167,28 +165,28 @@ const RentingProcessScreen = ({ location, history }) => {
                 <MyMarker
                   color='blue'
                   state={null}
-                  text='Waiting for the door to get open...'
+                  text={t('Waiting for the door to get open...')}
                   icon={faInfoCircle}
                 />
                 : stateRentingProcess === RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ?
                   <MyMarker
                     color='blue'
                     state={null}
-                    text='The door is opened. Pull out your scooter and close the door.'
+                    text={t('The door is opened. Pull out your scooter and close the door.')}
                     icon={faInfoCircle}
                   />
                   : stateRentingProcess === RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ?
                     <MyMarker
                       color='blue'
                       state={null}
-                      text='You have pulled out your scooter. Close the door.'
+                      text={t('You have pulled out your scooter. Close the door.')}
                       icon={faInfoCircle}
                     />
                     :
                     <MyMarker
                       color='blue'
                       state={null}
-                      text='The door is closed. Enjoy the rented scooter.'
+                      text={t('The door is closed. Enjoy the rented scooter.')}
                       icon={faInfoCircle}
                     />
             }

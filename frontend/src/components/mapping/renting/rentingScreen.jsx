@@ -31,8 +31,6 @@ const RentingScreen = () => {
   const [userState, setUserState] = useState(null);
 
   useEffect(() => {
-    console.log("Renting Screen");
-
     const userId = getApiUser().id;
     checkUserIdState(userId);
   }, []);

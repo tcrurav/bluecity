@@ -28,10 +28,7 @@ const useGeolocation = () => {
   const watchId = useRef(null);
 
   const onEvent = event => {
-    // console.log("se produce onEvent")
     if (mounted.current) {
-      // console.log("va a poner estado")
-      // console.log(geolocationAvailabilityInside)
       setState({
         ...state,
         // accuracy: event.coords.accuracy,
@@ -44,25 +41,20 @@ const useGeolocation = () => {
         timestamp: event.timestamp,
       });
     }
-    // console.log("eventuando")
-    // console.log(mounted)
   };
 
   useEffect(() => {
-      // console.log("principio del useEffect primero")
 
       navigator.geolocation.getCurrentPosition(onEvent);
       watchId.current = navigator.geolocation.watchPosition(onEvent);
 
       checkGeolocationAvailability().then((res) => {
-        // console.log(res)
         setGeolocationAvailabilityInside(res);
       });
 
       return () => {
         mounted.current = false;
         navigator.geolocation.clearWatch(watchId.current);
-        // console.log("se fue el geolocation principal")
       };
     },
     []

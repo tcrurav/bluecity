@@ -47,7 +47,6 @@ export default function MyAccount(props) {
   const getUser = () => {
     UserDataService.get(userId)
       .then(response => {
-        // console.log(response)
         setProfileState({
           name: response.data.name,
           email: response.data.username,

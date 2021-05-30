@@ -11,7 +11,6 @@ function PrivateRoute({ component: Component, ...rest }) {
   
   useEffect(() => {
     const apiUser = getApiUser();
-    // console.log(apiUser)
     if (apiUser) {
       if (i18n.language !== apiUser.language) i18n.changeLanguage(apiUser.language);
     }

@@ -15,8 +15,6 @@ const MyColReservation = ({ bg, id, index, handleReservation }) => {
       key={id}
       bg={bg}
       onClick={() => {
-        // console.log("dentro de MyColReservation")
-        // console.log(index);
         handleReservation(index)
       }}
     >

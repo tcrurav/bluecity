@@ -84,27 +84,12 @@ exports.findAllWithAFreeScooter = (req, res) => {
       where: { userId: null, occupied: true }
     }]
   }).then(data => {
-    // console.log(data)
     return res.send(data);
   }).catch(err => {
     return res.status(500).send({
       message: err.message || "Some error occurred while retrieving boxes."
     });
   });
-  // Box.findAll({
-  //   where: { userId: null, occupied: true }
-  // })
-  //   .then(data => {
-  //     executeQueryAsynchronously(data).then(resultParking => {
-  //       return res.send(resultParking);
-  //     })
-  //   })
-  //   .catch(err => {
-  //     return res.status(500).send({
-  //       message:
-  //         err.message || "Some error occurred while retrieving boxes."
-  //     });
-  //   });
 };
 
 const FIVE_MINUTES = 5 * 60 * 1000;
@@ -119,28 +104,12 @@ exports.findAllWithAFreeBox = (req, res) => {
       where: { occupied: false, lastReservationDate: { [Op.lt]: new Date(new Date() - FIVE_MINUTES) } }
     }]
   }).then(data => {
-    // console.log(data)
     return res.send(data);
   }).catch(err => {
     return res.status(500).send({
       message: err.message || "Some error occurred while retrieving boxes."
     });
   });
-  // Box.findAll({
-  //   where: { occupied: false, lastReservationDate: { [Op.lt]: new Date(new Date() - FIVE_MINUTES) } }
-  // })
-  //   .then(data => {
-  //     executeQueryAsynchronously(data).then(resultParking => {
-  //       return res.send(resultParking);
-  //     })
-  //   })
-  //   .catch(err => {
-  //     return res.status(500).send({
-  //       message:
-  //         err.message || "Some error occurred while retrieving boxes."
-  //     });
-  //   });
-  //   console.log("line which should never be reached.")
 };
 
 // Find a single Parking with an id
@@ -150,7 +119,6 @@ exports.findOne = (req, res) => {
   Parking.findByPk(id)
     .then(data => {
       console.log("encontrado parking..." + id)
-      // console.log(data)
       return res.send(data);
     })
     .catch(err => {
