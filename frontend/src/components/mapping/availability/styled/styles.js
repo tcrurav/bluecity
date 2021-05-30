@@ -14,11 +14,14 @@ const MyColCustom = styled(Button)({
     color: 'white',
     backgroundColor: (props) => props.bg,
     transition: 'box-shadow 350ms ease-in-out',
-    '& :hover': {
-        color: 'black'
+    // '&:hover': {
+    //     color: 'black'
+    // },
+    '&:focus': {
+        backgroundColor: (props) => props.bg
     },
     marginBottom: '1vh',
-    marginRight: '1vh'
+    marginRight: '1vh',
 });
 
 const ColorMarker = styled(Box) ({
