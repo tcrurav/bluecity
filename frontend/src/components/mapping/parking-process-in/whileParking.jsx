@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
+import { useTranslation } from 'react-i18next';
 
 /**
 |--------------------------------------------------
@@ -75,6 +76,8 @@ const WhileParking = ({ location, history }) => {
 
   const { state: { parking, boxId, checkingForRenting } } = location;
 
+  const { t } = useTranslation();
+
   const socketRef = useRef();
 
   const reservationInterval = useRef(null);
@@ -120,7 +123,6 @@ const WhileParking = ({ location, history }) => {
             ...s,
             boxReservedByThisUser: i
           }));
-          console.log(data.data[i].id)
           return;
         }
       }
@@ -187,7 +189,6 @@ const WhileParking = ({ location, history }) => {
   }, [geolocation.latitude, geolocation.longitude, stateParking.lat_parking, stateParking.long_parking]);
 
   useEffect(() => {
-    console.log("useEffect de openBoxPossible")
     if (distanceToParking < CLOSE_DISTANCE_TO_PARKING && stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
       setStateOpenBoxPossible(true);
     } else {
@@ -228,26 +229,26 @@ const WhileParking = ({ location, history }) => {
         <Row>
           <Col xs={{ span: 12, offset: 0 }}>
             <div className={classes.margins}>
-              <FontAwesomeIcon icon={faInfoCircle} color="blue" />&nbsp; You have parked your scooter in {name}.<br />
-              <FontAwesomeIcon icon={faInfoCircle} color="blue" />&nbsp; You parked it {formatTimeLeft(stateParking.reservation_time_left.valueOf())} minutes ago.<br />
-              <FontAwesomeIcon icon={faInfoCircle} color="blue" />&nbsp; Distance to parking: {distanceToParking.toFixed(2)} km.
+              <FontAwesomeIcon icon={faInfoCircle} color="blue" />{` ${t('You have parked your scooter in')} ${name}.`}<br />
+              <FontAwesomeIcon icon={faInfoCircle} color="blue" />{` ${t('You parked it')} ${formatTimeLeft(stateParking.reservation_time_left.valueOf())} ${t('minutes ago')}.`}<br />
+              <FontAwesomeIcon icon={faInfoCircle} color="blue" />{` ${t('Distance to parking')}: ${distanceToParking.toFixed(2)} km.`}
 
               {stateOpenBoxPossible ?
                 <div>
                   <span>
-                    <FontAwesomeIcon icon={faInfoCircle} color="blue" />&nbsp; You can take your scooter back.
+                    <FontAwesomeIcon icon={faInfoCircle} color="blue" />{` ${t('You can take your scooter back')}.`}
 							    </span>
-                  <Col xs={{ span: 9, offset: 3 }}>
-                    <br />
+                  <br /><br />
+                  <div className="text-center">
                     <Button
                       variant="contained"
                       className={classes.buttons}
-                      onClick={goToParkingProcessOut}> Open Box </Button>
-                  </Col>
+                      onClick={goToParkingProcessOut}>{t('Open Box')}</Button>
+                  </div>
                 </div>
                 :
                 <div>
-                  <FontAwesomeIcon icon={faInfoCircle} color="blue" />&nbsp;You are too far from the parking.
+                  <FontAwesomeIcon icon={faInfoCircle} color="blue" />{` ${t('You are too far from the parking')}.`}
 						    </div>
               }
             </div>

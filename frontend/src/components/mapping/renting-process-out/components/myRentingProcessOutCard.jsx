@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 /**
 |--------------------------------------------------
@@ -65,6 +66,8 @@ const MyRentingProcessOutCard = ({ parking, stateRentingProcess, noResponseFromP
 
   const classes = useStyles();
 
+  const { t } = useTranslation();
+
   const { id, address, name } = parking;
 
   return (
@@ -81,7 +84,7 @@ const MyRentingProcessOutCard = ({ parking, stateRentingProcess, noResponseFromP
               <MyMarker
                 color='blue'
                 state={null}
-                text='No response from Parking device...'
+                text={t('No response from Parking device...')}
                 icon={faInfoCircle}
               />
               <Grid
@@ -91,20 +94,20 @@ const MyRentingProcessOutCard = ({ parking, stateRentingProcess, noResponseFromP
               >
                 <Grid item xs={12}>
                   <Button variant="contained" className={classes.buttons} onClick={continueWithProcess}>
-                    Continue
-                      </Button>
+                    {t('Continue')}
+                  </Button>
                 </Grid>
               </Grid>
             </>
             :
             <>
-              <Card.Title>Renting process steps...</Card.Title>
+              <Card.Title>{t('Renting process steps...')}</Card.Title>
               <Row className='pt-2'>
                 <Col>
                   <MyMarker
                     color={stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? 'green' : 'red'}
                     state={null}
-                    text='Open box door'
+                    text={t('Open box')}
                     icon={stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
                   />
                 </Col>
@@ -114,7 +117,7 @@ const MyRentingProcessOutCard = ({ parking, stateRentingProcess, noResponseFromP
                   <MyMarker
                     color={stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? 'green' : 'red'}
                     state={null}
-                    text='Pull out the scooter'
+                    text={t('Pull out the scooter')}
                     icon={stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
                   />
                 </Col>
@@ -124,7 +127,7 @@ const MyRentingProcessOutCard = ({ parking, stateRentingProcess, noResponseFromP
                   <MyMarker
                     color={stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? 'green' : 'red'}
                     state={null}
-                    text='Closed box door'
+                    text={t('Closed box door')}
                     icon={stateRentingProcess >= RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
                   />
                 </Col>

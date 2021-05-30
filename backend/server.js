@@ -98,7 +98,6 @@ if (process.env.USING_WEBSOCKETS == "false") {
   /* Renting        -- RENTING, PULLING OUT -- */
   app.post("/open_renting_box_confirmed/:parking_id/:box_id", (req, res) => {
     console.log("open_renting_box_confirmed in backend")
-    console.log(userId)
 
     const data = { boxId: parseInt(req.params.box_id) };
 
@@ -544,7 +543,6 @@ io.on("connect", (socket) => {
       console.log("charger-unplugged");
       Box.findByPk(data.boxId)
         .then((data) => {
-          console.log(data);
           if (data.dataValues.state == constants.PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ||
             data.dataValues.state == constants.RENTING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED) {
             Box.update({ state: data.dataValues.state + 1 }, {
@@ -602,7 +600,6 @@ io.on("connect", (socket) => {
   }
   socket.on("something-changed", (data) => {
     console.log("something changed: " + data.toString());
-    console.log(data)
 
     if(data.reservation != null && data.reservation == true){
       console.log("reserve-box sent")
@@ -611,7 +608,6 @@ io.on("connect", (socket) => {
 
     if(data.reservation != null  && data.reservation == false){
       console.log("unreserve-box sent")
-      console.log(data)
       io.sockets.emit('unreserve-box', { boxId: data.box_id, parkingId: data.parking_changed });
     }
 

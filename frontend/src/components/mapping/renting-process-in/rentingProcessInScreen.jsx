@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
+import { useTranslation } from 'react-i18next';
 
 /**
 |--------------------------------------------------
@@ -46,6 +47,8 @@ import { BEGIN_OF_TIMES, getApiUser, NEITHER_PARKING_NOT_RENTING } from '../avai
 const RentingProcessScreen = ({ location, history }) => {
 
   const { state: { parking, boxId } } = location;
+
+  const { t } = useTranslation();
 
   const socketRef = useRef();
 
@@ -98,12 +101,10 @@ const RentingProcessScreen = ({ location, history }) => {
   }
 
   useEffect(() => {
-    console.log("useEffect primero");
     refreshBoxState();
   }, []);
 
   useEffect(() => {
-    console.log("useEffect socket");
     socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL);
 
     socketRef.current.on('welcome', () => {
@@ -143,28 +144,28 @@ const RentingProcessScreen = ({ location, history }) => {
                 <MyMarker
                   color='blue'
                   state={null}
-                  text='Waiting for the door to get open...'
+                  text={t('Waiting for the door to get open...')}
                   icon={faInfoCircle}
                 />
                 : stateRentingProcess === RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ?
                   <MyMarker
                     color='blue'
                     state={null}
-                    text='The door is open. Introduce your scooter, plug it in and close the door.'
+                    text={t('The door is open. Introduce your scooter, plug it in and close the door.')}
                     icon={faInfoCircle}
                   />
                   : stateRentingProcess === RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ?
                     <MyMarker
                       color='blue'
                       state={null}
-                      text='The scooter is in the box. Close the door.'
+                      text={t('The scooter is in the box. Close the door.')}
                       icon={faInfoCircle}
                     />
                     :
                     <MyMarker
                       color='blue'
                       state={null}
-                      text='The door is closed. The parking process of your rented scooter is complete.'
+                      text={t('The door is closed. The parking process of your rented scooter is complete.')}
                       icon={faInfoCircle}
                     />
             }

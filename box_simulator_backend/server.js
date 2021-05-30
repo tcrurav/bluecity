@@ -259,7 +259,6 @@ async function openPlc() {
 
   socketClient.on("unreserve-box", async (data) => {
     // from backend
-    console.log(data)
     console.log(`unreserve-box received for Box nº ${data.boxId} in Parking nº ${data.parkingId}`)
 
     if (parkingId == data.parkingId) {
@@ -347,7 +346,6 @@ if (process.env.USING_WEBSOCKETS == "false") {
 
   app.post("/open_box_renting_in/:box_id", (req, res) => {
     console.log("open_box_renting_in in box backend");
-    console.log(req.params.box_id);
 
     let data = { boxId: parseInt(req.params.box_id) };
     io.sockets.emit('simulator-open-box-renting-in', data);
@@ -357,7 +355,6 @@ if (process.env.USING_WEBSOCKETS == "false") {
 
   app.post("/open_box_renting_out/:box_id", (req, res) => {
     console.log("/open_box_renting_out in box backend");
-    console.log(req.params.box_id);
 
     let data = { boxId: parseInt(req.params.box_id) };
     io.sockets.emit('simulator-open-box-renting-out', data);
@@ -367,7 +364,6 @@ if (process.env.USING_WEBSOCKETS == "false") {
 
   app.post("/open_box_parking_in/:box_id", (req, res) => {
     console.log("/open_parking_box in box backend");
-    console.log(req.params.box_id);
 
     let data = { boxId: parseInt(req.params.box_id) };
     io.sockets.emit('simulator-open-box-parking-in', data);
@@ -377,7 +373,6 @@ if (process.env.USING_WEBSOCKETS == "false") {
 
   app.post("/open_box_parking_out/:box_id", (req, res) => {
     console.log("/open_parking_box out box backend");
-    console.log(req.params.box_id);
 
     let data = { boxId: parseInt(req.params.box_id) };
     io.sockets.emit('simulator-open-box-parking-out', data);

@@ -28,8 +28,6 @@ const ParkingScreen = () => {
   const [loadingState, setLoadingState] = useState(true);
 
   useEffect(() => {
-    console.log("Parking Screen");
-
     const userId = getApiUser().id;
     checkUserIdState(userId);
   }, []);

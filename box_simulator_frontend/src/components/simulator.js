@@ -17,7 +17,6 @@ const Simulator = () => {
   const socketRef = useRef();
 
   useEffect(() => {
-    console.log("useEffect socket");
     socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL);
 
     socketRef.current.on('simulator-welcome', () => {
@@ -27,7 +26,6 @@ const Simulator = () => {
     socketRef.current.on('simulator-open-box-renting-in', data => {
 		setIsRenting(true)
 		console.log("simulator-open-box in simulator frontend")
-		console.log(data)
 		if (parseInt(data.boxId) === SIMULATED_BOX_ID) {
 			setStateBox(BOX_OPENED);
 
@@ -38,7 +36,6 @@ const Simulator = () => {
     socketRef.current.on('simulator-open-box-renting-out', data => {
 		setIsRenting(true)
 		console.log("simulator-open-renting-box out simulator frontend")
-		console.log(data)
 		if (parseInt(data.boxId) === SIMULATED_BOX_ID) {
 			setStateBox(BOX_OPENED);
 
@@ -49,7 +46,6 @@ const Simulator = () => {
 	socketRef.current.on('simulator-open-box-parking-in', data => {
 		setIsRenting(false)
 		console.log("simulator-open-parking-box in simulator frontend")
-		console.log(data)
 		if (parseInt(data.boxId) === SIMULATED_BOX_ID) {
 			setStateBox(BOX_OPENED);
 
@@ -60,7 +56,6 @@ const Simulator = () => {
 	socketRef.current.on('simulator-open-box-parking-out', data => {
 		setIsRenting(false)
 		console.log("simulator-open-parking-box out simulator frontend")
-		console.log(data)
 		if (parseInt(data.boxId) === SIMULATED_BOX_ID) {
 			setStateBox(BOX_OPENED);
 

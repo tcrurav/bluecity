@@ -15,7 +15,6 @@ const MyBtnPopup = ({ text, p, type, checkingForRenting, returningScooter }) => 
     let history = useHistory();
 
     const redirectToDetailedParking = (p) => {
-        // console.log("checking? " + checkingForRenting);
         history.push({
             pathname: '/availability',
             state: {

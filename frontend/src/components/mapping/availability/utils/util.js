@@ -19,12 +19,8 @@ const checkGeolocationAvailability = () => {
     return new Promise((resolve, reject) => {
         if ('geolocation' in navigator) {
             resolve(true);
-            //resolve({ geolocationAvailable: true });
-            //console.log('Geolocation Available');
         } else {
             resolve(false);
-            //resolve({ geolocationAvailable: false });
-            //console.log('Geolocation Not Available');
         }
     });
 };

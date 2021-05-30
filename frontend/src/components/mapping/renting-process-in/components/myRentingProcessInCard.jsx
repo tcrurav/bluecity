@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 /**
 |--------------------------------------------------
@@ -66,6 +67,8 @@ const MyRentingProcessCard = ({ parking, stateRentingProcess, continueWithProces
 
   const { id, address, name } = parking;
 
+  const { t } = useTranslation();
+
   const classes = useStyles();
 
   return (
@@ -76,13 +79,13 @@ const MyRentingProcessCard = ({ parking, stateRentingProcess, continueWithProces
       />
       <MyCarImg id={id} />
       <Card.Body>
-        <Card.Title>Returning rented Scooter...</Card.Title>
+        <Card.Title>{t('Returning rented Scooter...')}</Card.Title>
         <Row className='pt-2'>
           <Col>
             <MyMarker
               color={stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
-              text='Open box door'
+              text={t('Open box door')}
               icon={stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>
@@ -92,7 +95,7 @@ const MyRentingProcessCard = ({ parking, stateRentingProcess, continueWithProces
             <MyMarker
               color={stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
-              text='Introduce the scooter in the box'
+              text={t('Introduce the scooter in the box')}
               icon={stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>
@@ -112,7 +115,7 @@ const MyRentingProcessCard = ({ parking, stateRentingProcess, continueWithProces
             <MyMarker
               color={stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
-              text='Close box door'
+              text={t('Close box door')}
               icon={stateRentingProcess >= RENTING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
             {
@@ -124,7 +127,7 @@ const MyRentingProcessCard = ({ parking, stateRentingProcess, continueWithProces
                 >
                   <Grid item xs={12}>
                     <Button variant="contained" className={classes.buttons} onClick={continueWithProcess}>
-                      Continue
+                      {t('Continue')}
                   </Button>
                   </Grid>
                 </Grid>

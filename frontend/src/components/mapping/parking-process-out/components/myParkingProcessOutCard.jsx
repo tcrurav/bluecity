@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 /**
 |--------------------------------------------------
@@ -66,6 +67,8 @@ const MyParkingProcessOutCard = ({ parking, stateParkingProcess, continueWithPro
 
   const { id, address, name } = parking;
 
+  const { t } = useTranslation();
+
   const classes = useStyles();
 
   return (
@@ -79,9 +82,9 @@ const MyParkingProcessOutCard = ({ parking, stateParkingProcess, continueWithPro
         <Card.Title>
           {
             stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT ?
-              <span>Taking your scooter back...</span>
+              <span>{t('Taking your scooter back...')}</span>
               :
-              <span>Parking process steps...</span>
+              <span>{t('Parking process steps...')}</span>
           }
 
         </Card.Title>
@@ -90,7 +93,7 @@ const MyParkingProcessOutCard = ({ parking, stateParkingProcess, continueWithPro
             <MyMarker
               color={stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
-              text='Open box door'
+              text={t('Open box door')}
               icon={stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>
@@ -100,7 +103,7 @@ const MyParkingProcessOutCard = ({ parking, stateParkingProcess, continueWithPro
             <MyMarker
               color={stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
-              text='Pull your scooter out'
+              text={t('Pull out the scooter')}
               icon={stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
           </Col>
@@ -111,7 +114,7 @@ const MyParkingProcessOutCard = ({ parking, stateParkingProcess, continueWithPro
             <MyMarker
               color={stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? 'green' : 'red'}
               state={null}
-              text='Close box door'
+              text={t('Close box door')}
               icon={stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
             {
@@ -123,7 +126,7 @@ const MyParkingProcessOutCard = ({ parking, stateParkingProcess, continueWithPro
                 >
                   <Grid item xs={12}>
                     <Button variant="contained" className={classes.buttons} onClick={continueWithProcess}>
-                      Continue
+                      {t('Continue')}
                   </Button>
                   </Grid>
                 </Grid>

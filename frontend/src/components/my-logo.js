@@ -27,7 +27,6 @@ export function MyLogo() {
   const history = useHistory();
 
   function handleClick() {
-    console.log("un click")
     history.push("/main");
   }
 

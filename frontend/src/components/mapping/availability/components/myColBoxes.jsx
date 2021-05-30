@@ -18,8 +18,6 @@ import { OCCUPIED, FREE, RESERVED } from '../constants/constants';
 
 const MyColBoxes = ({ boxes, findOutGreenRedOrOrange, handleReservation }) => {
 
-  // console.log("MyColBoxes")
-
   return (
     <>
       {

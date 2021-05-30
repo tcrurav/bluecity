@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 /**
 |--------------------------------------------------
@@ -65,6 +66,8 @@ const MyParkingProcessInCard = ({ parking, stateParkingProcess, noResponseFromPa
 
   const classes = useStyles();
 
+  const { t } = useTranslation();
+
   const { id, address, name } = parking;
 
   return (
@@ -81,7 +84,7 @@ const MyParkingProcessInCard = ({ parking, stateParkingProcess, noResponseFromPa
               <MyMarker
                 color='blue'
                 state={null}
-                text='No response from Parking device...'
+                text={t('No response from Parking device...')}
                 icon={faInfoCircle}
               />
               <Grid
@@ -91,20 +94,20 @@ const MyParkingProcessInCard = ({ parking, stateParkingProcess, noResponseFromPa
               >
                 <Grid item xs={12}>
                   <Button variant="contained" className={classes.buttons} onClick={continueWithProcess}>
-                    Continue
-                      </Button>
+                    {t('Continue')}
+                  </Button>
                 </Grid>
               </Grid>
             </>
             :
             <>
-              <Card.Title>Parking process steps...</Card.Title>
+              <Card.Title>{t('Parking process steps...')}</Card.Title>
               <Row className='pt-2'>
                 <Col>
                   <MyMarker
                     color={stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? 'green' : 'red'}
                     state={null}
-                    text='Open box door'
+                    text={t('Open box door')}
                     icon={stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
                   />
                 </Col>
@@ -114,7 +117,7 @@ const MyParkingProcessInCard = ({ parking, stateParkingProcess, noResponseFromPa
                   <MyMarker
                     color={stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? 'green' : 'red'}
                     state={null}
-                    text='Introduce the scooter in the box'
+                    text={t('Introduce the scooter in the box')}
                     icon={stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
                   />
                 </Col>
@@ -135,7 +138,7 @@ const MyParkingProcessInCard = ({ parking, stateParkingProcess, noResponseFromPa
                   <MyMarker
                     color={stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? 'green' : 'red'}
                     state={null}
-                    text='Close box door'
+                    text={t('Close box door')}
                     icon={stateParkingProcess >= PARKING_MODE_INTRODUCING_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
                   />
                 </Col>

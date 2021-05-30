@@ -30,9 +30,6 @@ export const setApiUser = (apiUser) => {
 
 // return the token from the session storage
 export const getApiToken = () => {
-  // console.log("getApiToken");
-  // console.log(sessionStorage.getItem('apiToken'))
-  // console.log("sessionStorage")
   return sessionStorage.getItem('apiToken') || null;
 }
 

@@ -16,7 +16,6 @@ export class MyLoginWithGoogle extends React.Component {
   }
 
   googleSDK() {
-    //console.log("googleSDK");
     window['googleSDKLoaded'] = () => {
       window['gapi'].load('auth2', () => {
         this.auth2 = window['gapi'].auth2.init({
@@ -42,7 +41,6 @@ export class MyLoginWithGoogle extends React.Component {
   }
 
   componentDidMount() {
-    //console.log("componentDidMount")
     this.googleSDK();
   }
 
@@ -76,7 +74,6 @@ export class MyLoginWithGoogle extends React.Component {
   }
 
   prepareLoginButton = () => {
-    //console.log("prepareLoginButton")
     this.auth2.attachClickHandler(document.querySelector('#login-button'), {},
       (googleUser) => {
 

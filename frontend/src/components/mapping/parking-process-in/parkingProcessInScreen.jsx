@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
+import { useTranslation } from 'react-i18next';
 
 /**
 |--------------------------------------------------
@@ -47,6 +48,8 @@ import { BEGIN_OF_TIMES } from '../availability/constants/constants';
 const ParkingProcessInScreen = ({ location, history }) => {
 
   const { state: { parking, boxId } } = location;
+
+  const { t } = useTranslation();
 
   const socketRef = useRef();
 
@@ -117,16 +120,15 @@ const ParkingProcessInScreen = ({ location, history }) => {
   useEffect(() => {
     openBoxTimeout.current = setTimeout(function () {
       BoxDataService.get(boxId).then(data => {
-        console.log(data.data.state)
-        if (data.data.state == NEITHER_PARKING_NOT_RENTING ||
-          data.data.state == PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT) {
+        if (data.data.state === NEITHER_PARKING_NOT_RENTING ||
+          data.data.state === PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT) {
           setNoResposeFromParkingDevice(true);
         }
       });
     }, 15000);
 
     return () => {
-      if (openBoxTimeout.current != null) clearTimeout(openBoxTimeout.current);
+      if (openBoxTimeout.current !== null) clearTimeout(openBoxTimeout.current);
     }
   }, []);
 
@@ -152,21 +154,21 @@ const ParkingProcessInScreen = ({ location, history }) => {
                 <MyMarker
                   color='blue'
                   state={null}
-                  text='Waiting for the door to get open...'
+                  text={t('Waiting for the door to get open...')}
                   icon={faInfoCircle}
                 />
                 : stateParkingProcess === PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ?
                   <MyMarker
                     color='blue'
                     state={null}
-                    text='The door is opened. Please, introduce your scooter and plug the charger in.'
+                    text={t('The door is opened. Please, introduce your scooter and plug the charger in.')}
                     icon={faInfoCircle}
                   />
                   : stateParkingProcess === PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ?
                     <MyMarker
                       color='blue'
                       state={null}
-                      text='The scooter is in the box. Please, close the door.'
+                      text={t('The scooter is in the box. Please, close the door.')}
                       icon={faInfoCircle}
                     />
                     :
@@ -174,7 +176,7 @@ const ParkingProcessInScreen = ({ location, history }) => {
                       <MyMarker
                         color='blue'
                         state={null}
-                        text='The door is closed. The parking process is complete.'
+                        text={t('The door is closed. The parking process is complete.')}
                         icon={faInfoCircle}
                       />
                     </>
