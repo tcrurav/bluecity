@@ -95,42 +95,42 @@ const Images = () => {
                     <Grid item xs={12} sm={6} md={4}>
                         <Image roundedCircle className={classes.image} src="img/carlos.jpg" rounded width={250} height={300} />
                         <Typography variant="h2" component="h5">Carlos Sánchez</Typography>
-                        <Typography variant="body" color="textSecondary" component="p">Estudiante</Typography>
+                        <Typography variant="body1" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                         <Image roundedCircle className={classes.image} src="img/user_default.png" rounded width={250} />
                         <Typography variant="h2" component="h5">Sebastián Moreno</Typography>
-                        <Typography variant="body" color="textSecondary" component="p">Estudiante </Typography>
+                        <Typography variant="body1" color="textSecondary" component="p">Estudiante </Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                         <Image roundedCircle className={classes.image} src="img/aaron.png" rounded width={250} height={300} />
                         <Typography variant="h2" component="h5">Aarón Medina</Typography>
-                        <Typography variant="body" color="textSecondary" component="p">Estudiante</Typography>
+                        <Typography variant="body1" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                         <Image roundedCircle className={classes.image} src="img/alejandro.png" rounded width={250} height={300} />
                         <Typography variant="h2" component="h5">Alejandro Pazos</Typography>
-                        <Typography variant="body" color="textSecondary" component="p">Estudiante</Typography>
+                        <Typography variant="body1" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                         <Image roundedCircle className={classes.image} src="img/gabriel.png" rounded width={250} height={300} />
                         <Typography variant="h2" component="h5">Gabriel Rodríguez</Typography>
-                        <Typography variant="body" color="textSecondary" component="p">Estudiante</Typography>
+                        <Typography variant="body1" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                         <Image roundedCircle className={classes.image} src="img/juan.png" rounded width={250} height={300} />
                         <Typography variant="h2" component="h5">Juan Thielmann</Typography>
-                        <Typography variant="body" color="textSecondary" component="p">Estudiante</Typography>
+                        <Typography variant="body1" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <Image roundedCircle className={classes.image} src="img/user_default.png" rounded width={250} height={300} />
                         <Typography variant="h2" component="h5">David Freyre</Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">Estudiante</Typography>
+                        <Typography variant="body1" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <Image roundedCircle className={classes.image} src="img/sonia.png" rounded width={250} height={300} />
                         <Typography variant="h2" component="h5">Sonia Castro</Typography>
-                        <Typography variant="body" color="textSecondary" component="p">Estudiante</Typography>
+                        <Typography variant="body1" color="textSecondary" component="p">Estudiante</Typography>
                     </Grid>
                 </Grid>
                 {/* <Divider/> */}
