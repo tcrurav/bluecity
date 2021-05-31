@@ -72,11 +72,11 @@ const useStyles = makeStyles((theme) => ({
   appbar: {
     marginBottom: "10vh",
     background: "#00569F",
-    },
+  },
 }));
 
-export function MyNavbar(props) {
-  const { t  } = useTranslation();
+export const MyNavbar = React.memo(function MyNavbar(props) {
+  const { t } = useTranslation();
   const [stateUser, setStateUser] = useState({
     name: "",
     email: "",
@@ -88,24 +88,9 @@ export function MyNavbar(props) {
     setStateUser((s) => ({
       ...s,
       name: newStateUser.data.name,
-      email: newStateUser.data.email,
-      loading: false,
+      email: newStateUser.data.email
     }));
   };
-
-  /* const getUser = () => {
-    UserDataService.get(props.userId)
-      .then(response => {
-        setStateUser({
-          name: response.data.name,
-          email: response.data.username,
-          loading: false
-        })
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  } */
 
   // handle click event of logout button
   const handleLogout = () => {
@@ -161,7 +146,7 @@ export function MyNavbar(props) {
           </ListItemIcon>
           <ListItemText primary={t('Home')} />
         </ListItemLink>
-        <ListItemLink  
+        <ListItemLink
           onClick={() =>
             props.history.push({
               pathname: "/parking"
@@ -172,7 +157,7 @@ export function MyNavbar(props) {
           </ListItemIcon>
           <ListItemText primary={t('Parking')} />
         </ListItemLink>
-        <ListItemLink 
+        <ListItemLink
           onClick={() =>
             props.history.push({
               pathname: "/renting",
@@ -181,17 +166,17 @@ export function MyNavbar(props) {
               },
             })
           }
-          >
+        >
           <ListItemIcon>
             <CreditCardIcon />
           </ListItemIcon>
           <ListItemText primary={t('Renting')} />
         </ListItemLink>
         <ListItemLink onClick={() =>
-            props.history.push({
-              pathname: "/contact"
-            })
-          }>
+          props.history.push({
+            pathname: "/contact"
+          })
+        }>
           <ListItemIcon>
             <ContactSupportIcon />
           </ListItemIcon>
@@ -244,18 +229,19 @@ export function MyNavbar(props) {
 
   function CustomizedAccordions({ stateUser }) {
     const { t } = useTranslation();
-    const [expanded, setExpanded] = React.useState("panel1");
+    // const [expanded, setExpanded] = React.useState("panel1");
 
-    const handleChange = (panel) => (event, newExpanded) => {
-      setExpanded(newExpanded ? panel : false);
-    };
+    // const handleChange = (panel) => (event, newExpanded) => {
+    //   setExpanded(newExpanded ? panel : false);
+    // };
 
     const avatarLetter = stateUser.name.charAt(0);
     const onlyNameString = stateUser.name.split(" ")[0];
 
     return (
       <div>
-        <Accordion square onChange={handleChange("panel1")}>
+        {/* <Accordion square onChange={handleChange("panel1")}> */}
+        <Accordion square>
           <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
             <Grid container direction="row" alignItems="center">
               <Grid item xs={2}>
@@ -290,7 +276,7 @@ export function MyNavbar(props) {
         </Accordion>
       </div>
     );
-  }
+  };
 
   useEffect(() => {
     try {
@@ -331,3 +317,4 @@ export function MyNavbar(props) {
     </div>
   );
 }
+);

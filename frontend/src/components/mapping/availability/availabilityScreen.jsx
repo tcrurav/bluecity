@@ -260,6 +260,7 @@ const AvailabilityScreen = ({ location, history }) => {
   };
 
   const refresh = () => {
+    console.log("refresh")
     findAllBoxesInAParking().then((newState) => {
       setStateParking(s => ({
         ...s,

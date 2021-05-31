@@ -21,6 +21,9 @@ module.exports = app => {
   
     // Update a Box with id
     router.put("/:id", auth.isAuthenticated, boxes.update);
+
+    // reset all boxes in a parking
+    router.put("/reset/:id", auth.isAuthenticated, boxes.resetAllBoxesInAParking);
   
     // Delete a Box with id
     router.delete("/:id", auth.isAuthenticated, boxes.delete);

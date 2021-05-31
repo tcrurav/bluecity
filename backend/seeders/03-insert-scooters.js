@@ -8,14 +8,14 @@ module.exports = {
             {
                 id: 1,
                 userId: null,
-                boxId: 1,
+                boxId: 18,
                 lastReservationDate: BEGIN_OF_TIMES,
                 createdAt: new Date(),
                 updatedAt: new Date()
             },{
                 id: 2,
                 userId: null,
-                boxId: 4,
+                boxId: 9,
                 lastReservationDate: BEGIN_OF_TIMES,
                 createdAt: new Date(),
                 updatedAt: new Date()
