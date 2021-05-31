@@ -3,6 +3,7 @@ import { MyNavbar } from '../ui/navbar/my-navbar';
 import { Footer } from '../ui/footer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { MyContainer } from '../ui/my-container';
 import FlagIcon from '../languages/flagIcon';
 import { BallBeat } from "react-pure-loaders";
@@ -10,6 +11,7 @@ import { BallBeat } from "react-pure-loaders";
 import { getApiUser, setApiUser } from '../../utils/common';
 
 import UserDataService from '../../services/user.service';
+import BoxDataService from '../../services/box.service';
 
 /*-----------------------------------
         Material-UI Imports
@@ -34,7 +36,7 @@ export default function MyAccount(props) {
       ...profileState,
       language: event.target.value
     });
-    UserDataService.update(userId, { language: event.target.value }).then(()=>{
+    UserDataService.update(userId, { language: event.target.value }).then(() => {
       let apiUser = getApiUser();
       apiUser.language = event.target.value;
       setApiUser(apiUser);
@@ -50,13 +52,23 @@ export default function MyAccount(props) {
         setProfileState({
           name: response.data.name,
           email: response.data.username,
-          language: response.data.language
+          language: response.data.language,
+          isAdmin: response.data.isAdmin
         });
         setLoadingState(false);
       })
       .catch(e => {
         console.log("error retrieving user data");
       });
+  }
+
+  const reset = () => {
+    //Reset parkingId=1 for testing purposes
+    BoxDataService.resetAllBoxesInAParking(1).then((res) => {
+      console.log("reset successful");
+    }).catch(e => {
+      console.log("error resetting");
+    });
   }
 
   return (
@@ -91,16 +103,24 @@ export default function MyAccount(props) {
             <Row>
               <Col>
                 <p className="font-weight-bold">{t('Language')}</p>
-                  <Select labelId="language" id="select" value={profileState.language} onChange={changeLanguage}>
-                    <MenuItem value="es">
-                      <FlagIcon code="es" />&nbsp;Español</MenuItem>
-                    <MenuItem value="es-CA">
-                      <FlagIcon code="es-ca" />&nbsp;Catal&agrave;</MenuItem>
-                    <MenuItem value="en">
-                      <FlagIcon code="gb" />&nbsp;English</MenuItem>
-                  </Select>
+                <Select labelId="language" id="select" value={profileState.language} onChange={changeLanguage}>
+                  <MenuItem value="es">
+                    <FlagIcon code="es" />&nbsp;Español</MenuItem>
+                  <MenuItem value="es-CA">
+                    <FlagIcon code="es-ca" />&nbsp;Catal&agrave;</MenuItem>
+                  <MenuItem value="en">
+                    <FlagIcon code="gb" />&nbsp;English</MenuItem>
+                </Select>
               </Col>
             </Row>
+            {profileState.isAdmin ?
+              <Row>
+                <Col>
+                  <Button className="mt-4" onClick={reset}>Test Reset</Button>
+                </Col>
+              </Row>
+              : <></>
+            }
           </MyContainer>
           <Footer />
         </>

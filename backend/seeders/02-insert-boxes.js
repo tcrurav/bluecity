@@ -36,7 +36,7 @@ module.exports = {
       },{
         id: 4,
         state: Constants.NEITHER_PARKING_NOT_RENTING,
-        occupied: true,
+        occupied: false,
         lastReservationDate: BEGIN_OF_TIMES,
         userId: null,
         parkingId: 2,
@@ -81,7 +81,7 @@ module.exports = {
       },{
         id: 9,
         state: Constants.NEITHER_PARKING_NOT_RENTING,
-        occupied: false,
+        occupied: true,
         lastReservationDate: BEGIN_OF_TIMES,
         userId: null,
         parkingId: 3,
@@ -162,7 +162,7 @@ module.exports = {
       },{
         id: 18,
         state: Constants.NEITHER_PARKING_NOT_RENTING,
-        occupied: false,
+        occupied: true,
         lastReservationDate: BEGIN_OF_TIMES,
         userId: null,
         parkingId: 6,

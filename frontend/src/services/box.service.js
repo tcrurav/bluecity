@@ -26,6 +26,10 @@ class BoxDataService {
     return http.put(`/boxes/${id}`, data);
   }
 
+  resetAllBoxesInAParking(id) {
+    return http.put(`/boxes/reset/${id}`);
+  }
+
   delete(id) {
     return http.delete(`/boxes/${id}`);
   }
