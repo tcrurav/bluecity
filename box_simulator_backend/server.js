@@ -237,7 +237,10 @@ async function openPlc() {
       // BoxId in PLC always start with 1. It's assumed that all parkings have 3 boxes.
       const boxIdInPLC = parseInt(data.boxId) - (parseInt(data.parkingId) - 1) * 3;
       const openBox = true;
-      await writeToPLC(boxIdInPLC, openBox);
+      const closeBox = false;
+      const reserveBox = false;
+      //await writeToPLC(boxIdInPLC, openBox); 
+      await writeToPLC(boxIdInPLC, openBox, closeBox, reserveBox); //CAMBIO DE ÚLTIMA HORA (ESTABA COMO EN LA LÍNEA ANTERIOR)
     }
   });
 
@@ -288,21 +291,21 @@ async function openPlc() {
           socketClient.emit("open-box-confirmed", { boxId: boxIdInBackend, parkingId });
 
           //Inform PLC that confirmation was received
-          const boxId = i;
-          const openBox = false;
-          const closeBox = null;
-          const reserveBox = null;
-          await writeToPLC(boxId, openBox, closeBox, reserveBox);
+          //const boxId = i;
+          //const openBox = false;
+          //const closeBox = null;
+          //const reserveBox = null;
+          //await writeToPLC(boxId, openBox, closeBox, reserveBox);
         } else {
           console.log("se emite box-closed")
           socketClient.emit("box-closed", { boxId: boxIdInBackend, parkingId });
 
           //Inform PLC that confirmation was received
-          const boxId = i;
-          const openBox = null;
-          const closeBox = false;
-          const reserveBox = null;
-          await writeToPLC(boxId, openBox, closeBox, reserveBox);
+          //const boxId = i;
+          //const openBox = null;
+          //const closeBox = false;
+          //const reserveBox = null;
+          //await writeToPLC(boxId, openBox, closeBox, reserveBox);
         }
         lastDataFromPLC[i].openBoxConfirmed = newDataFromPLC[i].openBoxConfirmed;
       }

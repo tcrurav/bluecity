@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
 import { useTranslation } from 'react-i18next';
+import { Footer } from '../../ui/footer';
 
 /**
 |--------------------------------------------------
@@ -184,6 +185,7 @@ const ParkingProcessInScreen = ({ location, history }) => {
           </Col>
         </Row>
       </MyContainer>
+      <Footer/>
     </>
   )
 };

@@ -37,7 +37,8 @@ const MyParkingsWithFreeScooters = () => {
 
   const [freeScooter, setFreeScooter] = useState({
     parkings: [],
-    position: [28.128081, -15.4467406]
+    // position: [28.128081, -15.4467406] //IES El Rincón
+    position: [41.3603711, 2.0611996] //Citilab
   });
 
   const { parkings, position } = freeScooter;

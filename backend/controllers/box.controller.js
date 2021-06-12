@@ -127,7 +127,7 @@ exports.resetAllBoxesInAParking = (req, res) => {
 
   const BEGIN_OF_TIMES = new Date('1970-01-01 00:00:00');
 
-  Box.update({ state: 0, ocuppied: false, lastReservationDate: BEGIN_OF_TIMES, userId: null }, {
+  Box.update({ state: 0, occupied: false, lastReservationDate: BEGIN_OF_TIMES, userId: null }, {
     where: { parkingId: id },
   })
     .then((num) => {

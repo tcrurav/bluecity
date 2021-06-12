@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
 import { BallBeat } from "react-pure-loaders";
+import { Footer } from '../../ui/footer';
 
 import { useGeolocation } from '../../geolocation/geolocation';
 
@@ -37,7 +38,7 @@ import ParkingDataService from '../../../services/parking.service';
 | Utils
 |--------------------------------------------------
 */
-import { getDistanceFromLatLonInKm } from '../../../utils/common';
+import { getDistanceFromLatLonInKm, getDistanceToOpenBox } from '../../../utils/common';
 import { formatTimeLeft } from './utils/util';
 
 /**
@@ -45,7 +46,9 @@ import { formatTimeLeft } from './utils/util';
 | Constants
 |--------------------------------------------------
 */
-import { OCCUPIED, FREE, RESERVED, FIVE_MINUTES, THIS_USER_HAS_NO_RESERVATION, getApiUser, CLOSE_DISTANCE_TO_PARKING, BEGIN_OF_TIMES, MINIMUM_DISTANCE_INCREMENT } from './constants/constants'
+import { OCCUPIED, FREE, RESERVED, FIVE_MINUTES, THIS_USER_HAS_NO_RESERVATION, getApiUser, 
+  // CLOSE_DISTANCE_TO_PARKING, 
+  BEGIN_OF_TIMES, MINIMUM_DISTANCE_INCREMENT } from './constants/constants'
 import {
   PARKING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
   RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT,
@@ -357,6 +360,7 @@ const AvailabilityScreen = ({ location, history }) => {
   }, [geolocation.latitude, geolocation.longitude, stateParking.lat_parking, stateParking.long_parking]);
 
   useEffect(() => {
+    let CLOSE_DISTANCE_TO_PARKING = getDistanceToOpenBox();
     if (distanceToParking < CLOSE_DISTANCE_TO_PARKING && stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
       setStateOpenBoxPossible(true);
     } else {
@@ -438,7 +442,7 @@ const AvailabilityScreen = ({ location, history }) => {
           </Row>
         </MyContainer>
       }
-      {/* <Footer /> */}
+      <Footer />
     </>
   )
 };
