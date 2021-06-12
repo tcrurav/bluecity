@@ -49,6 +49,17 @@ export const setUserSession = (token, user, apiToken, apiUser) => {
   sessionStorage.setItem('apiUser', JSON.stringify(apiUser));
 }
 
+// set distance to open box
+export const setDistanceToOpenBox = (distance) => {
+  sessionStorage.setItem('distance', distance);
+}
+
+// return the distance to open box
+export const getDistanceToOpenBox = () => {
+  let distance = sessionStorage.getItem('distance') || "1";
+  return parseInt(distance);
+}
+
 // Geolocation
 export const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
   const R = 6371; // Radius of the earth in km

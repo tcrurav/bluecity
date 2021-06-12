@@ -8,7 +8,9 @@ import { MyContainer } from '../ui/my-container';
 import FlagIcon from '../languages/flagIcon';
 import { BallBeat } from "react-pure-loaders";
 
-import { getApiUser, setApiUser } from '../../utils/common';
+// import { CLOSE_DISTANCE_TO_PARKING } from '../mapping/availability/constants/constants';
+
+import { getApiUser, getDistanceToOpenBox, setApiUser, setDistanceToOpenBox } from '../../utils/common';
 
 import UserDataService from '../../services/user.service';
 import BoxDataService from '../../services/box.service';
@@ -25,9 +27,15 @@ export default function MyAccount(props) {
   const [loadingState, setLoadingState] = useState(true);
   const { userId, history } = props;
   const [profileState, setProfileState] = useState(null);
+  const [distanceToOpenBoxState, setDistanceToOpenBoxState] = useState("1");
 
   useEffect(() => {
     getUser();
+  }, []);
+
+  useEffect(() => {
+    let distance = getDistanceToOpenBox();
+    setDistanceToOpenBoxState(distance);
   }, []);
 
   const changeLanguage = (event) => {
@@ -63,17 +71,23 @@ export default function MyAccount(props) {
   }
 
   const reset = () => {
-    //Reset parkingId=1 for testing purposes
-    BoxDataService.resetAllBoxesInAParking(1).then((res) => {
+    //Reset parkingId=7 for testing purposes in Citilab
+    //Cambiar al 1 para el Museo Elder
+    BoxDataService.resetAllBoxesInAParking(7).then((res) => {
       console.log("reset successful");
     }).catch(e => {
       console.log("error resetting");
     });
   }
 
+  const changeDistanceToOpenBox = (event) => {
+    setDistanceToOpenBox(event.target.value);
+    setDistanceToOpenBoxState(event.target.value);
+  }
+
   return (
     <>
-      { loadingState ?
+      {loadingState ?
         <MyContainer>
           <Row className="justify-content-md-center h-50">
             <Col md={6} className="text-center mt-auto pb-5">
@@ -114,11 +128,26 @@ export default function MyAccount(props) {
               </Col>
             </Row>
             {profileState.isAdmin ?
-              <Row>
-                <Col>
-                  <Button className="mt-4" onClick={reset}>Test Reset</Button>
-                </Col>
-              </Row>
+              <>
+                <Row>
+                  <Col>
+                    {/* <p className="font-weight-bold">Admin options:</p> */}
+                    <Button className="mt-4" onClick={reset}>Test Box Reset</Button>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <span className="font-weight-bold mt-4">Min. distance to open Box:&nbsp;</span>
+                    <Select className="mt-4" labelId="Distance to Open Box" id="selectDistanceToOpenBox" value={distanceToOpenBoxState} onChange={changeDistanceToOpenBox}>
+                      <MenuItem value="1">1</MenuItem>
+                      <MenuItem value="10">10</MenuItem>
+                      <MenuItem value="100">100</MenuItem>
+                      <MenuItem value="1000">1000</MenuItem>
+                      <MenuItem value="10000">10000</MenuItem>
+                    </Select>
+                  </Col>
+                </Row>
+              </>
               : <></>
             }
           </MyContainer>

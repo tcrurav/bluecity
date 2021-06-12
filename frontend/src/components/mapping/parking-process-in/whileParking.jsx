@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
 import { useTranslation } from 'react-i18next';
+import { Footer } from '../../ui/footer';
 
 /**
 |--------------------------------------------------
@@ -32,11 +33,13 @@ import Button from "@material-ui/core/Button";
 import BoxDataService from '../../../services/box.service';
 import ParkingDataService from '../../../services/parking.service';
 import { useGeolocation } from '../../geolocation/geolocation';
-import { getDistanceFromLatLonInKm } from '../../../utils/common';
+import { getDistanceFromLatLonInKm, getDistanceToOpenBox } from '../../../utils/common';
 import { formatTimeLeft } from '../availability/utils/util';
 
 import {
-  THIS_USER_HAS_NO_RESERVATION, CLOSE_DISTANCE_TO_PARKING, MINIMUM_DISTANCE_INCREMENT
+  THIS_USER_HAS_NO_RESERVATION, 
+  //CLOSE_DISTANCE_TO_PARKING, 
+  MINIMUM_DISTANCE_INCREMENT
 } from '../availability/constants/constants.js';
 
 import {
@@ -189,6 +192,7 @@ const WhileParking = ({ location, history }) => {
   }, [geolocation.latitude, geolocation.longitude, stateParking.lat_parking, stateParking.long_parking]);
 
   useEffect(() => {
+    let CLOSE_DISTANCE_TO_PARKING = getDistanceToOpenBox();
     if (distanceToParking < CLOSE_DISTANCE_TO_PARKING && stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
       setStateOpenBoxPossible(true);
     } else {
@@ -255,6 +259,7 @@ const WhileParking = ({ location, history }) => {
           </Col>
         </Row>
       </MyContainer>
+      <Footer />
     </>
   )
 };
