@@ -13,6 +13,7 @@ export class MyLoginWithGoogle extends React.Component {
 
     this.prepareLoginButton = this.prepareLoginButton.bind(this);
     this.googleSDK = this.googleSDK.bind(this);
+    this.saveUser = this.saveUser.bind(this);
   }
 
   googleSDK() {
@@ -61,9 +62,9 @@ export class MyLoginWithGoogle extends React.Component {
         setUserSession(token, profile, response.data.token, response.data.user);
 
         // setTimeout(() => { //Just to simulate the timeout
-          this.props.changeLoadingState(false);
+        this.props.changeLoadingState(false);
 
-          this.props.history.push("/main");
+        this.props.history.push("/main");
         // }, 2000);
 
 
@@ -95,7 +96,7 @@ export class MyLoginWithGoogle extends React.Component {
 
   render() {
     return (
-        <MyGoogleLoginButton />
+      <MyGoogleLoginButton />
     );
   }
 }

@@ -26,7 +26,7 @@
     "immer": "^8.0.1",
     "leaflet": "^1.6.0",
     "material-ui-image": "^3.3.1",
-    
+
     "path": "^0.12.7",
     "react": "^16.13.0",
     "react-bootstrap": "^1.4.3",
@@ -47,8 +47,8 @@
     "styled-components": "^5.0.1"
   },
   "scripts": {
-    "start-develop": "node server/server.js",
-    "start": "react-scripts start",
+    "start": "node server/server.js",
+    "start-develop": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
