@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
 import { useTranslation } from 'react-i18next';
+import { Footer } from '../../ui/footer';
 
 /**
 |--------------------------------------------------
@@ -131,8 +132,8 @@ const RentingProcessScreen = ({ location, history }) => {
   useEffect(() => {
     openBoxTimeout.current = setTimeout(function () {
       BoxDataService.get(boxId).then(data => {
-        if (data.data.state == NEITHER_PARKING_NOT_RENTING ||
-          data.data.state == RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT) {
+        if (data.data.state === NEITHER_PARKING_NOT_RENTING ||
+          data.data.state === RENTING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT) {
           setNoResposeFromParkingDevice(true);
         }
       })
@@ -193,6 +194,7 @@ const RentingProcessScreen = ({ location, history }) => {
           </Col>
         </Row>
       </MyContainer>
+      <Footer/>
     </>
   )
 };

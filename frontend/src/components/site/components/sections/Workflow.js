@@ -3,14 +3,10 @@ import React from 'react';
 import { Image } from 'react-bootstrap';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import Avatar from '@material-ui/core/Avatar';
+
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
-import step0Short from '../../assets/images/step-0-short.png';
 import { Divider } from '@material-ui/core';
 
 import { useMediaQuery } from 'react-responsive';

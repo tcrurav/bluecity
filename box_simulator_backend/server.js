@@ -36,22 +36,90 @@ app.get("/hello", (req, res) => {
   return res.send({ response: "I am alive" }).status(200);
 });
 
+let plcCurrentData = [{
+  value: {
+    value: 0
+  }
+}, {
+  value: {
+    value: 0
+  }
+}, {
+  value: {
+    value: 0
+  }
+}, {
+  value: {
+    value: 0
+  }
+}, {
+  value: {
+    value: 0
+  }
+}, {
+  value: {
+    value: 0
+  }
+}];
+
+// let lastSentToPLC = [{
+//   plcOpenBox: 0
+// }, {
+//   plcOpenBox: 0
+// }, {
+//   plcOpenBox: 0
+// }];
+
+let ioUsingPLC = null;
+
+if (process.env.USING_PLC == "false") {
+  ioUsingPLC = socketIo(server, {
+    cors: {
+      // origin: process.env.BLUECITY_CLIENT,
+      origin: '*',
+      methods: ["GET", "POST"],
+      credentials: true
+    },
+    transports: ['polling', 'websocket']
+  });
+
+  ioUsingPLC.on("connect", (socket) => {
+    console.log("New simulator_frontend simulating PLC");
+
+    socketWithBox = socket;
+
+    socket.emit("simulator-welcome", { connection_confirmed: true });
+
+    socket.on("simulator-read-from-plc", (data) => {
+      console.log("simulator-read-from-plc");
+      // console.log(data);
+
+      plcCurrentData = data;
+    });
+
+    socket.on("disconnect", () => {
+      console.log("simulator_frontend simulating PLC disconnected");
+    });
+  });
+}
+
 let parkingId = process.env.PLC_PARKING_ID;
 let session = null;
 let client = null;
 
 async function closePLC() {
-  // close session with PL
-  await session.close();
+  if (process.env.USING_PLC == "true") {
+    // close session with PL
+    await session.close();
 
-  // disconnecting from PLC
-  await client.disconnect();
+    // disconnecting from PLC
+    await client.disconnect();
+  }
 }
 
 async function writeToPLC(boxId, openBox, closeBox, reserve) {
-  // to PLC 
-
-  console.log(`ns=3;s="${process.env.PLC_BOX_ID}"`)
+  console.log("writeToPLC");
+  // console.log(`ns=3;s="${process.env.PLC_BOX_ID}"`)
   var nodesToWrite = [{
     nodeId: `ns=3;s="${process.env.PLC_BOX_ID}"`,
     attributeId: nodeOpcua.AttributeIds.Value,
@@ -67,12 +135,12 @@ async function writeToPLC(boxId, openBox, closeBox, reserve) {
   if (openBox != null) {
     nodesToWrite.push({
       nodeId: `ns=3;s="${process.env.PLC_OPEN_BOX}"`,
-        attributeId: nodeOpcua.AttributeIds.Value,
-          indexRange: null,
-            value: {
+      attributeId: nodeOpcua.AttributeIds.Value,
+      indexRange: null,
+      value: {
         value: {
           dataType: nodeOpcua.DataType.SByte,
-            value: openBox ? 1 : 0
+          value: openBox ? 1 : 0
         }
       }
     });
@@ -81,12 +149,12 @@ async function writeToPLC(boxId, openBox, closeBox, reserve) {
   if (closeBox != null) {
     nodesToWrite.push({
       nodeId: `ns=3;s="${process.env.PLC_CLOSE_BOX}"`,
-        attributeId: nodeOpcua.AttributeIds.Value,
-          indexRange: null,
-            value: {
+      attributeId: nodeOpcua.AttributeIds.Value,
+      indexRange: null,
+      value: {
         value: {
           dataType: nodeOpcua.DataType.SByte,
-            value: closeBox ? 1 : 0
+          value: closeBox ? 1 : 0
         }
       }
     });
@@ -95,60 +163,33 @@ async function writeToPLC(boxId, openBox, closeBox, reserve) {
   if (closeBox != null) {
     nodesToWrite.push({
       nodeId: `ns=3;s="${process.env.PLC_RESERVE}"`,
-        attributeId: nodeOpcua.AttributeIds.Value,
-          indexRange: null,
-            value: {
+      attributeId: nodeOpcua.AttributeIds.Value,
+      indexRange: null,
+      value: {
         value: {
           dataType: nodeOpcua.DataType.SByte,
-            value: reserve ? 1 : 0
+          value: reserve ? 1 : 0
         }
       }
     });
   }
 
-  // var nodesToWrite = [{
-  //   nodeId: `ns=3;s="${process.env.PLC_BOX_ID}"`,
-  //   attributeId: nodeOpcua.AttributeIds.Value,
-  //   indexRange: null,
-  //   value: {
-  //     value: {
-  //       dataType: nodeOpcua.DataType.SByte,
-  //       value: boxId
-  //     }
-  //   }
-  // }, {
-  //   nodeId: `ns=3;s="${process.env.PLC_OPEN_BOX}"`,
-  //   attributeId: nodeOpcua.AttributeIds.Value,
-  //   indexRange: null,
-  //   value: {
-  //     value: {
-  //       dataType: nodeOpcua.DataType.SByte,
-  //       value: openBox ? 1 : 0
-  //     }
-  //   }
-  // }, {
-  //   nodeId: `ns=3;s="${process.env.PLC_CLOSE_BOX}"`,
-  //   attributeId: nodeOpcua.AttributeIds.Value,
-  //   indexRange: null,
-  //   value: {
-  //     value: {
-  //       dataType: nodeOpcua.DataType.SByte,
-  //       value: closeBox ? 1 : 0
-  //     }
-  //   }
-  // }, {
-  //   nodeId: `ns=3;s="${process.env.PLC_RESERVE}"`,
-  //   attributeId: nodeOpcua.AttributeIds.Value,
-  //   indexRange: null,
-  //   value: {
-  //     value: {
-  //       dataType: nodeOpcua.DataType.SByte,
-  //       value: reserve ? 1 : 0
-  //     }
-  //   }
-  // }];
+  // lastSentToPLC[boxId - 1] = {
+  //   plcOpenBox: openBox == null ? 0 : openBox ? 1 : 0,
+  // };
 
-  await session.write(nodesToWrite);
+  if (process.env.USING_PLC == "true") {
+    // Write to real PLC
+    await session.write(nodesToWrite);
+  } else {
+    // Write to simulator
+    ioUsingPLC.emit("simulator-write-to-plc", {
+      plcBoxId: boxId,
+      plcOpenBox: openBox == null ? 0 : openBox ? 1 : 0,
+      plcCloseBox: closeBox == null ? 0 : closeBox ? 1 : 0,
+      plcReserve: reserve == null ? 0 : reserve ? 1 : 0,
+    });
+  }
 }
 
 async function readFromPLC() {
@@ -172,9 +213,18 @@ async function readFromPLC() {
     attributeId: nodeOpcua.AttributeIds.Value
   }];
 
-  const maxAge = 0;
-  let dataValue = await session.read(nodesToRead, maxAge);
-  // console.log(" dataValue ", dataValue.toString());
+  let dataValue = null;
+
+  if (process.env.USING_PLC == "true") {
+    // Read from real PLC
+    const maxAge = 0;
+    dataValue = await session.read(nodesToRead, maxAge);
+    // console.log(" dataValue ", dataValue.toString());
+  } else {
+    // Read from simulator
+    dataValue = plcCurrentData;
+    // console.log(dataValue);
+  }
 
   return [{
     openBoxConfirmed: dataValue[0].value.value,
@@ -192,30 +242,34 @@ async function readFromPLC() {
 async function openPlc() {
   // Using OPCUA to connect to PLC
 
-  const connectionStrategy = {
-    initialDelay: 1000,
-    maxRetry: 1
+  if (process.env.USING_PLC == "true") {
+
+    const connectionStrategy = {
+      initialDelay: 1000,
+      maxRetry: 1
+    }
+    const opcuaOptions = {
+      applicationName: "MyClient",
+      connectionStrategy: connectionStrategy,
+      securityMode: nodeOpcua.MessageSecurityMode.None,
+      securityPolicy: nodeOpcua.SecurityPolicy.None,
+      endpoint_must_exist: false,
+    };
+    client = nodeOpcua.OPCUAClient.create(opcuaOptions);
+    const endpointUrl = process.env.PLC_OPCUA_URL;
+
+    // step 1 : connect to
+    await client.connect(endpointUrl);
+    console.log("connected !");
+
+    // step 2 : createSession
+    session = await client.createSession();
+    console.log("session created !");
+
   }
-  const opcuaOptions = {
-    applicationName: "MyClient",
-    connectionStrategy: connectionStrategy,
-    securityMode: nodeOpcua.MessageSecurityMode.None,
-    securityPolicy: nodeOpcua.SecurityPolicy.None,
-    endpoint_must_exist: false,
-  };
-  client = nodeOpcua.OPCUAClient.create(opcuaOptions);
-  const endpointUrl = process.env.PLC_OPCUA_URL;
-
-  // step 1 : connect to
-  await client.connect(endpointUrl);
-  console.log("connected !");
-
-  // step 2 : createSession
-  session = await client.createSession();
-  console.log("session created !");
 
   let lastDataFromPLC = await readFromPLC();
-  console.log(lastDataFromPLC);
+  // console.log(lastDataFromPLC);
 
   let socketClient = ioClient(process.env.BACKEND_URL, {
     withCredentials: true,
@@ -284,6 +338,7 @@ async function openPlc() {
     let boxIdInBackend = 0;
     for (let i = 0; i < 3; i++) {
       boxIdInBackend = i + 1 + (parkingId - 1) * 3;
+
       if (lastDataFromPLC[i].openBoxConfirmed != newDataFromPLC[i].openBoxConfirmed) {
         if (newDataFromPLC[i].openBoxConfirmed == 1) {
 
@@ -310,7 +365,7 @@ async function openPlc() {
         lastDataFromPLC[i].openBoxConfirmed = newDataFromPLC[i].openBoxConfirmed;
       }
 
-      if (lastDataFromPLC[i].detector != newDataFromPLC[i].detector) {
+      if (lastDataFromPLC[i].detector != newDataFromPLC[i].detector) { 
         if (newDataFromPLC[i].detector == 1) {
           console.log("se emite charger-plugged-in")
           socketClient.emit("charger-plugged-in", { boxId: boxIdInBackend, parkingId });
@@ -320,6 +375,7 @@ async function openPlc() {
         }
         lastDataFromPLC[i].detector = newDataFromPLC[i].detector;
       }
+
     }
 
   }, process.env.PLC_POOLING_TIME);

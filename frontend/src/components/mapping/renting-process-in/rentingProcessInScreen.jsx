@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
 import { useTranslation } from 'react-i18next';
+import { Footer } from '../../ui/footer';
 
 /**
 |--------------------------------------------------
@@ -55,11 +56,7 @@ const RentingProcessScreen = ({ location, history }) => {
   const [stateRentingProcess, setStateRentingProcess] = useState(RENTING_MODE_INTRODUCING_SCOOTER_ORDER_TO_OPEN_DOOR_SENT);
 
   const refreshBoxState = () => {
-    console.log("refreshBoxState")
-
     BoxDataService.get(boxId).then((data) => {
-      console.log("refreshBoxState after call to boxdataservice")
-
       setStateRentingProcess(
         data.data.state
       );
@@ -95,7 +92,6 @@ const RentingProcessScreen = ({ location, history }) => {
       userId: null
     }
     BoxDataService.update(boxId, data).then((res) => {
-
       history.push("/main")
     }).catch((error) => console.log(error));
   }
@@ -113,7 +109,10 @@ const RentingProcessScreen = ({ location, history }) => {
 
     socketRef.current.on('refresh-box-state', data => {
       if (data.boxId === boxId) {
-        console.log("box state refreshed");
+        if(data.resetFromServer){
+          history.push("/main");
+          return;
+        }
         refreshBoxState();
       }
     });
@@ -172,6 +171,7 @@ const RentingProcessScreen = ({ location, history }) => {
           </Col>
         </Row>
       </MyContainer>
+      <Footer/>
     </>
   )
 };

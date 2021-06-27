@@ -513,15 +513,18 @@ io.on("connect", (socket) => {
 
     socket.on("charger-plugged-in", (data) => {
       // From Box
-
+console.log("charger-plugged-in");
       Box.findByPk(data.boxId)
         .then((data) => {
+          console.log("charger-plugged-in inside");
+          console.log(data);
           if (data.dataValues.state == constants.PARKING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ||
             data.dataValues.state == constants.RENTING_MODE_INTRODUCING_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED) {
             Box.update({ state: data.dataValues.state + 1 }, {
               where: { id: data.dataValues.id }
             }).then(num => {
               if (num == 1) {
+                console.log("charger-plugged-in updated")
                 // refresh information in mobile phones
                 io.sockets.emit('refresh-box-state', { boxId: data.dataValues.id });
               } else {
@@ -566,9 +569,11 @@ io.on("connect", (socket) => {
 
     socket.on("box-closed", (data) => {
       // From Box
-
+console.log("box-closed")
       Box.findByPk(data.boxId)
         .then((data) => {
+          console.log("box-closed inside")
+          console.log(data);
           if (data.dataValues.state == constants.PARKING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED ||
             data.dataValues.state == constants.PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ||
             data.dataValues.state == constants.RENTING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ||
@@ -585,6 +590,54 @@ io.on("connect", (socket) => {
               if (num == 1) {
                 // refresh information in mobile phones
                 io.sockets.emit('refresh-box-state', { boxId: data.dataValues.id });
+
+                //Just in case User doesn't click on continue button in mobile phone we do it here too
+                if (data.dataValues.state == constants.PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED) {
+                  //reset parking after 5 seconds
+                  setTimeout(function () {
+                    Box.update({
+                      state: 0,
+                      lastReservationDate: constants.BEGIN_OF_TIMES,
+                      occupied: false,
+                      userId: null
+                    }, {
+                      where: { id: data.dataValues.id }
+                    }).then((res) => {
+                      //reset done
+                      io.sockets.emit('refresh-box-state', { boxId: data.dataValues.id, resetFromServer: true });
+                    }).catch((error) => console.log(error));
+                  }, 5000);
+                  return;
+                }
+
+                if (data.dataValues.state == constants.RENTING_MODE_INTRODUCING_SCOOTER_CHARGER_PLUGGED_IN_CONFIRMATION_RECEIVED) {
+                  //reset parking and Scooter after 5 seconds
+                  setTimeout(function () {
+                    Scooter.update({
+                      userId: null,
+                      lastReservationDate: constants.BEGIN_OF_TIMES,
+                      boxId: data.dataValues.id
+                    }, {
+                      where: { userId: data.dataValues.userId }
+                    }).then(scooterData => {
+                      Box.update({
+                        userId: null,
+                        lastReservationDate: constants.BEGIN_OF_TIMES,
+                        state: constants.NEITHER_PARKING_NOT_RENTING,
+                        occupied: true
+                      }, {
+                        where: { id: data.dataValues.id }
+                      }).then(boxData => {
+                        io.sockets.emit('refresh-box-state', { boxId: data.dataValues.id, resetFromServer: true });
+                      }).catch(error => {
+                        console.log("error");
+                      })
+                    }).catch(error => {
+                      console.log("error");
+                    })
+                  }, 5000);
+                  return;
+                }
               } else {
                 // Cannot update Box with id. Maybe Box was not found
               }
@@ -601,12 +654,12 @@ io.on("connect", (socket) => {
   socket.on("something-changed", (data) => {
     console.log("something changed: " + data.toString());
 
-    if(data.reservation != null && data.reservation == true){
+    if (data.reservation != null && data.reservation == true) {
       console.log("reserve-box sent")
       io.sockets.emit('reserve-box', { boxId: data.box_id, parkingId: data.parking_changed });
     }
 
-    if(data.reservation != null  && data.reservation == false){
+    if (data.reservation != null && data.reservation == false) {
       console.log("unreserve-box sent")
       io.sockets.emit('unreserve-box', { boxId: data.box_id, parkingId: data.parking_changed });
     }

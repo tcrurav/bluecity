@@ -5,9 +5,11 @@ import Image from "material-ui-image";
 import { useTranslation } from 'react-i18next';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
+import { DisclaimerLinkText } from "../disclaimer-app/disclaimer-link-text";
+
 const useStyles = makeStyles((theme) => ({
   myBottomStripes: {
-    marginTop: "1em" 
+    marginTop: "1em"
   },
   myStripes: {
     margin: "auto",
@@ -19,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   mySwipe: {
     backgroundColor: "#00569F",
-    height: '8em',
+    height: '12.5em',
     width: "100%"
   },
   root: {
@@ -49,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export function Footer() {
+export function Footer({ webDisclaimer }) {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -79,6 +81,22 @@ export function Footer() {
             <Typography variant="body2">
               <Link href="https://www.furiouskoalas.com/" color="inherit" className={classes.links}>Furious Koalas</Link>
             </Typography>
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid item xs={12}>
+            <p className="text-center">
+              {webDisclaimer == "true" ?
+                <a href="/disclaimer" className="text-white">
+                  <DisclaimerLinkText />
+                </a>
+                :
+                <a href="/disclaimer-app" className="text-white">
+                  <DisclaimerLinkText />
+                </a>
+              }
+
+            </p>
           </Grid>
         </Grid>
       </div>

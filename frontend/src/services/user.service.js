@@ -2,7 +2,7 @@ import http from "../utils/http-common";
 
 class UserDataService {
   signin(data) {
-    return http.post("/signin", data);
+    return http.post("/users/signin", data);
   }
 
   getAll() {

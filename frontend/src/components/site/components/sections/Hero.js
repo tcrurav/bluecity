@@ -1,40 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { SectionProps } from '../../utils/SectionProps';
-import ButtonGroup from '../elements/ButtonGroup';
-import Button from '../elements/Button';
-import Image from '../elements/Image';
-import Modal from '../elements/Modal';
+// import ButtonGroup from '../elements/ButtonGroup';
+// import Button from '../elements/Button';
+// import Image from '../elements/Image';
+// import Modal from '../elements/Modal';
 
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 
 // import videoPlaceholder from '../../assets/images/video-placeholder.jpg';
-import mobileLogo from '../../assets/images/mobile-logo.png';
+// import mobileLogo from '../../assets/images/mobile-logo.png';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop: "10vh",
-  },
-  image: {
-    maxWidth: "512px",
-  },
-  buttonContainer: {
-    justify: "center",
-    alignItems: "center",
-    //justifyContent: "center",
-  },
-  buttons: {
-    marginTop: "1vh",
-    backgroundColor: "#00a9f4",
-    "&:hover": {
-      backgroundColor: "#007ac1",
-      color: "white",
-    },
-  },
-  footer: {
-    top: 0,
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     marginTop: "10vh",
+//   },
+//   image: {
+//     maxWidth: "512px",
+//   },
+//   buttonContainer: {
+//     justify: "center",
+//     alignItems: "center",
+//     //justifyContent: "center",
+//   },
+//   buttons: {
+//     marginTop: "1vh",
+//     backgroundColor: "#00a9f4",
+//     "&:hover": {
+//       backgroundColor: "#007ac1",
+//       color: "white",
+//     },
+//   },
+//   footer: {
+//     top: 0,
+//   },
+// }));
 
 const propTypes = {
   ...SectionProps.types
@@ -55,26 +55,26 @@ const Hero = ({
   ...props
 }) => {
 
-  const myClasses = useStyles();
+  // const myClasses = useStyles();
 
-  const [videoModalActive, setVideomodalactive] = useState(false);
+  // const [videoModalActive, setVideomodalactive] = useState(false);
 
-  const openModal = (e) => {
-    e.preventDefault();
-    setVideomodalactive(true);
-  }
+  // const openModal = (e) => {
+  //   e.preventDefault();
+  //   setVideomodalactive(true);
+  // }
 
-  const closeModal = (e) => {
-    e.preventDefault();
-    setVideomodalactive(false);
-  }
+  // const closeModal = (e) => {
+  //   e.preventDefault();
+  //   setVideomodalactive(false);
+  // }
 
   const outerClasses = classNames(
     'hero section center-content',
-    topOuterDivider && 'has-top-divider',
-    bottomOuterDivider && 'has-bottom-divider',
-    hasBgColor && 'has-bg-color',
-    invertColor && 'invert-color',
+    // topOuterDivider && 'has-top-divider',
+    // bottomOuterDivider && 'has-bottom-divider',
+    // hasBgColor && 'has-bg-color',
+    // invertColor && 'invert-color',
     className
   );
 

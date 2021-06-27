@@ -43,8 +43,8 @@
     "minutes ago": "minutes ago",
     "Distance to parking": "Distance to parking",
     "You can take your scooter back": "You can take your scooter back",
-    "Open Box": "Open Box",
-    "You are too far from the parking": "You are too far from the parking",
+    "Open box": "Open box",
+    "You are too far from the parking to open the door": "You are too far from the parking to open the door",
     "Waiting for the door to get open...": "Waiting for the door to get open...",
     "The door is opened. Please, introduce your scooter and plug the charger in.": "The door is opened. Please, introduce your scooter and plug the charger in.",
     "The scooter is in the box. Please, close the door.": "The scooter is in the box. Please, close the door.",
@@ -71,5 +71,16 @@
     "Close box door": "Close box door",
     "Parking process steps...": "Parking process steps...",
     "Open box door": "Open box door",
-    "Taking your scooter back...": "Taking your scooter back..."
+    "Taking your scooter back...": "Taking your scooter back...",
+    "Delete account": "Delete account",
+    "Cancel": "Cancel",
+    "Deleting your account...": "Deleting your account...",
+    "You are deleting your account in Bluecity": "You are deleting your account in Bluecity",
+    "If you delete your account all your data in Bluecity App will be erased": "If you delete your account all your data in Bluecity App will be erased",
+    "If you want to access the App later just log in again with your Gmail account": "If you want to access the App later just log in again with your Gmail account",
+    "Click on Parking to search a parking for your own scooter": "Click on Parking to search a parking for your own scooter",
+    "Click on Renting to search a free scooter to rent in our network": "Click on Renting to search a free scooter to rent in our network",
+    "Others": "Others",
+    "Accept": "Accept",
+    "Disclaimer": "Disclaimer"
 }

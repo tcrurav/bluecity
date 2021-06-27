@@ -9,32 +9,41 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { BallBeat } from 'react-pure-loaders';
 
+import { Footer } from '../ui/footer';
+
 const useStyles = makeStyles({
   bgImage: {
-    /* Full height */
-    // height: "1vh",
-    // width: "100vw",
-    height: "100vh",
-
-    /* Center and scale the image nicely */
-    // backgroundPosition: "center",
-    // backgroundRepeat: "repeat",
-    // backgroundSize: "60px 50px",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "contain",
     backgroundImage: "url('logo.png')",
-    // backgroundColor: "#b3e5fc",
-
-    // position: "relative",
-    // display: "flex",
-    // justifyContent: "center",
-    // alignItems: "center",
-    // zIndex: -1
   },
   iconImage: {
     height: "40vh"
-  }
+  },
+  disclaimer: {
+    color: "black"
+  },
+  disclaimerCol: {
+    position: "absolute",
+    bottom: "0"
+  },
+  myBottomStripes: {
+    marginTop: "1em"
+  },
+  myStripes: {
+    margin: "auto",
+    width: "4em",
+    height: "0.3em",
+    borderBottom: "2px solid white",
+    color: "white",
+    // position: "absolute"
+  },
+  mySwipe: {
+    backgroundColor: "#00569F",
+    height: '12.5em',
+    width: "100%"
+  },
 });
 
 export function Login(props) {
@@ -45,7 +54,7 @@ export function Login(props) {
   let history = useHistory();
 
   useEffect(() => {
-    if(!isMobile){
+    if (!isMobile) {
       history.push("/");
     }
   });
@@ -68,13 +77,16 @@ export function Login(props) {
           </Row>
         </MyContainer>
         :
-        <MyContainer className={classes.bgImage}>
-          <Row className="justify-content-md-center h-100">
-            <Col md={6} className="my-auto">
-              <MyAuthButtons history={props.history} changeLoadingState={changeLoadingState} />
-            </Col>
-          </Row>
-        </MyContainer>
+        <>
+          <MyContainer className={classes.bgImage}>
+            <Row className="justify-content-xs-center h-100">
+              <Col xs={12} className="my-auto">
+                <MyAuthButtons history={props.history} changeLoadingState={changeLoadingState} />
+              </Col>
+            </Row>
+          </MyContainer>
+          <Footer webDisclaimer="true"/>
+        </>
       }
     </>
   );

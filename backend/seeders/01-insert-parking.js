@@ -57,6 +57,14 @@ module.exports = {
         name: 'Citilab',
         createdAt: new Date(),
         updatedAt: new Date()
+      },{
+        id: 8,
+        lat: '28.1411542',
+        long: '-15.431888',
+        address: 'Muelle de Sta. Catalina, 35007 Las Palmas de Gran Canaria',
+        name: 'Museo Elder',
+        createdAt: new Date(),
+        updatedAt: new Date()
       }]);
     },
     down: (queryInterface, Sequelize) => {

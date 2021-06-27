@@ -61,7 +61,7 @@ const ParkingProcessInScreen = ({ location, history }) => {
   const [noResponseFromParkingDevice, setNoResposeFromParkingDevice] = useState(false);
 
   const refreshBoxState = () => {
-    console.log("refreshBoxState")
+    // console.log("refreshBoxState")
 
     BoxDataService.get(boxId).then((data) => {
       setStateParkingProcess(
@@ -90,12 +90,12 @@ const ParkingProcessInScreen = ({ location, history }) => {
     socketRef.current = socketIOClient(process.env.REACT_APP_BASEURL);
 
     socketRef.current.on('welcome', () => {
-      console.log('connected to backend');
+      // console.log('connected to backend');
     });
 
     socketRef.current.on('refresh-box-state', data => {
       if (data.boxId === boxId) {
-        console.log("box state refreshed");
+        // console.log("box state refreshed");
         refreshBoxState();
       }
     });
