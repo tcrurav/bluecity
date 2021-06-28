@@ -1,21 +1,16 @@
 import React, { Suspense } from 'react';
-// import { library } from '@fortawesome/fontawesome-svg-core';
-// import { fab } from '@fortawesome/free-brands-svg-icons';
 import RoutePrivate from './utils/private-route';
 import RoutePublic from './utils/public-route';
 import { Login } from './components/auth/login';
 import { Main } from './components/main';
 import ParkingScreen from './components/mapping/parking/parkingScreen';
 import RentingScreen from './components/mapping/renting/rentingScreen';
-// import { Renting } from './components/mapping/renting';
 import { Contact } from './components/contact/contact';
-// import { MyLogo } from './components/my-logo';
 import { MyError } from './components/my-error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { getCurrentUserId } from "./utils/common";
 import { Scooter } from "./components/mapping/scooter";
 import MyAccount from "./components/auth/my-account";
-// import {ParkingsWithFreeScooters} from './components/parkingsWithFreeScooters';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AvailabilityScreen from "./components/mapping/availability/availabilityScreen";
 import Site from './components/site/site';
@@ -25,20 +20,9 @@ import RentingProcessInScreen from "./components/mapping/renting-process-in/rent
 import RentingProcessOutScreen from "./components/mapping/renting-process-out/rentingProcessOutScreen";
 import WhileRenting from "./components/mapping/renting-process-in/whileRenting";
 import WhileParking from "./components/mapping/parking-process-in/whileParking";
-import Rincon from './components/site/views/Rincon';
-
-// import 'jquery/dist/jquery.min.js';
-// import 'bootstrap/dist/js/bootstrap.min.js';
+import { DisclaimerApp } from './components/disclaimer-app/disclaimer-app';
 
 function App() {
-  /*constructor(props) {
-     super(props);
-
-     // library.add(fab);
-     this.state = {
-       userId: 1
-     }
-  }*/
 
   // READ following web to understand the use of history in react-router-dom
   // https://github.com/ReactTraining/react-router/blob/master/FAQ.md#how-do-i-pass-props-to-the-component-rendered-by-a-route
@@ -59,13 +43,12 @@ function App() {
           <RoutePrivate path='/renting-process-out' component={RentingProcessOutScreen} />
           <RoutePrivate path='/while-renting' component={WhileRenting} />
           <RoutePrivate path='/while-parking' component={WhileParking} />
+          <RoutePrivate path="/disclaimer-app" component={DisclaimerApp} />
           {/* <RoutePrivate path='/renting' component={() => <Renting userId={getCurrentUserId()}/>}/> */}
           <RoutePrivate path='/scooter-renting' component={Scooter} />
           <RoutePublic path='/login' component={Login} />
           <Route path='/contact' component={Contact} />
           <Route path="/" component={Site} />
-          <Route path="/rincon" component={Rincon} />
-          {/* <Route path="/" component={MyLogo}/> */}
           <Route component={MyError} />
         </Switch>
       </Router>

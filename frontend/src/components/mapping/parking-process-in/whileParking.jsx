@@ -37,9 +37,8 @@ import { getDistanceFromLatLonInKm, getDistanceToOpenBox } from '../../../utils/
 import { formatTimeLeft } from '../availability/utils/util';
 
 import {
-  THIS_USER_HAS_NO_RESERVATION, 
-  //CLOSE_DISTANCE_TO_PARKING, 
-  MINIMUM_DISTANCE_INCREMENT
+  THIS_USER_HAS_NO_RESERVATION,
+  MINIMUM_DISTANCE_INCREMENT,
 } from '../availability/constants/constants.js';
 
 import {
@@ -77,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
 
 const WhileParking = ({ location, history }) => {
 
-  const { state: { parking, boxId, checkingForRenting } } = location;
+  const { state: { parking, boxId } } = location;
 
   const { t } = useTranslation();
 
@@ -204,7 +203,10 @@ const WhileParking = ({ location, history }) => {
     if (stateParking.boxReservedByThisUser !== THIS_USER_HAS_NO_RESERVATION) {
       reservationInterval.current = setInterval(() => {
         try {
-          const reservation_time_left = new Date().getTime() - stateParking.lastReservationDate;
+          let reservation_time_left = 1;
+          if (stateParking.lastReservationDate !== null) {
+            reservation_time_left = new Date().getTime() - stateParking.lastReservationDate;
+          }
           setStateParking(s => ({
             ...s,
             reservation_time_left
@@ -241,19 +243,19 @@ const WhileParking = ({ location, history }) => {
                 <div>
                   <span>
                     <FontAwesomeIcon icon={faInfoCircle} color="blue" />{` ${t('You can take your scooter back')}.`}
-							    </span>
+                  </span>
                   <br /><br />
                   <div className="text-center">
                     <Button
                       variant="contained"
                       className={classes.buttons}
-                      onClick={goToParkingProcessOut}>{t('Open Box')}</Button>
+                      onClick={goToParkingProcessOut}>{t('Open box')}</Button>
                   </div>
                 </div>
                 :
                 <div>
-                  <FontAwesomeIcon icon={faInfoCircle} color="blue" />{` ${t('You are too far from the parking')}.`}
-						    </div>
+                  <FontAwesomeIcon icon={faInfoCircle} color="blue" />{` ${t('You are too far from the parking to open the door')}.`}
+                </div>
               }
             </div>
           </Col>

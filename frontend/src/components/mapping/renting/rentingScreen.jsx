@@ -52,6 +52,7 @@ const RentingScreen = () => {
       }
       goToMain();
     });
+    
   };
 
   const goToMain = () => {

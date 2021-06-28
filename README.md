@@ -108,7 +108,7 @@ HTTPS=false
 
 # true --> using websockets to communicate to PARKING BOX intermediate computer
 # false --> NOT using websockets to communicate to PARKING BOX intermediate computer
-USING_WEBSOCKETS=false
+USING_WEBSOCKETS=true
 ```
 
 2. You need a mysql server working.
@@ -134,6 +134,10 @@ npx sequelize-cli db:seed:all
 ```
 REACT_APP_BASEURL=http://localhost:9000
 PORT=8000
+
+# true --> simulating OPCUA to communicate to box_simulator_backend
+# false --> NOT simulating OPCUA to communicate to box_simulator_backend but using websockets
+REACT_APP_SIMULATING_OPCUA=true
 ```
 
 * For your box_simulator_backend part, intended only to test a parking box, in the file bluecity/box_simulator_backend/.env put the following 2 lines: 
@@ -145,7 +149,11 @@ NODE_ENV=development
 
 # true --> using websockets to communicate to Backend
 # false --> NOT using websockets to communicate to Backend
-USING_WEBSOCKETS=false
+USING_WEBSOCKETS=true
+
+# true --> using PLC
+# false --> NOT using PLC but box simulator frontend simulating OPCUA
+USING_PLC=false
 
 //Reading from PLC
 PLC_OPEN_BOX_CONFIRMED_1="Bloque de datos_2"."datos_enviar"."openboxconfirmed_1"
@@ -161,9 +169,9 @@ PLC_OPEN_BOX="Bloque de datos_2"."datos_recibir"."open_box"
 PLC_CLOSE_BOX="Bloque de datos_2"."datos_recibir"."closed_box"
 PLC_RESERVE="Bloque de datos_2"."datos_recibir"."reserva"
 
-PLC_PARKING_ID=3
+PLC_PARKING_ID=8
 
-PLC_POOLING_TIME=5000
+PLC_POOLING_TIME=500
 
 PLC_OPCUA_URL=opc.tcp://192.168.0.40:4000
 ```

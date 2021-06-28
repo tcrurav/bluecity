@@ -118,7 +118,7 @@ const MyParkingProcessOutCard = ({ parking, stateParkingProcess, continueWithPro
               icon={stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ? faCheckCircle : faTimes}
             />
             {
-              stateParkingProcess >= PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED ?
+              stateParkingProcess == PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_CLOSED_CONFIRMATION_RECEIVED?
                 <Grid
                   container
                   className={classes.buttonContainer}

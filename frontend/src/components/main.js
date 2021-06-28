@@ -139,22 +139,6 @@ export function Main(props) {
             });
             break;
           default:
-            //It Happens when the user has nothing in a box
-            //The user maybe riding on a rented scooter. Let's check it...
-            ScooterDataService.getScooterWithUserId(currentUserId).then(data => {
-              console.log("vacío o no")
-              if (data.data) {
-                setUserState({
-                  state: "rented out",
-                  message: "You are enjoying a rented scooter right now. Click continue to return it."
-                });
-                setLoadingState(false);
-                return;
-              }
-            }).catch((e) => {
-              //Error
-            });
-
             //It happens when the user has started a reservation but hasn't finished the process
             setUserState({
               state: "reserving for parking",
@@ -165,6 +149,21 @@ export function Main(props) {
         setLoadingState(false);
         return;
       }
+      //It Happens when the user has nothing in a box
+      //The user maybe riding on a rented scooter. Let's check it...
+      ScooterDataService.getScooterWithUserId(currentUserId).then(data => {
+        console.log("vacío o no")
+        if (data.data) {
+          setUserState({
+            state: "rented out",
+            message: "You are enjoying a rented scooter right now. Click continue to return it."
+          });
+          setLoadingState(false);
+          return;
+        }
+      }).catch((e) => {
+        //Error
+      });
       setLoadingState(false);
     })
   }
@@ -242,6 +241,8 @@ export function Main(props) {
             },
           });
         })
+        break;
+      default:
         break;
     }
   }
@@ -324,6 +325,22 @@ export function Main(props) {
                 >
                   {t('Renting')}
                 </Button>
+              </Grid>
+            </Grid>
+            <Grid container className={classes.buttonContainer} direction="column">
+              <Grid item xs={12} className={classes.margins}>
+                <MyMarker
+                  color='blue'
+                  state={null}
+                  text={`${t("Click on Parking to search a parking for your own scooter")}.`}
+                  icon={faInfoCircle}
+                />
+                <MyMarker
+                  color='blue'
+                  state={null}
+                  text={`${t("Click on Renting to search a free scooter to rent in our network")}.`}
+                  icon={faInfoCircle}
+                />
               </Grid>
             </Grid>
           </Paper>

@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { SectionSplitProps } from '../../utils/SectionProps';
-import SectionHeader from './partials/SectionHeader';
+// import SectionHeader from './partials/SectionHeader';
 // import Image from '../elements/Image';
 // import Image from 'react-bootstrap/Image';
 
@@ -70,11 +70,11 @@ const FeaturesSplitTop = ({
     className
   );
 
-  const innerClasses = classNames(
-    'features-split-inner section-inner',
-    topDivider && 'has-top-divider',
-    bottomDivider && 'has-bottom-divider'
-  );
+  // const innerClasses = classNames(
+  //   'features-split-inner section-inner',
+  //   topDivider && 'has-top-divider',
+  //   bottomDivider && 'has-bottom-divider'
+  // );
 
   const splitClasses = classNames(
     'split-wrap',
@@ -83,10 +83,10 @@ const FeaturesSplitTop = ({
     alignTop && 'align-top'
   );
 
-  const sectionHeader = {
-    title: 'Workflow that just works',
-    paragraph: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum — semper quis lectus nulla at volutpat diam ut venenatis.'
-  };
+  // const sectionHeader = {
+  //   title: 'Workflow that just works',
+  //   paragraph: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum — semper quis lectus nulla at volutpat diam ut venenatis.'
+  // };
 
   return (
     <section
@@ -117,7 +117,7 @@ const FeaturesSplitTop = ({
                 )}
                 data-reveal-container=".split-item">
                 <Container className={myClasses.image}>
-                  <Image src={mobileLogo} aspectRatio={5 / 9}  />
+                  <Image src={mobileLogo} aspectRatio={5 / 9} />
                 </Container>
               </div>
             </div>

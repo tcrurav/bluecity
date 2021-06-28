@@ -195,6 +195,33 @@ module.exports = {
         parkingId: 7,
         createdAt: new Date(),
         updatedAt: new Date()
+      },{
+        id: 22,
+        state: Constants.NEITHER_PARKING_NOT_RENTING,
+        occupied: false,
+        lastReservationDate: BEGIN_OF_TIMES,
+        userId: null,
+        parkingId: 8,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },{
+        id: 23,
+        state: Constants.NEITHER_PARKING_NOT_RENTING,
+        occupied: false,
+        lastReservationDate: BEGIN_OF_TIMES,
+        userId: null,
+        parkingId: 8,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },{
+        id: 24,
+        state: Constants.NEITHER_PARKING_NOT_RENTING,
+        occupied: false,
+        lastReservationDate: BEGIN_OF_TIMES,
+        userId: null,
+        parkingId: 8,
+        createdAt: new Date(),
+        updatedAt: new Date()
       }]);
     },
     down: (queryInterface, Sequelize) => {

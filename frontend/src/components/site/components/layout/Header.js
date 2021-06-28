@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
 import Logo from './partials/Logo';
 import { useHistory } from "react-router-dom";
+
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+
+import { useMediaQuery } from 'react-responsive';
 
 const propTypes = {
   navPosition: PropTypes.string,
@@ -47,7 +49,7 @@ const Header = ({
       document.removeEventListener('click', clickOutside);
       closeMenu();
     };
-  });  
+  });
 
   const openMenu = () => {
     document.body.classList.add('off-nav-is-active');
@@ -69,7 +71,7 @@ const Header = ({
     if (!nav.current) return
     if (!isActive || nav.current.contains(e.target) || e.target === hamburger.current) return;
     closeMenu();
-  }  
+  }
 
   const classes = classNames(
     'site-header',
@@ -87,12 +89,10 @@ const Header = ({
 
   let history = useHistory();
 
-  // useEffect(() => {
-  //   if(isMobile){
-  //     history.push("/login");
-  //   }
-  // });
   const classesRoot = useStyles();
+
+  const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
+
   return (
     <header
       {...props}
@@ -144,7 +144,12 @@ const Header = ({
                     </ul>}
                 </div>
               </nav> */}
-              <Button className={classesRoot.buttonLogin} variant="contained" color="primary" onClick={()=> {history.push("/login")}}>Acceso para móvil</Button>
+              {
+                isMobile ?
+                  <Button className={classesRoot.buttonLogin} variant="contained" color="primary" onClick={() => { history.push("/login") }}>Acceso a la App</Button>
+                  :
+                  <></>
+              }
             </>}
         </div>
       </div>

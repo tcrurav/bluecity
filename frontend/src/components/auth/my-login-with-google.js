@@ -2,7 +2,9 @@
 import React from 'react';
 import MyGoogleLoginButton from '../ui/my-google-login-button';
 import { setUserSession } from '../../utils/common';
-import UserDataService from '../../services/user.service'
+import UserDataService from '../../services/user.service';
+
+import DisclaimerModal from '../disclaimer-app/disclaimer-modal';
 
 // I have implemented the solution of this url:
 // https://w3path.com/react-google-login-with-example/
@@ -11,9 +13,14 @@ export class MyLoginWithGoogle extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      googleUser: null
+    }
+
     this.prepareLoginButton = this.prepareLoginButton.bind(this);
     this.googleSDK = this.googleSDK.bind(this);
     this.saveUser = this.saveUser.bind(this);
+    this.handleAccept = this.handleAccept.bind(this);
   }
 
   googleSDK() {
@@ -67,7 +74,6 @@ export class MyLoginWithGoogle extends React.Component {
         this.props.history.push("/main");
         // }, 2000);
 
-
       })
       .catch(e => {
         console.log(e);
@@ -87,16 +93,44 @@ export class MyLoginWithGoogle extends React.Component {
 
         //YOUR CODE HERE
 
-        this.saveUser(googleUser.getAuthResponse().id_token, profile);
+        // this.saveUser(googleUser.getAuthResponse().id_token, profile);
+        var data = {
+          username: profile.getEmail(),
+          password: profile.getId()
+        };
 
+        UserDataService.signin(data).then(response => {
+          if(response.data.token !== null){
+            console.log("La respuesta del servidor es")
+            console.log(response)
+            setUserSession(googleUser.getAuthResponse().id_token, profile, response.data.token, response.data.user);
+            this.props.history.push("/main");
+            return;
+          }
+          this.setState({
+            ...this.state,
+            googleUser: googleUser
+          })
+        }).catch(err => {
+          console.log("some error logging in");
+        });
+        
       }, (error) => {
         console.log(JSON.stringify(error, undefined, 2));
       });
   }
 
+  handleAccept() {
+    const profile = this.state.googleUser.getBasicProfile();
+    this.saveUser(this.state.googleUser.getAuthResponse().id_token, profile);
+  };
+
   render() {
     return (
-      <MyGoogleLoginButton />
+      <>
+        <MyGoogleLoginButton />
+        <DisclaimerModal open={this.state.googleUser !== null} handleAccept={this.handleAccept} />
+      </>
     );
   }
 }

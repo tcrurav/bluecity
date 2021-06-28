@@ -1,6 +1,3 @@
-//ATENTION: THIS FILE COULD/SHOULD BE MERGED WITH AvailabilityScreen.jsx IN THE FUTURE
-//          NOW IT'S JUST A WAY TO WORK IN A MORE UNDERSTANDABLE WAY
-
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
@@ -56,22 +53,19 @@ const ParkingProcessOutScreen = ({ location, history }) => {
   const [stateParkingProcess, setStateParkingProcess] = useState(NEITHER_PARKING_NOT_RENTING);
 
   const continueWithProcess = () => {
-    const data = {
-      state: 0,
-      lastReservationDate: BEGIN_OF_TIMES,
-      occupied: false,
-      userId: null
-    }
-    BoxDataService.update(boxId, data).then((res) => {
-      history.push("/main")
-    }).catch((error) => console.log(error));
+      const data = {
+        state: 0,
+        lastReservationDate: BEGIN_OF_TIMES,
+        occupied: false,
+        userId: null
+      }
+      BoxDataService.update(boxId, data).then((res) => {
+        history.push("/main")
+      }).catch((error) => console.log(error));
   }
 
   const refreshBoxState = () => {
-    console.log("refreshBoxState")
-
     BoxDataService.get(boxId).then((data) => {
-      console.log("refreshBoxState after call to boxdataservice")
       setStateParkingProcess(
         data.data.state
       );
@@ -91,7 +85,10 @@ const ParkingProcessOutScreen = ({ location, history }) => {
 
     socketRef.current.on('refresh-box-state', data => {
       if (data.boxId === boxId) {
-        console.log("box state refreshed");
+        if(data.resetFromServer){
+          history.push("/main");
+          return;
+        }
         refreshBoxState();
       }
     });
@@ -103,54 +100,54 @@ const ParkingProcessOutScreen = ({ location, history }) => {
 
   return (
     <>
-        <MyNavbar history={history} />
-        <MyContainer>
-          <Row>
-            <Card className='m-2'>
-              <MyParkingProcessOutCard
-                parking={parking}
-                stateParkingProcess={stateParkingProcess}
-                continueWithProcess={continueWithProcess}
-              />
-            </Card>
-          </Row>
-          <Row className='pt-3'>
-            <Col>
-              {
-                stateParkingProcess === PARKING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT
-                  ?
+      <MyNavbar history={history} />
+      <MyContainer>
+        <Row>
+          <Card className='m-2'>
+            <MyParkingProcessOutCard
+              parking={parking}
+              stateParkingProcess={stateParkingProcess}
+              continueWithProcess={continueWithProcess}
+            />
+          </Card>
+        </Row>
+        <Row className='pt-3'>
+          <Col>
+            {
+              stateParkingProcess === PARKING_MODE_PULLING_OUT_SCOOTER_ORDER_TO_OPEN_DOOR_SENT
+                ?
+                <MyMarker
+                  color='blue'
+                  state={null}
+                  text={t('Waiting for the door to get open...')}
+                  icon={faInfoCircle}
+                />
+                : stateParkingProcess === PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ?
                   <MyMarker
                     color='blue'
                     state={null}
-                    text={t('Waiting for the door to get open...')}
+                    text={t('The door is opened. Please, pull out your scooter and unplug the charger.')}
                     icon={faInfoCircle}
                   />
-                  : stateParkingProcess === PARKING_MODE_PULLING_OUT_SCOOTER_DOOR_OPEN_CONFIRMATION_RECEIVED ?
+                  : stateParkingProcess === PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ?
                     <MyMarker
                       color='blue'
                       state={null}
-                      text={t('The door is opened. Please, pull out your scooter and unplug the charger.')}
+                      text={t('You have pulled your scooter out. Please, close the door.')}
                       icon={faInfoCircle}
                     />
-                    : stateParkingProcess === PARKING_MODE_PULLING_OUT_SCOOTER_CHARGER_PULLED_OUT_CONFIRMATION_RECEIVED ?
-                      <MyMarker
-                        color='blue'
-                        state={null}
-                        text={t('You have pulled your scooter out. Please, close the door.')}
-                        icon={faInfoCircle}
-                      />
-                      :
-                      <MyMarker
-                        color='blue'
-                        state={null}
-                        text={t('The door is closed. Thank you for using our service.')}
-                        icon={faInfoCircle}
-                      />
-              }
-            </Col>
-          </Row>
-        </MyContainer>
-        <Footer/>
+                    :
+                    <MyMarker
+                      color='blue'
+                      state={null}
+                      text={t('The door is closed. Thank you for using our service.')}
+                      icon={faInfoCircle}
+                    />
+            }
+          </Col>
+        </Row>
+      </MyContainer>
+      <Footer />
     </>
   )
 };

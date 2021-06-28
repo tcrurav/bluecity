@@ -53,7 +53,7 @@ export default function MyGoogleLoginButton() {
           <MySpan>Login with Google</MySpan>
         </MyA> */}
         <Button className={classes.root} id="login-button" variant="contained">
-          <MyImg alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+          <MyImg alt="Google sign-in" src="img/Google__G__Logo.svg.webp" />
           <MySpan>Login with Google</MySpan>
         </Button>
       </div>

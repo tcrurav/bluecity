@@ -2,10 +2,6 @@ import React, { useRef, useEffect } from 'react';
 import { useLocation, Switch } from 'react-router-dom';
 import AppRoute from './utils/AppRoute';
 import ScrollReveal from './utils/ScrollReveal';
-// import ReactGA from 'react-ga';
-
-import { useMediaQuery } from 'react-responsive';
-import { useHistory } from "react-router-dom";
 
 import './assets/scss/style.scss';
 
@@ -14,36 +10,20 @@ import LayoutDefault from './layouts/LayoutDefault';
 
 // Views 
 import Home from './views/Home';
-
-// Initialize Google Analytics
-// ReactGA.initialize(process.env.REACT_APP_GA_CODE);
-
-// const trackPage = page => {
-//   ReactGA.set({ page });
-//   ReactGA.pageview(page);
-// };
+import Disclaimer from './views/Disclaimer';
+import Rincon from './views/Rincon';
+import Terradas from './views/Terradas';
+import Koalas from './views/Koalas';
+import Bernat from './views/Bernat';
 
 const Site = () => {
-
-  // const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
-
-  // let history = useHistory();
-
-  // useEffect(() => {
-  //   if(isMobile){
-  //     history.push("/login");
-  //   }
-  // });
 
   const childRef = useRef();
   let location = useLocation();
 
   useEffect(() => {
-    const page = location.pathname;
     document.body.classList.add('is-loaded')
     childRef.current.init();
-    // trackPage(page);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   return (
@@ -53,6 +33,11 @@ const Site = () => {
       children={() => (
         <Switch>
           <AppRoute exact path="/" component={Home} layout={LayoutDefault}/>
+          <AppRoute exact path="/disclaimer" component={Disclaimer} layout={LayoutDefault}/>
+          <AppRoute exact path="/rincon" component={Rincon} layout={LayoutDefault}/>
+          <AppRoute exact path="/bernat" component={Bernat} layout={LayoutDefault}/>
+          <AppRoute exact path="/terradas" component={Terradas} layout={LayoutDefault}/>
+          <AppRoute exact path="/koalas" component={Koalas} layout={LayoutDefault}/>
         </Switch>
       )} />
       </div>

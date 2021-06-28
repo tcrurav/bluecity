@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -66,11 +66,6 @@ export default function MediaCard({ changeWebpage }) {
                                 <Typography gutterBottom variant="h2" component="h5">
                                     INS Bernat el Ferrer
                                     </Typography>
-                                {/* <Truncate lines={3}>
-                                    <p className="m-0 text-sm">
-                                        Está situado en Molins de Rei, Barcelona. Participan las familias profesionales de Administración y Gestión, y también de Electricidad y Electrónica.
-                                    </p>
-                                </Truncate> */}
                                 <Truncate className="m-0 text-sm" width={1000}>
                                     <p>
                                         El Instituto Bernat el Ferrer es actualmente un centro donde se imparten enseñanzas de ESO; de bachillerato de las modalidades humanística y social, científica y tecnológica; y ciclos formativos medios y superiores, de las familias administrativa, eléctrica-electrónica e informática.
@@ -80,7 +75,6 @@ export default function MediaCard({ changeWebpage }) {
                             </CardContent>
                             <CardActions>
                             <Button size="small" color="primary" onClick={() => { changeWebpage("bernat") }}>
-                                {/* <Button size="small" color="primary"> */}
                                     Ver más <ArrowForwardIcon />
                                 </Button>
                             </CardActions>
@@ -99,11 +93,6 @@ export default function MediaCard({ changeWebpage }) {
                                 <Typography gutterBottom variant="h2" component="h5">
                                     INS Esteve Terradas
                                 </Typography>
-                                {/* <Truncate className="m-0 text-sm" width={2000}>
-                                 <p className="m-0 text-sm">
-                                    Estamos situados en el centro de Cornellà de Llobregat, muy cerca de Barcelona. Participa la familia Profesional de Fábricacion Mecánica.
-                                 </p>
-                                 </Truncate> */}
 
                                 <Truncate className="m-0 text-sm" width={1000}>
                                     <p>
@@ -134,9 +123,6 @@ export default function MediaCard({ changeWebpage }) {
                                 <Typography gutterBottom variant="h2" component="h5">
                                     IES El Rincón
                                     </Typography>
-                                {/* <p className="m-0 text-sm">
-                                    Está ubicado en la ciudad de Las Palmas de Gran Canaria (Las Palmas, España). En este proyecto participa la familia Profesional de Informática.
-                                </p> */}
                                 <Truncate className="m-0 text-sm" width={1000}>
                                     <p>
                                         El Instituto de Educación Secundaria  El Rincón está ubicado en la ciudad de Las Palmas de Gran Canaria (Las Palmas, España).
@@ -166,14 +152,6 @@ export default function MediaCard({ changeWebpage }) {
                                 <Typography gutterBottom variant="h2" component="h5">
                                     Furious Koalas S.L.
                                 </Typography>
-                                {/* <Typography variant="body2" color="textSecondary" component="p">
-                                    Proporcionamos servicios de alta calidad en las áreas de Gamificación, Juegos Serios, Simuladores y Visión por Computador.
-
-                                    Con más de 15 años de experiencia en el seno de los grupos de investigación Oreto y Artificial Intelligence and Representation, pertenecientes a la Universidad de Castilla-La Mancha, Furious Koalas S.L. ofrece resultados profesionales en el contexto del diseño, desarrollo y despliegue de soluciones interactivas.
-                                </Typography> */}
-                                {/* <p className="m-0 text-sm">
-                                    Proporcionamos servicios de alta calidad en las áreas de Gamificación, Juegos Serios, Simuladores y Visión por Computador.
-                                </p> */}
                                 <Truncate className="m-0 text-sm" width={1000}>
                                     <p>
                                         Proporcionamos servicios de alta calidad en las áreas de Gamificación, Juegos Serios, Simuladores y Visión por Computador.
@@ -185,7 +163,6 @@ export default function MediaCard({ changeWebpage }) {
                             </CardContent>
                             <CardActions>
                             <Button size="small" color="primary" onClick={() => { changeWebpage("koalas") }}>
-                                {/* <Button size="small" color="primary"> */}
                                     Ver más <ArrowForwardIcon />
                                 </Button>
                             </CardActions>

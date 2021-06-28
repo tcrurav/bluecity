@@ -28,9 +28,9 @@ const publicPath = path.join(__dirname, '..', 'build');
 const port = process.env.PORT || 3000;
 app.use(express.static(publicPath));
 
-app.get("/worker.js", (req, res) => {
-   res.sendFile(path.resolve(publicPath, "worker.js"));
-});
+// app.get("/worker.js", (req, res) => {
+//    res.sendFile(path.resolve(publicPath, "worker.js"));
+// });
 
 app.get('*', (req, res) => {
    res.sendFile(path.join(publicPath, 'index.html'));
