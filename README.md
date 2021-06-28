@@ -171,7 +171,7 @@ PLC_RESERVE="Bloque de datos_2"."datos_recibir"."reserva"
 
 PLC_PARKING_ID=8
 
-PLC_POOLING_TIME=5000
+PLC_POOLING_TIME=500
 
 PLC_OPCUA_URL=opc.tcp://192.168.0.40:4000
 ```
