@@ -20,6 +20,7 @@ export class MyLoginWithGoogle extends React.Component {
     this.prepareLoginButton = this.prepareLoginButton.bind(this);
     this.googleSDK = this.googleSDK.bind(this);
     this.handleAccept = this.handleAccept.bind(this);
+    this.saveUser = this.saveUser.bind(this);
   }
 
   googleSDK() {
