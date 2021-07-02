@@ -15,6 +15,7 @@ exports.create = (req, res) => {
   const box = {
     id: req.body.id,
     state: req.body.state,
+    enabled: req.body.enabled,
     occupied: req.body.occupied,
     lastReservationDate: req.body.lastReservationDate,
     userId: req.body.userId,

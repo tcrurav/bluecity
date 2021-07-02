@@ -7,6 +7,11 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
       defaultValue: Constants.BOX_EMPTY_DOOR_CLOSED
     },
+    enabled: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
+    },
     occupied: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
