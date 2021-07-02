@@ -90,13 +90,15 @@ const AvailabilityScreen = ({ location, history }) => {
   const findOutGreenRedOrOrange = (data) => {
     const reservationExpired = new Date(data.lastReservationDate) < new Date(new Date() - FIVE_MINUTES + 1000); // five minutes minus 1 second
 
-    if (!reservationExpired) {
-      return RESERVED;
-    }
+    if (!reservationExpired) return RESERVED;
+    
+    if (!data.enabled) return OCCUPIED;
+
     if ((!checkingForRenting && !data.occupied && reservationExpired) ||
       (checkingForRenting && data.occupied && reservationExpired & !data.userId)) {
       return FREE;
     }
+
     return OCCUPIED;
   };
 

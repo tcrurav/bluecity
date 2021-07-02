@@ -17,6 +17,10 @@ module.exports = {
           allowNull: false,
           defaultValue: Constants.BOX_EMPTY_DOOR_CLOSED
         },
+        enabled: {
+          type: Sequelize.BOOLEAN,
+          allowNull: false,
+        },
         occupied: {
           type: Sequelize.BOOLEAN,
           allowNull: false,

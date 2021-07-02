@@ -59,8 +59,8 @@ module.exports = {
         updatedAt: new Date()
       },{
         id: 8,
-        lat: '28.1411542',
-        long: '-15.431888',
+        lat: '28.1411781',
+        long: '-15.4298421',
         address: 'Muelle de Sta. Catalina, 35007 Las Palmas de Gran Canaria',
         name: 'Museo Elder',
         createdAt: new Date(),
