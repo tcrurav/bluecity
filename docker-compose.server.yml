@@ -1,0 +1,61 @@
+version: '3.3'
+services:
+  db:
+    # image: postgres
+    image: mysql
+    # restart: always
+    env_file:
+      - ./backend/.env
+    # environment:
+    #   - MYSQL_DATABASE=${MYSQL_DATABASE}
+    #   # So you don't have to use root, but you can if you like
+    #   - MYSQL_USER=${MYSQL_USER}
+    #   # You can use whatever password you like
+    #   - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    #   # Password for root access
+    #   - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - 3306:3306
+      # - 5432:5432
+    volumes:
+      - my-db:/var/lib/mysql
+      # - my-db:/var/lib/postgresql/data
+    networks:
+      - app-network
+  api:
+    image: bluecity_api
+    build: ./backend
+    env_file:
+      - ./backend/.env
+    ports: 
+      - '4000:4000'
+    expose:
+      - '4000'
+    # stdin_open: true
+    networks:
+      - app-network
+    depends_on:
+      - db
+    # command: ["./wait-for-it.sh", "db:3306", "--timeout=0", "--", "./docker-entrypoint.sh"]
+    #command: ["./wait-for-it.sh", "db:5432", "--timeout=0", "--", "./docker-entrypoint.sh"]
+  app:
+    image: bluecity_app
+    tty: true
+    build: ./frontend
+    env_file:
+      - ./frontend/.env
+    ports: 
+      - '443:3000'
+    expose:
+      - '3000'
+    stdin_open: true
+    networks:
+      - app-network
+    depends_on:
+      - api
+volumes:
+  my-db:
+    driver: local
+networks:
+  app-network:
+    driver: bridge
